@@ -20,7 +20,11 @@ TODO:
 * Before importing sprite assets:
   * Determine appropriate PPU
     * Note: Base sprite sizes should be 8x8, according to source asset link
+  * Set Project Settings according to 2D "standards" (e.g. disable Bloom)
+  * Add PostProcessVolume to default game map and set various 2D settings.
+    * Note: It is understood that, even without a "PostProcessVolume", Unreal still applies default post process settings that MUST be manually disabled in a level PostProcessVolume
   * Define extended Paper2D project settings to apply to all textures
+  * Determine gameplay axis/plane (most likely XZ plane for this game, as I plan on NOT using Character or Navmesh features).
 
 -----------------------------
 
