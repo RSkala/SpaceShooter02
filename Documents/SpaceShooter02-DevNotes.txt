@@ -16,9 +16,14 @@ Location in Project:
 * Assets-Source/SpaceShooterAssets
 
 ==============================================
+Asset Naming Convention References:
+* https://dev.epicgames.com/documentation/en-us/unreal-engine/recommended-asset-naming-conventions-in-unreal-engine-projects
+* https://unrealdirective.com/resources/asset-naming-conventions
+* https://github.com/Allar/ue5-style-guide
+
+==============================================
 TODO:
 * Before importing sprite assets:
-  * Set Project Settings according to 2D "standards" (e.g. disable Bloom)
   * Add PostProcessVolume to default game map and set various 2D settings.
     * Note: It is understood that, even without a "PostProcessVolume", Unreal still applies default post process settings that MUST be manually disabled in a level PostProcessVolume
   * Define extended Paper2D project settings to apply to all textures
@@ -26,6 +31,8 @@ TODO:
 
 ==============================================
 Pixels Per Unit
+
+* Project Settings -> Editor -> Paper2D - Import -> Default Pixels Per Unreal Unit
 
 I selected 0.08PPU for this project.
 
@@ -50,4 +57,14 @@ PPU Calculation for Project:
 This means that a character with a height of 8 pixels will have a height of 100m or 1m.
 
 ==============================================
+Project Settings for 2D Pixel Art
 
+Project Settings -> Engine -> Rendering -> Default Settings:
+* Bloom: OFF
+* Auto Exposure: OFF
+* Auto Exposure: Manual
+* Auto Exposure Bias: 0.0
+* Motion Blur: OFF
+* Anti-Aliasing Method: None
+
+==============================================
