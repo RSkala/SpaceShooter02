@@ -4,7 +4,26 @@ SpaceShooter02 - Dev Notes
 
 Unreal Engine 5 project based on:
 https://github.com/RSkala/SpaceShooter01
-* Built in Unity C#
+* Twin Stick shooter built in Unity C#
 
 ----------------------------
+Source Assets:
+
+Space Shooter Asset Pack by Gustavo Vituri
+https://gvituri.itch.io/space-shooter
+
+Location in Project:
+* Assets-Source/SpaceShooterAssets
+
+----------------------------
+TODO:
+* Before importing sprite assets:
+  * Determine appropriate PPU
+    * Note: Base sprite sizes should be 8x8, according to source asset link
+  * Define extended Paper2D project settings to apply to all textures
+
+-----------------------------
+
+
+
 
