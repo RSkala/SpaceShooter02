@@ -24,8 +24,6 @@ Asset Naming Convention References:
 ==============================================
 TODO:
 * Before importing sprite assets:
-  * Add PostProcessVolume to default game map and set various 2D settings.
-    * Note: It is understood that, even without a "PostProcessVolume", Unreal still applies default post process settings that MUST be manually disabled in a level PostProcessVolume
   * Define extended Paper2D project settings to apply to all textures
   * Determine gameplay axis/plane (most likely XZ plane for this game, as I plan on NOT using Character or Navmesh features).
 
@@ -71,11 +69,12 @@ Project Settings -> Engine -> Rendering -> Default Settings:
 Post Process Settings
 
 The Post Process settings are set up in a PostProcessVolume in your Level.
+
 Reason this needs to be done:
-* A level has its own "hidden" PostProcessVolume with these settings enabled and set to some value by default. Creating your own PostProcessVolume in a Level will override these "hidden" default PostProcessVolume settings.
+* A level has its own "hidden" PostProcessVolume with these settings enabled and set to some value by default. Creating your own PostProcessVolume in a Level will override these "hidden" default PostProcessVolume settings. Unreal still applies default post process settings that MUST be manually disabled in a level PostProcessVolume
 
 
-Add a PostProcessVolume:
+Add a PostProcessVolume to Your Game Map:
 * Quick Add -> Visual Effects -> PostProcessVolume
   * Set Transform Location to (0,0,0), although this really shouldn't matter
     * Note: The position shouldn't really matter, so long Infinite Extent (Unbound) is set to TRUE
