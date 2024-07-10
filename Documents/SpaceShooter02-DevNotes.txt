@@ -1,12 +1,12 @@
-----------------------------
+==============================================
 SpaceShooter02 - Dev Notes
-----------------------------
+==============================================
 
 Unreal Engine 5 project based on:
 https://github.com/RSkala/SpaceShooter01
 * Twin Stick shooter built in Unity C#
 
-----------------------------
+==============================================
 Source Assets:
 
 Space Shooter Asset Pack by Gustavo Vituri
@@ -15,19 +15,39 @@ https://gvituri.itch.io/space-shooter
 Location in Project:
 * Assets-Source/SpaceShooterAssets
 
-----------------------------
+==============================================
 TODO:
 * Before importing sprite assets:
-  * Determine appropriate PPU
-    * Note: Base sprite sizes should be 8x8, according to source asset link
   * Set Project Settings according to 2D "standards" (e.g. disable Bloom)
   * Add PostProcessVolume to default game map and set various 2D settings.
     * Note: It is understood that, even without a "PostProcessVolume", Unreal still applies default post process settings that MUST be manually disabled in a level PostProcessVolume
   * Define extended Paper2D project settings to apply to all textures
   * Determine gameplay axis/plane (most likely XZ plane for this game, as I plan on NOT using Character or Navmesh features).
 
------------------------------
+==============================================
+Pixels Per Unit
 
+I selected 0.08PPU for this project.
+
+My reasoning for this is as follows:
+* The asset pack I am using has the standard sprite size of 8x8.
+* 1 Unreal Unit = 100cm (0.0328ft) 
+* 100 Unreal Units = 100cm = 1m (3.328ft)
+* I prefer to have my 2D pixel art characters to be 1m = 100cm = 100UU
+* In general, it is a good idea to have decently-sized pixel art characters, as the CharacterMovementComponent expects the character to be "reasonable" height (i.e. human-sized)
+* Note: I likely will not be using Characters or CharacterMovementComponent in this project, but I wanted to define a "standard" PPU.
+
+Formula for Calculating PPU:
+* Base-Character-Pixel-Height / 100
+  * Using 100 for 100UU or 100cm or 1m
+
+PPU Calculation for Project:
+* Base Character Size:    8x8 pixels
+* Base Character Height:  8px
+* 8px / 100cm = 0.08px/cm = 0.08px/UU
+* 0.08 PPU
+
+==============================================
 
 
 
