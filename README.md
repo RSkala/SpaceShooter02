@@ -1,2 +1,10 @@
 # SpaceShooter02
- 2D Twin Stick Shooter built in Unreal Engine 5
+ 2D Twin Stick Shooter built in **Unreal Engine 5**
+
+ I've been doing a bit of research with 2D development with Unreal Engine, so I decided to rebuild this previous project, which was built in Unity: <br>
+ https://github.com/RSkala/SpaceShooter01
+
+ Once core gameplay and a game loop is implemented, my intention is to implement the following features:
+ * Local Co-op
+ * Gameplay Ability System
+ * Network Replication
