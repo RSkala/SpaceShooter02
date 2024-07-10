@@ -47,7 +47,7 @@ PPU Calculation for Project:
 * 8px / 100cm = 0.08px/cm = 0.08px/UU
 * 0.08 PPU
 
+This means that a character with a height of 8 pixels will have a height of 100m or 1m.
+
 ==============================================
-
-
 
