@@ -1,0 +1,10 @@
+----------------------------
+SpaceShooter02 - Dev Notes
+----------------------------
+
+Unreal Engine 5 project based on:
+https://github.com/RSkala/SpaceShooter01
+* Built in Unity C#
+
+----------------------------
+
