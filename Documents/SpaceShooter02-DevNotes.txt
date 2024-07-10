@@ -21,11 +21,8 @@ Asset Naming Convention References:
 * https://unrealdirective.com/resources/asset-naming-conventions
 * https://github.com/Allar/ue5-style-guide
 
-==============================================
-TODO:
-* Before importing sprite assets:
-  * Define extended Paper2D project settings to apply to all textures
-  * Determine gameplay axis/plane (most likely XZ plane for this game, as I plan on NOT using Character or Navmesh features).
+Texture: T_ or T2D_  -- Note: I usually leave the Texture the same as the imported asset
+Sprite: SPR_
 
 ==============================================
 Pixels Per Unit
@@ -113,14 +110,27 @@ While Texture asset is open, in Details, ensure the following settings are set:
 
 * Level of Detail -> Mip Gen Settings: NoMipMaps
 * Level of Detail -> Texture Group: 2D Pixels (unfiltered)
-* Texture -> Advanced -> Filter: Nearest
 * Compression -> Compression Settings: UserInterface2D (RGBA)
 * Texture -> sRGB: True
+* Texture -> Advanced -> Filter: Nearest
 
 -------
 NOTE:
 * This can be changed using a "Scripted Asset Actions" tool, so you don't have to do all of the above manually every single time.
 * Source:
   * https://www.youtube.com/watch?v=_sgyZ2dsUV0
+
+==============================================
+Editor Viewport Settings
+
+* Upper-left of Viewport -> Viewport Options -> 
+  * Realtime:  FALSE
+
+* Projection Settings:
+  * Right (Orthographic, looking down the "Right" / Y axis towards the origin)
+    * This means our game will be played in the XZ plane (X-right, Z-up)
+
+* View Mode:
+  * Unlit
 
 ==============================================
