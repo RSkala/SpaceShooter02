@@ -68,3 +68,39 @@ Project Settings -> Engine -> Rendering -> Default Settings:
 * Anti-Aliasing Method: None
 
 ==============================================
+Post Process Settings
+
+The Post Process settings are set up in a PostProcessVolume in your Level.
+Reason this needs to be done:
+* A level has its own "hidden" PostProcessVolume with these settings enabled and set to some value by default. Creating your own PostProcessVolume in a Level will override these "hidden" default PostProcessVolume settings.
+
+
+Add a PostProcessVolume:
+* Quick Add -> Visual Effects -> PostProcessVolume
+  * Set Transform Location to (0,0,0), although this really shouldn't matter
+    * Note: The position shouldn't really matter, so long Infinite Extent (Unbound) is set to TRUE
+
+Settings in PostProcesVolume's Details Panel:
+
+* Post Process Volume Settings -> Infinite Extent (Unbound): TRUE
+  * This means the setting will be applied no matter where the camera is. If unchecked, will only apply when camera is inside the box.
+
+* Lens -> Bloom -> Threshold: TRUE, set to 1.0
+  * This limits the glowing effect around bright elements
+
+* Lens -> Exposure -> Exposure Compensation: TRUE, set to 0.0
+  * Removes the slightly brightened and corrected effect
+
+* Lens -> Exposure -> MinEV100: TRUE, set to 0.0
+* Lens -> Exposure -> MaxEV100: TRUE, set to 0.0
+  * These specify the auto-exposure effect range. Auto-Exposure can and should be disabled in Project Settings -> Engine -> Rendering -> Default Settings
+  * When Auto-Exposure is disabled, these should have no effect, but we should still disable them just in case.
+
+* Lens -> Image Effects -> Vignette Intensity: TRUE, set to 0.0
+  * This eliminates the elements that make the edges of the screen slightly darker
+
+* Color Grading -> Misc -> Expand Gamut: TRUE, set to 0.0
+* Color Grading -> Misc -> Tone Curve Amount: TRUE, set to 0.0
+  * These two settings make the sprites much brighter than they are supposed to be and therefore should be set to 0
+
+==============================================
