@@ -103,3 +103,24 @@ Settings in PostProcesVolume's Details Panel:
   * These two settings make the sprites much brighter than they are supposed to be and therefore should be set to 0
 
 ==============================================
+Texture Settings for 2D Pixel Art
+
+Default way of applying Texture Settings for 2D:
+* Right-click Texture -> Sprite Actions -> Apply Paper2D Texture Settings
+  * Note that this only applies the settings in the Paper2D Import project settings, and therefore not all of the settings below will be set.
+
+While Texture asset is open, in Details, ensure the following settings are set:
+
+* Level of Detail -> Mip Gen Settings: NoMipMaps
+* Level of Detail -> Texture Group: 2D Pixels (unfiltered)
+* Texture -> Advanced -> Filter: Nearest
+* Compression -> Compression Settings: UserInterface2D (RGBA)
+* Texture -> sRGB: True
+
+-------
+NOTE:
+* This can be changed using a "Scripted Asset Actions" tool, so you don't have to do all of the above manually every single time.
+* Source:
+  * https://www.youtube.com/watch?v=_sgyZ2dsUV0
+
+==============================================
