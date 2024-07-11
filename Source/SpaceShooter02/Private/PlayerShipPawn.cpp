@@ -40,6 +40,10 @@ APlayerShipPawn::APlayerShipPawn()
 void APlayerShipPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	// TODO: Update player ship from movement and direction inputs
+	//UE_LOG(LogPlayerShipPawn, Log, TEXT("MovementDirection: %s"), *MovementDirection.ToString());
+	//UE_LOG(LogPlayerShipPawn, Log, TEXT("AimingDirection:   %s"), *AimingDirection.ToString());
 }
 
 // Called to bind functionality to input
@@ -50,16 +54,24 @@ void APlayerShipPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		// Bind Movement
-		EnhancedInputComponent->BindAction(InputActionMove, ETriggerEvent::Triggered, this, &ThisClass::MoveTriggered);
-		//EnhancedInputComponent->BindAction(InputActionMove, ETriggerEvent::Completed, this, &ThisClass::MoveCompleted); // Possibly unnecessary
+		// Bind Keyboard Movement
+		ensureAlways(InputActionKeyboardMove != nullptr);
+		EnhancedInputComponent->BindAction(InputActionKeyboardMove, ETriggerEvent::Triggered, this, &ThisClass::KeyboardMoveTriggered);
+		EnhancedInputComponent->BindAction(InputActionKeyboardMove, ETriggerEvent::Completed, this, &ThisClass::KeyboardMoveCompleted);
+		
+		// Bind Gamepad Movement
+		ensureAlways(InputActionGamepadMove != nullptr);
+		EnhancedInputComponent->BindAction(InputActionGamepadMove, ETriggerEvent::Triggered, this, &ThisClass::GamepadMoveTriggered);
+		EnhancedInputComponent->BindAction(InputActionGamepadMove, ETriggerEvent::Completed, this, &ThisClass::GamepadMoveCompleted);
 
-		// Bind Aiming 
-		EnhancedInputComponent->BindAction(InputActionAim, ETriggerEvent::Triggered, this, &ThisClass::AimTriggered);
-		//EnhancedInputComponent->BindAction(InputActionAim, ETriggerEvent::Completed, this, &ThisClass::MoveTriggered); // Possibly unnecessary
+		// Bind Gamepad Aiming
+		ensureAlways(InputActionGamepadAim != nullptr);
+		EnhancedInputComponent->BindAction(InputActionGamepadAim, ETriggerEvent::Triggered, this, &ThisClass::GamepadAimTriggered);
+		EnhancedInputComponent->BindAction(InputActionGamepadAim, ETriggerEvent::Completed, this, &ThisClass::GamepadAimCompleted);
 
-		// Bind Firing/Shooting 
-		EnhancedInputComponent->BindAction(InputActionFire, ETriggerEvent::Started, this, &ThisClass::Fire); // Started: When the player first presses the Fire button
+		// Bind Firing/Shooting
+		ensureAlways(InputActionFire != nullptr);
+		//EnhancedInputComponent->BindAction(InputActionFire, ETriggerEvent::Started, this, &ThisClass::Fire); // Started: When the player first presses the Fire button
 		EnhancedInputComponent->BindAction(InputActionFire, ETriggerEvent::Triggered, this, &ThisClass::Fire); // Triggered: When the player HOLDS down the Fire button
 	}
 }
@@ -88,27 +100,49 @@ void APlayerShipPawn::BeginPlay()
 	}
 }
 
-void APlayerShipPawn::MoveTriggered(const FInputActionValue& InputActionValue)
+void APlayerShipPawn::KeyboardMoveTriggered(const FInputActionValue& InputActionValue)
+{
+	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::KeyboardMoveTriggered - %s"), *GetName());
+	FVector2D MoveTriggeredInput = InputActionValue.Get<FVector2D>();
+	MovementDirection = MoveTriggeredInput.GetSafeNormal();
+}
+
+void APlayerShipPawn::KeyboardMoveCompleted(const FInputActionValue& InputActionValue)
+{
+	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::KeyboardMoveCompleted - %s"), *GetName());
+	MovementDirection = FVector2D::ZeroVector;
+}
+
+void APlayerShipPawn::GamepadMoveTriggered(const FInputActionValue& InputActionValue)
 {
 	FVector2D MoveTriggeredInput = InputActionValue.Get<FVector2D>();
-	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::MoveTriggered - %s, MoveTriggeredInput: %s"), *GetName(), *MoveTriggeredInput.ToString());
+	MovementDirection = MoveTriggeredInput.GetSafeNormal();
+
+	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::GamepadMoveTriggered - MovementDirection: %s"), *MovementDirection.ToString());
 }
 
-void APlayerShipPawn::MoveCompleted(const FInputActionValue& InputActionValue)
+void APlayerShipPawn::GamepadMoveCompleted(const FInputActionValue& InputActionValue)
 {
-	FVector2D MoveCompletedInput = InputActionValue.Get<FVector2D>();
-	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::MoveCompleted - %s, MoveCompletedInput: %s"), *GetName(), *MoveCompletedInput.ToString());
+	MovementDirection = FVector2D::ZeroVector;
+	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::GamepadMoveCompleted - MovementDirection: %s"), *MovementDirection.ToString());
 }
 
-void APlayerShipPawn::AimTriggered(const FInputActionValue& InputActionValue)
+void APlayerShipPawn::GamepadAimTriggered(const FInputActionValue& InputActionValue)
 {
 	FVector2D AimTriggeredInput = InputActionValue.Get<FVector2D>();
-	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::MoveTriggered - %s, AimTriggeredInput: %s"), *GetName(), *AimTriggeredInput.ToString());
+	AimingDirection = AimTriggeredInput.GetSafeNormal();
+	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::GamepadAimTriggered - %s"), *AimingDirection.ToString());
+}
+
+void APlayerShipPawn::GamepadAimCompleted(const FInputActionValue& InputActionValue)
+{
+	AimingDirection = FVector2D::ZeroVector;
+	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::GamepadAimCompleted - AimingDirection: %s"), *AimingDirection.ToString());
 }
 
 void APlayerShipPawn::Fire(const FInputActionValue& InputActionValue)
 {
 	bool FireInput = InputActionValue.Get<bool>();
-	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::Shoot - %s, FireInput: %d"), *GetName(), FireInput);
+	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::Fire - FireInput: %d"), FireInput);
 }
 

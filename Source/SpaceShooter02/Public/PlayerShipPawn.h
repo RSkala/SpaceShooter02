@@ -26,48 +26,65 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
-	void MoveTriggered(const struct FInputActionValue& InputActionValue);
-	void MoveCompleted(const struct FInputActionValue& InputActionValue);
-	void AimTriggered(const struct FInputActionValue& InputActionValue);
+	void KeyboardMoveTriggered(const struct FInputActionValue& InputActionValue);
+	void KeyboardMoveCompleted(const struct FInputActionValue& InputActionValue);
+
+	void GamepadMoveTriggered(const struct FInputActionValue& InputActionValue);
+	void GamepadMoveCompleted(const struct FInputActionValue& InputActionValue);
+
+	void GamepadAimTriggered(const struct FInputActionValue& InputActionValue);
+	void GamepadAimCompleted(const struct FInputActionValue& InputActionValue);
+
 	void Fire(const struct FInputActionValue& InputActionValue);
 
 protected:
 	// --- Components ---
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
 	TObjectPtr<class USphereComponent> SphereComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
 	TObjectPtr<class UPaperSpriteComponent> PaperSpriteComp;
 
 	// --- Camera ---
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
 	TObjectPtr<class USpringArmComponent> SpringArmComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
 	TObjectPtr<class UCameraComponent> CameraComp;
 
 	// --- Input ---
 	// ==== RKS TODO: First, get general input working, then move all input into a PlayerController subclass
 
 	// Mapping Context for Input
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
 	TObjectPtr<class UInputMappingContext> InputMappingContext;
 
-	// Player Ship Movement, i.e. Left Thumbstick or WASD
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input", meta = (AllowPrivateAccess = true))
-	TObjectPtr<class UInputAction> InputActionMove;
+	// Player ship movement via keyboard, i.e. WASD
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
+	TObjectPtr<class UInputAction> InputActionKeyboardMove;
+
+	// Player ship movement via gamepad, i.e. left thumbstick
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
+	TObjectPtr<class UInputAction> InputActionGamepadMove;
 
 	// Player Ship Aim, i.e. Right Thumbstick or Mouse
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input", meta = (AllowPrivateAccess = true))
-	TObjectPtr<class UInputAction> InputActionAim;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
+	TObjectPtr<class UInputAction> InputActionGamepadAim;
 
 	// Player Ship Shoot, i.e. Gamepad face button or Left Mouse
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
 	TObjectPtr<class UInputAction> InputActionFire;
 
 	// Player Ship Dash, i.e. Gamepad right bumpter or SpaceBar
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
 	TObjectPtr<class UInputAction> InputActionDash;
+
+	// --- Movement and Aiming ---
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming")
+	FVector2D MovementDirection;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming")
+	FVector2D AimingDirection;
 };

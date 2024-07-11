@@ -151,3 +151,55 @@ Using 3840, so the size will be:
 3840 x 2160 (i.e. 4K, although that doesn't really matter)
 
 ==============================================
+Player Input:
+
+NOTES:
+* Note that I separated movement input between keyboard and gamepad. I did this intentionally so I could debug inputs more easily.
+* That is:
+
+  void KeyboardMoveTriggered(const struct FInputActionValue& InputActionValue);
+  void KeyboardMoveCompleted(const struct FInputActionValue& InputActionValue);
+
+  void GamepadMoveTriggered(const struct FInputActionValue& InputActionValue);
+  void GamepadMoveCompleted(const struct FInputActionValue& InputActionValue);
+
+* I implemented this first in the PlayerShipPawn class directly, so it would be quicker to implement. Once movement and general gameplay input is working sufficiently, I plan on moving this over to a custom PlayerController subclass.
+
+---------------------------------------------------
+
+Blueprint Setup:
+
+---------------------------------------------------
+Thumbstick Input:
+
+Input Action:
+* Value Type: Axis2D (Vector2D)
+* Modifier: Dead Zone
+  * Default values of [0.2, 1.0] works well
+
+Input Mapping Context:
+* After adding the InputAction:
+* Assign Gamepad Left Thumbstick X-Axis
+  * Default values are fine
+* Assign Gamepad Left Thumbstick Y-Axis
+  * Modifier: Swizzle Input Axis Values
+* Note that the DeadZone modifier is "inherited" from the InputAction and cannot be edited here
+
+---------------------------------------------------
+Keyboard Input for Movement (WASD)
+
+Input Action:
+* Value Type: Axis2D (Vector2D)
+* No other settings need to be changed
+
+Input Mapping Context:
+* After adding the InputAction:
+* D = Right / +X axis => Default
+* A = Left  / -X axis => Modifier: Negate
+* W = Up    / +Y axis => Modifier: Swizzle Input Axis Values YXZ
+* S = Down  / -Y axis => Modifier: Negate, Swizzle Input Axis Values YXZ
+
+---------------------------------------------------
+
+
+==============================================
