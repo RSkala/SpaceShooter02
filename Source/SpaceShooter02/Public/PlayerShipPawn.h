@@ -28,6 +28,7 @@ protected:
 protected:
 	void MoveTriggered(const struct FInputActionValue& InputActionValue);
 	void MoveCompleted(const struct FInputActionValue& InputActionValue);
+	void AimTriggered(const struct FInputActionValue& InputActionValue);
 	void Fire(const struct FInputActionValue& InputActionValue);
 
 protected:

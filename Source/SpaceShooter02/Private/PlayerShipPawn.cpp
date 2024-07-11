@@ -52,7 +52,11 @@ void APlayerShipPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	{
 		// Bind Movement
 		EnhancedInputComponent->BindAction(InputActionMove, ETriggerEvent::Triggered, this, &ThisClass::MoveTriggered);
-		EnhancedInputComponent->BindAction(InputActionMove, ETriggerEvent::Completed, this, &ThisClass::MoveCompleted);
+		//EnhancedInputComponent->BindAction(InputActionMove, ETriggerEvent::Completed, this, &ThisClass::MoveCompleted); // Possibly unnecessary
+
+		// Bind Aiming 
+		EnhancedInputComponent->BindAction(InputActionAim, ETriggerEvent::Triggered, this, &ThisClass::AimTriggered);
+		//EnhancedInputComponent->BindAction(InputActionAim, ETriggerEvent::Completed, this, &ThisClass::MoveTriggered); // Possibly unnecessary
 
 		// Bind Firing/Shooting 
 		EnhancedInputComponent->BindAction(InputActionFire, ETriggerEvent::Started, this, &ThisClass::Fire); // Started: When the player first presses the Fire button
@@ -94,6 +98,12 @@ void APlayerShipPawn::MoveCompleted(const FInputActionValue& InputActionValue)
 {
 	FVector2D MoveCompletedInput = InputActionValue.Get<FVector2D>();
 	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::MoveCompleted - %s, MoveCompletedInput: %s"), *GetName(), *MoveCompletedInput.ToString());
+}
+
+void APlayerShipPawn::AimTriggered(const FInputActionValue& InputActionValue)
+{
+	FVector2D AimTriggeredInput = InputActionValue.Get<FVector2D>();
+	UE_LOG(LogPlayerShipPawn, Log, TEXT("APlayerShipPawn::MoveTriggered - %s, AimTriggeredInput: %s"), *GetName(), *AimTriggeredInput.ToString());
 }
 
 void APlayerShipPawn::Fire(const FInputActionValue& InputActionValue)
