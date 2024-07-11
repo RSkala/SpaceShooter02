@@ -134,3 +134,20 @@ Editor Viewport Settings
   * Unlit
 
 ==============================================
+Orthographic Width
+
+This is the width of the camera view in Unreal Units
+So, a Ortho Width of 1000 is exactly 1000 Unreal Units = 1000cm = 10m
+This means that exactly 10 ship sprites in this game will across the screen from edge to edge.
+
+If the Aspect Ratio is set to 16:9 (1.777778), then the screen height will be:
+1000 / 1.777778 ~ 562
+
+Therefore, the screen orthographic viewport size will be:
+1000 x 562
+
+However, this is way too small for this game.
+Using 3840, so the size will be:
+3840 x 2160 (i.e. 4K, although that doesn't really matter)
+
+==============================================
