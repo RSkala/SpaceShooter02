@@ -4,6 +4,7 @@
 
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/SceneComponent.h"
 #include "Components/SphereComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -11,6 +12,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "InputActionValue.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "PaperFlipbookComponent.h"
 #include "PaperSpriteComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawn, Warning, All)
@@ -37,6 +39,12 @@ APlayerShipPawn::APlayerShipPawn()
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(SpringArmComp, USpringArmComponent::SocketName);
+
+	FirePointComp = CreateDefaultSubobject<USceneComponent>(TEXT("FirePointComp"));
+	FirePointComp->SetupAttachment(RootComponent);
+
+	ShipExhaustFlipbookComp = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("ShipExhaustFlipbookComp"));
+	ShipExhaustFlipbookComp->SetupAttachment(RootComponent);
 }
 
 // Called every frame
@@ -48,6 +56,10 @@ void APlayerShipPawn::Tick(float DeltaTime)
 	//UE_LOG(LogPlayerShipPawn, Log, TEXT("MovementDirection: %s"), *MovementDirection.ToString());
 	//UE_LOG(LogPlayerShipPawn, Log, TEXT("AimingDirection:   %s"), *AimingDirection.ToString());
 
+	// Show / Hide the ship's exhaust
+	UpdateExhaust();
+
+	// Update the ship movement from the movement input
 	UpdateMovement(DeltaTime);
 }
 
@@ -174,6 +186,27 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 		// FRotator NewPlayerShipRotation = UKismetMathLibrary::MakeRotator(0.0f, AtanAngleDegrees, 0.0f);
 		// SetActorRotation(NewPlayerShipRotation);
 		// UE_LOG(LogPlayerShipPawnMovement, Log, TEXT("AtanAngleDegrees: %0.3f"), AtanAngleDegrees);
+	}
+}
+
+void APlayerShipPawn::UpdateExhaust()
+{
+	if (ShipExhaustFlipbookComp != nullptr)
+	{
+		if (MovementDirection.SquaredLength() > 0.0f)
+		{
+			if (ShipExhaustFlipbookComp->bHiddenInGame)
+			{
+				ShipExhaustFlipbookComp->SetHiddenInGame(false);
+			}
+		}
+		else
+		{
+			if (!ShipExhaustFlipbookComp->bHiddenInGame)
+			{
+				ShipExhaustFlipbookComp->SetHiddenInGame(true);
+			}
+		}
 	}
 }
 

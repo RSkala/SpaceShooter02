@@ -26,6 +26,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	void UpdateMovement(float DeltaTime);
+	void UpdateExhaust();
 
 protected:
 	void KeyboardMoveTriggered(const struct FInputActionValue& InputActionValue);
@@ -50,11 +51,19 @@ protected:
 
 	// --- Camera ---
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components|Camera")
 	TObjectPtr<class USpringArmComponent> SpringArmComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components|Camera")
 	TObjectPtr<class UCameraComponent> CameraComp;
+
+	// --- Scene Components (fire point, exhaust, etc) ---
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components|Scene")
+	TObjectPtr<class USceneComponent> FirePointComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components|Scene")
+	TObjectPtr<class UPaperFlipbookComponent> ShipExhaustFlipbookComp;
 
 	// --- Input ---
 	// ==== RKS TODO: First, get general input working, then move all input into a PlayerController subclass
