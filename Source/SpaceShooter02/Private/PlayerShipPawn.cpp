@@ -10,10 +10,12 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "InputActionValue.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "PaperSpriteComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawn, Warning, All)
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnInput, Warning, All)
+DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnMovement, Log, All)
 
 // Sets default values
 APlayerShipPawn::APlayerShipPawn()
@@ -45,6 +47,8 @@ void APlayerShipPawn::Tick(float DeltaTime)
 	// TODO: Update player ship from movement and direction inputs
 	//UE_LOG(LogPlayerShipPawn, Log, TEXT("MovementDirection: %s"), *MovementDirection.ToString());
 	//UE_LOG(LogPlayerShipPawn, Log, TEXT("AimingDirection:   %s"), *AimingDirection.ToString());
+
+	UpdateMovement(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -98,6 +102,66 @@ void APlayerShipPawn::BeginPlay()
 			LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
 		}*/
 		// ---------------------------------------------------------------------
+	}
+}
+
+void APlayerShipPawn::UpdateMovement(float DeltaTime)
+{
+	UE_LOG(LogPlayerShipPawnMovement, Verbose, TEXT("APlayerShipPawn::UpdateMovement: %s"), *MovementDirection.ToString());
+
+	if(MovementDirection.Length() > 0.0f)
+	{
+		// Valid movement input - update the player ship position and rotation
+		
+		// --------------------------------------------------------
+		// Update the ship position
+		
+		// Get player ship's current position
+		FVector PlayerShipPosition = GetActorLocation();
+
+		// Get the distance to move this frame using the movement direction
+		// Movement formula, Distance = Rate * Time
+		FVector2D MovementAmount2D = MovementDirection * MoveSpeed * DeltaTime;
+
+		// Get the movement amount as a 3D vector, as SetActorLocation() uses FVector
+		//FVector MovementAmount = FVector(MovementAmount2D.X, PlayerShipPosition.Y, MovementAmount2D.Y);
+		FVector MovementAmount = FVector(MovementAmount2D.X, 0.0f, MovementAmount2D.Y);
+
+		// Get the new ship position and set it
+		FVector NewShipPosition = PlayerShipPosition + MovementAmount;
+		SetActorLocation(NewShipPosition);
+
+		// ---------------------------------------------------------
+		// Update the ship facing direction
+		FRotator PlayerShipRotation = GetActorRotation();
+
+		//FVector MovementDirection3D = FVector(MovementDirection.X, PlayerShipPosition.Y, MovementDirection.Y);
+		FVector MovementDirection3D = FVector(MovementDirection.X, 0.0f, MovementDirection.Y);
+
+		// Get the angle between the world up vector (+Z axis) and the movement input direction
+		float Dot = FVector::UnitZ().Dot(MovementDirection3D);
+		float Acos = FMath::Acos(Dot);
+		float AngleDegrees = FMath::RadiansToDegrees(Acos);
+
+		FVector Cross = FVector::CrossProduct(FVector::UnitZ(), MovementDirection3D);
+
+		// Determine the rotation direction from the cross product (left-hand rule since Unreal uses a left handed coordinate system)
+		// Since our 2D coordinate system is in the XZ plane (X = Horiz, Z = Vert), we want the sign of the Y value of the cross product.
+		// If the Y value is POSITIVE, then the plane projection is in the +Y (and therefore a POSITIVE rotation).
+		// If the Y value is NEGATIVE, then the plane projection is in the -Y (and therefore a NEGATIVE rotation).
+
+		// Positive Rotation is COUNTERCLOCKWISE (to the left)
+		// Negative Rotation is CLOCKWISE (to the right)
+		float AngleDirectionMultipler = Cross.Y >= 0.0f ? -1.0f : 1.0f;
+		AngleDegrees *= AngleDirectionMultipler;
+
+		//UE_LOG(LogPlayerShipPawnMovement, Log, TEXT("-----------------------------"));
+		//UE_LOG(LogPlayerShipPawnMovement, Log, TEXT("Cross:                   %s"), *Cross.ToString());
+		//UE_LOG(LogPlayerShipPawnMovement, Log, TEXT("AngleDirectionMultipler: %0.2f"), AngleDirectionMultipler);
+		//UE_LOG(LogPlayerShipPawnMovement, Log, TEXT("AngleDegrees:            %0.2f"), AngleDegrees);
+
+		FRotator NewPlayerShipRotation = UKismetMathLibrary::MakeRotator(0.0f, AngleDegrees, 0.0f);
+		SetActorRotation(NewPlayerShipRotation);
 	}
 }
 

@@ -25,6 +25,8 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void UpdateMovement(float DeltaTime);
+
 protected:
 	void KeyboardMoveTriggered(const struct FInputActionValue& InputActionValue);
 	void KeyboardMoveCompleted(const struct FInputActionValue& InputActionValue);
@@ -87,4 +89,8 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming")
 	FVector2D AimingDirection;
+
+	// --- Movement ---
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming", meta = (ClampMin = "1"))
+	float MoveSpeed;
 };
