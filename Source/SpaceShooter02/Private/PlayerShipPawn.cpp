@@ -144,6 +144,7 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 		float AngleDegrees = FMath::RadiansToDegrees(Acos);
 
 		FVector Cross = FVector::CrossProduct(FVector::UnitZ(), MovementDirection3D);
+		//UE_LOG(LogPlayerShipPawnMovement, Log, TEXT("Cross: %s"), *Cross.ToString());
 
 		// Determine the rotation direction from the cross product (left-hand rule since Unreal uses a left handed coordinate system)
 		// Since our 2D coordinate system is in the XZ plane (X = Horiz, Z = Vert), we want the sign of the Y value of the cross product.
@@ -162,6 +163,17 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 
 		FRotator NewPlayerShipRotation = UKismetMathLibrary::MakeRotator(0.0f, AngleDegrees, 0.0f);
 		SetActorRotation(NewPlayerShipRotation);
+
+		// NOTE:
+		// I could also get the angle using Atan2, but there are two caveats:
+		// (1) I need to pass X as the first param and Y as the second, which is backwards from what I would expect
+		// (2) I need to flip the result (multiply by -1), which is also not what I would expect
+		// It would be called like this:
+		// float AtanDegrees = -1.0f * FMath::RadiansToDegrees(FMath::Atan2(MovementDirection.X, MovementDirection.Y));
+		// float AtanAngleDegrees = -1.0f * FMath::RadiansToDegrees(FMath::Atan2(MovementDirection.X, MovementDirection.Y));
+		// FRotator NewPlayerShipRotation = UKismetMathLibrary::MakeRotator(0.0f, AtanAngleDegrees, 0.0f);
+		// SetActorRotation(NewPlayerShipRotation);
+		// UE_LOG(LogPlayerShipPawnMovement, Log, TEXT("AtanAngleDegrees: %0.3f"), AtanAngleDegrees);
 	}
 }
 
