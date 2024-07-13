@@ -12,12 +12,20 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "InputActionValue.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "PaperFlipbook.h"
 #include "PaperFlipbookComponent.h"
+#include "PaperSprite.h"
 #include "PaperSpriteComponent.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawn, Warning, All)
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnInput, Warning, All)
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnMovement, Log, All)
+
+namespace
+{
+	static const TCHAR* DefaultPlayerShipSpritePath = TEXT("/Game/Sprites/PlayerShips/SPR_PlayerShip_2");
+	static const TCHAR* DefaultPlayerShipExhaustFlipbookPath = TEXT("/Game/Sprites/ShipExhaust/PFB_Ship_Exhaust_1");
+}
 
 // Sets default values
 APlayerShipPawn::APlayerShipPawn()
@@ -33,18 +41,39 @@ APlayerShipPawn::APlayerShipPawn()
 
 	PaperSpriteComp = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("PaperSpriteComp"));
 	PaperSpriteComp->SetupAttachment(RootComponent);
-
+	PaperSpriteComp->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
+	if (HasAnyFlags(EObjectFlags::RF_ClassDefaultObject))
+	{
+		// Set the default ship sprite (for the CDO only)
+		ConstructorHelpers::FObjectFinderOptional<UPaperSprite> DefaultPlayerShipSpriteFinder(DefaultPlayerShipSpritePath);
+		PaperSpriteComp->SetSprite(DefaultPlayerShipSpriteFinder.Get());
+	}
+	
 	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
 	SpringArmComp->SetupAttachment(RootComponent);
+	SpringArmComp->TargetArmLength = 1000.0f; // While armlength doesn't matter for orthographic, set far enough away so as to not be in the way
+	SpringArmComp->bDoCollisionTest = false; // Ensure the SpringArm does not collide with anything in the world (so it isn't "pushed")
+	SpringArmComp->SetAbsolute(false, true, false); // Set the SpringArm rotation to Absolute, so its rotation is not affected by the ship in any way
+	SpringArmComp->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0)); // Set the rotation so it is looking down the Y-axis towards the XZ plane (Note: Yaw is Z-axis rotation)
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(SpringArmComp, USpringArmComponent::SocketName);
+	CameraComp->SetProjectionMode(ECameraProjectionMode::Orthographic);
+	CameraComp->OrthoWidth = 3840.0f;
+	//CameraComp->bConstrainAspectRatio = true; // TODO: Test this value to see if it has any positive or negative effects
 
 	FirePointComp = CreateDefaultSubobject<USceneComponent>(TEXT("FirePointComp"));
 	FirePointComp->SetupAttachment(RootComponent);
 
 	ShipExhaustFlipbookComp = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("ShipExhaustFlipbookComp"));
 	ShipExhaustFlipbookComp->SetupAttachment(RootComponent);
+	ShipExhaustFlipbookComp->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
+	if (HasAnyFlags(EObjectFlags::RF_ClassDefaultObject))
+	{
+		// Set the default player ship exhaust flipbook (for the CDO only)
+		ConstructorHelpers::FObjectFinderOptional<UPaperFlipbook> DefaultPlayerShipExhaustFlipbookFinder(DefaultPlayerShipExhaustFlipbookPath);
+		ShipExhaustFlipbookComp->SetFlipbook(DefaultPlayerShipExhaustFlipbookFinder.Get());
+	}
 }
 
 // Called every frame
