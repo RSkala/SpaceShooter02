@@ -33,3 +33,14 @@ const TCHAR* AProjectileRectangular::GetDefaultSpritePath() const
 {
 	return DefaultProjectileSpritePath;
 }
+
+void AProjectileRectangular::OnCollisionOverlap(
+	UPrimitiveComponent* OverlappedComponent,
+	AActor* OtherActor,
+	UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex,
+	bool bFromSweep,
+	const FHitResult& SweepResult)
+{
+	UE_LOG(LogProjectiles, Log, TEXT("AProjectileRectangular::OnCollisionOverlap - %s"), *GetName());
+}

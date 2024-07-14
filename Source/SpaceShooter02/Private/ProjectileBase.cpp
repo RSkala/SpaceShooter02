@@ -6,6 +6,8 @@
 #include "PaperSprite.h"
 #include "PaperSpriteComponent.h"
 
+DEFINE_LOG_CATEGORY_CLASS(AProjectileBase, LogProjectiles)
+
 AProjectileBase::AProjectileBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -19,6 +21,11 @@ void AProjectileBase::Tick(float DeltaTime)
 void AProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	if (CollisionShapeComp != nullptr)
+	{
+		CollisionShapeComp->OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::OnCollisionOverlap);
+	}	
 }
 
 void AProjectileBase::CreateProjectileDefaultSubobjects()
@@ -32,6 +39,11 @@ void AProjectileBase::CreateProjectileDefaultSubobjects()
 
 	// Create the sprite component
 	CreateSpriteComponent(GetDefaultSpritePath());
+}
+
+void AProjectileBase::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	UE_LOG(LogProjectiles, Log, TEXT("AProjectileBase::OnCollisionOverlap - %s"), *GetName());
 }
 
 void AProjectileBase::CreateCollisionVolumeComponent(TSubclassOf<UShapeComponent> CollisionVolumeClass)

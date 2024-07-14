@@ -10,6 +10,9 @@ UCLASS(Abstract, NotBlueprintable)
 class SPACESHOOTER02_API AProjectileBase : public AActor
 {
 	GENERATED_BODY()
+
+public:
+	DECLARE_LOG_CATEGORY_CLASS(LogProjectiles, Log, All)
 	
 public:	
 	AProjectileBase();
@@ -21,6 +24,15 @@ protected:
 	void CreateProjectileDefaultSubobjects(); // Should be called in the constructor of any subclass. Will create all the proper default subobjects.
 	virtual TSubclassOf<class UShapeComponent> GetCollisionVolumeComponentClass() const; // PURE_VIRTUAL(GetCollisionVolumeComponentClass, ;)
 	virtual const TCHAR* GetDefaultSpritePath() const; // PURE_VIRTUAL(GetDefaultSpritePath, ;)
+
+	UFUNCTION()
+	virtual void OnCollisionOverlap(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
 
 private:
 	void CreateCollisionVolumeComponent(TSubclassOf<UShapeComponent> CollisionVolumeClass);
