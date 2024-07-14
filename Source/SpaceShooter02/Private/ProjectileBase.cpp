@@ -2,7 +2,7 @@
 
 #include "ProjectileBase.h"
 
-#include "Components/SphereComponent.h"
+#include "Components/ShapeComponent.h"
 #include "PaperSprite.h"
 #include "PaperSpriteComponent.h"
 
@@ -21,18 +21,41 @@ void AProjectileBase::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AProjectileBase::CreateProjectileDefaultSubobjects()
+{
+	// Create the scene root component
+	RootSceneComp = CreateDefaultSubobject<USceneComponent>("RootSceneComp");
+	SetRootComponent(RootSceneComp);
+
+	// Create the collision component
+	CreateCollisionVolumeComponent(GetCollisionVolumeComponentClass());
+
+	// Create the sprite component
+	CreateSpriteComponent(GetDefaultSpritePath());
+}
+
+void AProjectileBase::CreateCollisionVolumeComponent(TSubclassOf<UShapeComponent> CollisionVolumeClass)
+{
+	// Ensure this function is ONLY being called from the constructor
+	EnsureConstructorOnlyCall(GET_FUNCTION_NAME_CHECKED(AProjectileBase, CreateCollisionVolumeComponent));
+
+	// Ensure the RootComponent is valid (should have already been created before this function call)
+	ensureAlways(RootComponent != nullptr);
+
+	// Create the collision shape using the given collision volume class and attach to the root
+	CollisionShapeComp = Cast<UShapeComponent>(CreateDefaultSubobject(TEXT("CollisionShapeComp"), CollisionVolumeClass, CollisionVolumeClass, true, false));
+	CollisionShapeComp->SetupAttachment(RootComponent);
+}
+
 void AProjectileBase::CreateSpriteComponent(const TCHAR* DefaultSpritePath)
 {
-	// Ensure this function is ONLY being called from the constructor (since the sprite should be a child of the collision)
-	FUObjectThreadContext& ThreadContext = FUObjectThreadContext::Get();
-	ensureAlwaysMsgf(
-		ThreadContext.IsInConstructor > 0,
-		TEXT("Function %s should only be called from a Constructor!"), ANSI_TO_TCHAR(__FUNCTION__));
+	// Ensure this function is ONLY being called from the constructor
+	EnsureConstructorOnlyCall(GET_FUNCTION_NAME_CHECKED(AProjectileBase, CreateSpriteComponent));
 
 	// Ensure the sprite path string is valid
 	ensureAlways(DefaultSpritePath != nullptr);
 
-	// Ensure the RootComponent is valid (should have already been created in the subclass)
+	// Ensure the RootComponent is valid (should have already been created before this function call)
 	ensureAlways(RootComponent != nullptr);
 
 	// Create the bullet sprite and disable collision on it
@@ -49,3 +72,25 @@ void AProjectileBase::CreateSpriteComponent(const TCHAR* DefaultSpritePath)
 	//BulletSpriteComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	//BulletSpriteComp->SetCollisionResponseToChannel(ECC_Destructible, ECR_Overlap);
 }
+
+void AProjectileBase::EnsureConstructorOnlyCall(FName CallingFunctionName)
+{
+	// Ensure the calling function is only called in a constructor
+	FUObjectThreadContext& ThreadContext = FUObjectThreadContext::Get();
+	ensureAlwaysMsgf(
+		ThreadContext.IsInConstructor > 0,
+		TEXT("Function %s should only be called from a Constructor!"), *CallingFunctionName.ToString());
+}
+
+TSubclassOf<UShapeComponent> AProjectileBase::GetCollisionVolumeComponentClass() const
+{
+	checkf(false, TEXT("AProjectileBase::GetCollisionVolumeComponentClass MUST be overidden in a subclass"));
+	return UShapeComponent::StaticClass();
+}
+
+const TCHAR* AProjectileBase::GetDefaultSpritePath() const
+{
+	checkf(false, TEXT("AProjectileBase::GetDefaultSpritePath MUST be overidden in a subclass"));
+	return L"";
+}
+

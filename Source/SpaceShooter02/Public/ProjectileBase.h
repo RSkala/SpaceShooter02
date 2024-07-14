@@ -17,13 +17,29 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void CreateCollisionVolume() { checkf(false, TEXT("AProjectileBase::CreateCollisionVolume MUST be overidden in a subclass")); } //PURE_VIRTUAL(CreateCollisionVolume, ;);
+
+	void CreateProjectileDefaultSubobjects(); // Should be called in the constructor of any subclass. Will create all the proper default subobjects.
+	virtual TSubclassOf<class UShapeComponent> GetCollisionVolumeComponentClass() const; // PURE_VIRTUAL(GetCollisionVolumeComponentClass, ;)
+	virtual const TCHAR* GetDefaultSpritePath() const; // PURE_VIRTUAL(GetDefaultSpritePath, ;)
+
+private:
+	void CreateCollisionVolumeComponent(TSubclassOf<UShapeComponent> CollisionVolumeClass);
 	void CreateSpriteComponent(const TCHAR* DefaultSpritePath);
+	void EnsureConstructorOnlyCall(FName CallingFunctionName);
 
 protected:
 
 	// --- Components ---
 
+	// Root scene component that all subobjects should be attached to. This way, we can scale the collision without affecting the sprite.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class USceneComponent> RootSceneComp;
+
+	// Collision Volume. This is expected to be created in a subclass with its own specific type (e.g. Sphere, Box, etc)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UShapeComponent> CollisionShapeComp;
+
+	// Sprite for projectile
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UPaperSpriteComponent> ProjectileSpriteComp;
 
@@ -41,3 +57,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileBase|Behavior", meta = (ClampMin = "0"))
 	float LifetimeSeconds = 10.0f;
 };
+
+//template<class T>
+//inline void AProjectileBase::CreateCollisionVolumeFromClass(T CollisionVolumeClass)
+//{
+//}

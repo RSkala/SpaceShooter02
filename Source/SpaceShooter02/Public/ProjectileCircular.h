@@ -18,10 +18,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void CreateCollisionVolume() override;
 
-protected:
-	// Sphere Component - Used for collisions
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class USphereComponent> SphereComp;
+	virtual TSubclassOf<class UShapeComponent> GetCollisionVolumeComponentClass() const override;
+	virtual const TCHAR* GetDefaultSpritePath() const override;
 };

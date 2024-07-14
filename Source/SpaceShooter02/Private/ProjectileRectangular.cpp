@@ -11,8 +11,7 @@ namespace
 
 AProjectileRectangular::AProjectileRectangular()
 {
-	CreateCollisionVolume();
-	CreateSpriteComponent(DefaultProjectileSpritePath);
+	CreateProjectileDefaultSubobjects();
 }
 
 void AProjectileRectangular::Tick(float DeltaTime)
@@ -25,8 +24,12 @@ void AProjectileRectangular::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AProjectileRectangular::CreateCollisionVolume()
+TSubclassOf<UShapeComponent> AProjectileRectangular::GetCollisionVolumeComponentClass() const
 {
-	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
-	SetRootComponent(BoxComp);
+	return UBoxComponent::StaticClass();
+}
+
+const TCHAR* AProjectileRectangular::GetDefaultSpritePath() const
+{
+	return DefaultProjectileSpritePath;
 }

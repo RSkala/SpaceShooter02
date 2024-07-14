@@ -6,13 +6,12 @@
 
 namespace
 {
-	static const TCHAR* DefaultProjectileSpritePath = TEXT("/Game/Sprites/Projectiles/SPR_Projectile_01");
+	static const TCHAR* DefaultProjectileSpritePath = TEXT("/Game/Sprites/Projectiles/SPR_Projectile_02");
 }
 
 AProjectileCircular::AProjectileCircular()
 {
-	CreateCollisionVolume();
-	CreateSpriteComponent(DefaultProjectileSpritePath);
+	CreateProjectileDefaultSubobjects();
 }
 
 void AProjectileCircular::Tick(float DeltaTime)
@@ -25,8 +24,12 @@ void AProjectileCircular::BeginPlay()
 	Super::BeginPlay();
 }
 
-void AProjectileCircular::CreateCollisionVolume()
+TSubclassOf<UShapeComponent> AProjectileCircular::GetCollisionVolumeComponentClass() const
 {
-	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
-	SetRootComponent(SphereComp);
+	return USphereComponent::StaticClass();
+}
+
+const TCHAR* AProjectileCircular::GetDefaultSpritePath() const
+{
+	return DefaultProjectileSpritePath;
 }
