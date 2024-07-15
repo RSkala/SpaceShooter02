@@ -272,4 +272,18 @@ Adding an Object or Trace Channel will modify Config/DefaultEngine.ini in:
 ------------------------------------------
 
 ==============================================
+Gamepad Right-Thumbstick Aiming
 
+* On gamepads, the joystick Y-Axis UP is NEGATIVE and the joystick Y-Axis DOWN is POSITIVE.
+
+Therefore, in addition to Swizzle Axis Values you MUST also add the NEGATE modifier.
+That is, if you're expecting Y-Axis UP to be Positive (which I do, as that is what I used to calculate rotations).
+
+I've been using the Movement and Aiming in 3D, but I might be able to use 2D:
+
+float Cross2D = FVector2D::CrossProduct(FVector2D::UnitY(), MovementDirection);
+UE_LOG(LogTemp, Warning, TEXT("Movement - 2D Cross Product: %f"), Cross2D);
+
+https://stackoverflow.com/questions/22571740/what-is-the-geometry-meaning-of-2d-cross-product
+
+==============================================

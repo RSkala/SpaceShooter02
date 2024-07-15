@@ -95,6 +95,7 @@ void APlayerShipPawn::Tick(float DeltaTime)
 
 	// Update the ship movement from the movement input
 	UpdateMovement(DeltaTime);
+	UpdateGamepadAimFiring();
 
 	// Increase the time since last shot
 	TimeSinceLastShot += DeltaTime;
@@ -164,7 +165,7 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 {
 	UE_LOG(LogPlayerShipPawnMovement, Verbose, TEXT("APlayerShipPawn::UpdateMovement: %s"), *MovementDirection.ToString());
 
-	if(MovementDirection.Length() > 0.0f)
+	if (MovementDirection.SquaredLength() > 0.0f)
 	{
 		// Valid movement input - update the player ship position and rotation
 		
@@ -188,9 +189,16 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 
 		// ---------------------------------------------------------
 		// Update the ship facing direction
-		FRotator PlayerShipRotation = GetActorRotation();
 
-		//FVector MovementDirection3D = FVector(MovementDirection.X, PlayerShipPosition.Y, MovementDirection.Y);
+		// Note/Todo: I probably can use 2D calculations instead:
+		//float Dot2D = FVector2D::UnitY().Dot(MovementDirection); // FVector2d::DotProduct(FVector2D::UnitY(), MovementDirection);
+		//float Acos2D = FMath::Acos(Dot2D);
+		//float AngleDegrees2D = FMath::RadiansToDegrees(Acos2D);
+		//float Cross2D = FVector2D::CrossProduct(FVector2D::UnitY(), MovementDirection); // Get the 2D "Wedge Product"
+		//float AngleDirectionMultipler2D = Cross2D >= 0.0f ? 1.0f : -1.0f; // If result > 0, then direction is the left of the Up-Vector
+		//AngleDegrees2D *= AngleDirectionMultipler2D;
+
+		// Get the movement direction in 3D
 		FVector MovementDirection3D = FVector(MovementDirection.X, 0.0f, MovementDirection.Y);
 
 		// Get the angle between the world up vector (+Z axis) and the movement input direction
@@ -208,7 +216,7 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 
 		// Positive Rotation is COUNTERCLOCKWISE (to the left)
 		// Negative Rotation is CLOCKWISE (to the right)
-		float AngleDirectionMultipler = Cross.Y >= 0.0f ? -1.0f : 1.0f;
+		float AngleDirectionMultipler = Cross.Y >= 0.0f ? -1.0f : 1.0f; // Note: This is backwards from what I was expecting, whereas the 2D version yields what I was expecting
 		AngleDegrees *= AngleDirectionMultipler;
 
 		//UE_LOG(LogPlayerShipPawnMovement, Log, TEXT("-----------------------------"));
@@ -229,6 +237,36 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 		// FRotator NewPlayerShipRotation = UKismetMathLibrary::MakeRotator(0.0f, AtanAngleDegrees, 0.0f);
 		// SetActorRotation(NewPlayerShipRotation);
 		// UE_LOG(LogPlayerShipPawnMovement, Log, TEXT("AtanAngleDegrees: %0.3f"), AtanAngleDegrees);
+	}
+}
+
+void APlayerShipPawn::UpdateGamepadAimFiring()
+{
+	// If the aiming direction is greater than 0, then the player is aiming/firing with the gamepad right thumbstick
+	if (AimingDirection.SquaredLength() > 0.0f)
+	{
+		// Fire a projectile if enough time has elapsed from the last time a projectile was fired
+		if (TimeSinceLastShot >= FireRate)
+		{
+			// Get the aiming direction in 3D
+			//UE_LOG(LogTemp, Warning, TEXT("-----------------------"));
+			//UE_LOG(LogTemp, Warning, TEXT("AimingDirection: %s"), *AimingDirection.ToString());
+			FVector AimingDirection3D = FVector(AimingDirection.X, 0.0f, AimingDirection.Y);
+
+			// Get the angle between the world up vector (+Z axis) and the movement input direction
+			float Dot = FVector::UnitZ().Dot(AimingDirection3D);
+			float Acos = FMath::Acos(Dot);
+			float AngleDegrees = FMath::RadiansToDegrees(Acos);
+
+			FVector Cross = FVector::CrossProduct(FVector::UnitZ(), AimingDirection3D);
+			float AngleDirectionMultipler = Cross.Y >= 0.0f ? -1.0f : 1.0f;
+			AngleDegrees *= AngleDirectionMultipler;
+
+			FRotator AimingRotation = UKismetMathLibrary::MakeRotator(0.0f, AngleDegrees, 0.0f);
+			//UE_LOG(LogTemp, Warning, TEXT("AimingRotation: %s"), *AimingRotation.ToString());
+
+			FireProjectile(AimingRotation);
+		}
 	}
 }
 
@@ -300,11 +338,12 @@ void APlayerShipPawn::Fire(const FInputActionValue& InputActionValue)
 	// Fire a projectile if enough time has elapsed from the last time a projectile was fired
 	if (TimeSinceLastShot >= FireRate)
 	{
-		FireProjectile();
+		FRotator PlayerShipRotation = GetActorRotation();
+		FireProjectile(PlayerShipRotation);
 	}
 }
 
-void APlayerShipPawn::FireProjectile()
+void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 {
 	if (ensureMsgf(
 		ProjectileClass != nullptr,
@@ -322,7 +361,8 @@ void APlayerShipPawn::FireProjectile()
 			ProjectileSpawnParameters.NameMode = FActorSpawnParameters::ESpawnActorNameMode::Requested;
 			ProjectileSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-			AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, PlayerShipRotation, ProjectileSpawnParameters);
+			//AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, PlayerShipRotation, ProjectileSpawnParameters);
+			AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, ProjectileRotation, ProjectileSpawnParameters);
 			FiredProjectile->Init(FVector::ZeroVector, FRotator::ZeroRotator); // wip
 
 			// Play the shoot sound

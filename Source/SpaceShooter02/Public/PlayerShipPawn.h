@@ -26,6 +26,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	void UpdateMovement(float DeltaTime);
+	void UpdateGamepadAimFiring();
 	void UpdateExhaust();
 
 protected:
@@ -40,7 +41,7 @@ protected:
 
 	void Fire(const struct FInputActionValue& InputActionValue);
 	
-	void FireProjectile();
+	void FireProjectile(FRotator ProjectileRotation);
 	void PlayShootSound();
 
 protected:
