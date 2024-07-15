@@ -39,6 +39,8 @@ protected:
 	void GamepadAimCompleted(const struct FInputActionValue& InputActionValue);
 
 	void Fire(const struct FInputActionValue& InputActionValue);
+	
+	void FireProjectile();
 
 protected:
 	// --- Components ---
@@ -102,4 +104,9 @@ protected:
 	// --- Movement ---
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming", meta = (ClampMin = "1"))
 	float MoveSpeed;
+
+	// --- Weapons and Projectiles ---
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Weapons & Projectiles")
+	TSubclassOf<class AProjectileBase> ProjectileClass;
 };

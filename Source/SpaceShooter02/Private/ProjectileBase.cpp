@@ -16,6 +16,16 @@ AProjectileBase::AProjectileBase()
 void AProjectileBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	UpdateMovement(DeltaTime);
+	UpdateLifetime(DeltaTime);
+}
+
+void AProjectileBase::Init(FVector ProjectilePosition, FRotator ProjectileRotation)
+{
+	// TODO: Set movespeed, etc
+
+	//SetActorLocation(ProjectilePosition);
+	//SetActorRotation(ProjectileRotation);
 }
 
 void AProjectileBase::BeginPlay()
@@ -105,4 +115,35 @@ const TCHAR* AProjectileBase::GetDefaultSpritePath() const
 	checkf(false, TEXT("AProjectileBase::GetDefaultSpritePath MUST be overidden in a subclass"));
 	return L"";
 }
+
+void AProjectileBase::UpdateMovement(float DeltaTime)
+{
+	// By default, move the projectile in one direction (consider the +Z or "Up" the projectile "forward" direction)
+
+	// Get the projectile's current position
+	FVector ProjectilePosition = GetActorLocation();
+
+	// Get the distance to move this frame using the projectiles "up" direction
+	FTransform ProjectileTransform = GetActorTransform();
+	
+	// Get this projectile's "up" direction for the movement direction
+	FVector ProjectileUp = GetActorUpVector();
+	FVector MovementDirection = ProjectileUp;
+	FVector MovementAmount = MovementDirection * MoveSpeed * DeltaTime;
+
+	FVector NewProjectilePosition = ProjectilePosition + MovementAmount;
+	SetActorLocation(NewProjectilePosition);
+}
+
+void AProjectileBase::UpdateLifetime(float DeltaTime)
+{
+	TimeAlive += DeltaTime;
+	if (TimeAlive >= LifetimeSeconds)
+	{
+		// This projectile has exceeded its lifespawn. Destroy this projectile.
+		Destroy();
+	}
+}
+
+
 

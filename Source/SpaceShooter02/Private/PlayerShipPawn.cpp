@@ -17,6 +17,8 @@
 #include "PaperSprite.h"
 #include "PaperSpriteComponent.h"
 
+#include "ProjectileBase.h"
+
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawn, Warning, All)
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnInput, Warning, All)
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnMovement, Log, All)
@@ -282,5 +284,25 @@ void APlayerShipPawn::Fire(const FInputActionValue& InputActionValue)
 {
 	bool FireInput = InputActionValue.Get<bool>();
 	UE_LOG(LogPlayerShipPawnInput, Verbose, TEXT("APlayerShipPawn::Fire - FireInput: %d"), FireInput);
+
+	// Fire a projectile - TODO: Implement Fire Rate
+	FireProjectile();
+}
+
+void APlayerShipPawn::FireProjectile()
+{
+	if (ensureMsgf(
+		ProjectileClass != nullptr,
+		TEXT("%s - ProjectileClass not set. Set it in the PlayerShip blueprint."), ANSI_TO_TCHAR(__FUNCTION__)))
+	{
+		if (UWorld* World = GetWorld())
+		{
+			// TODO: Use Firepoint
+			FVector PlayerShipPosition = GetActorLocation();
+			FRotator PlayerShipRotation = GetActorRotation();
+			AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, PlayerShipRotation);
+			FiredProjectile->Init(FVector::ZeroVector, FRotator::ZeroRotator); // wip
+		}
+	}
 }
 

@@ -17,6 +17,7 @@ public:
 public:	
 	AProjectileBase();
 	virtual void Tick(float DeltaTime) override;
+	virtual void Init(FVector ProjectilePosition, FRotator ProjectileRotation);
 
 protected:
 	virtual void BeginPlay() override;
@@ -24,6 +25,9 @@ protected:
 	void CreateProjectileDefaultSubobjects(); // Should be called in the constructor of any subclass. Will create all the proper default subobjects.
 	virtual TSubclassOf<class UShapeComponent> GetCollisionVolumeComponentClass() const; // PURE_VIRTUAL(GetCollisionVolumeComponentClass, ;)
 	virtual const TCHAR* GetDefaultSpritePath() const; // PURE_VIRTUAL(GetDefaultSpritePath, ;)
+
+	virtual void UpdateMovement(float DeltaTime);
+	virtual void UpdateLifetime(float DeltaTime);
 
 	UFUNCTION()
 	virtual void OnCollisionOverlap(
@@ -68,9 +72,8 @@ protected:
 	// How long this projectile stays alive before being destroyed
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileBase|Behavior", meta = (ClampMin = "0"))
 	float LifetimeSeconds = 10.0f;
-};
 
-//template<class T>
-//inline void AProjectileBase::CreateCollisionVolumeFromClass(T CollisionVolumeClass)
-//{
-//}
+	// How long this projectile has been active
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectileBase|Behavior")
+	float TimeAlive = 0.0f;
+};
