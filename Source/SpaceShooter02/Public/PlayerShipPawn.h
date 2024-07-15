@@ -107,6 +107,19 @@ protected:
 
 	// --- Weapons and Projectiles ---
 
+	// Class of Projectile that will be fired
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Weapons & Projectiles")
 	TSubclassOf<class AProjectileBase> ProjectileClass;
+
+	// Number of shots the player can fire per second.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Weapons & Projectiles", meta = (ClampMin = "0.05", UIMin = "0.05"))
+	float ProjectileShotsPerSecond = 1.0f;
+
+	// Number of seconds between shots. Calculated with 1/ProjectileShotsPerSecond.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Weapons & Projectiles")
+	float FireRate;
+
+	// Amount of time that has elapsed since the player last fired a projectile
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Weapons & Projectiles", meta = (Units = "Seconds"))
+	float TimeSinceLastShot;
 };

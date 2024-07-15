@@ -92,6 +92,9 @@ void APlayerShipPawn::Tick(float DeltaTime)
 
 	// Update the ship movement from the movement input
 	UpdateMovement(DeltaTime);
+
+	// Increase the time since last shot
+	TimeSinceLastShot += DeltaTime;
 }
 
 // Called to bind functionality to input
@@ -146,6 +149,12 @@ void APlayerShipPawn::BeginPlay()
 		}*/
 		// ---------------------------------------------------------------------
 	}
+
+	// Weapons / Projectiles
+	FireRate = 1.0f / ProjectileShotsPerSecond;
+
+	// Initialize "time since last shot" to the fire rate, so there is no delay on the very first shot
+	TimeSinceLastShot = FireRate;
 }
 
 void APlayerShipPawn::UpdateMovement(float DeltaTime)
@@ -285,8 +294,11 @@ void APlayerShipPawn::Fire(const FInputActionValue& InputActionValue)
 	bool FireInput = InputActionValue.Get<bool>();
 	UE_LOG(LogPlayerShipPawnInput, Verbose, TEXT("APlayerShipPawn::Fire - FireInput: %d"), FireInput);
 
-	// Fire a projectile - TODO: Implement Fire Rate
-	FireProjectile();
+	// Fire a projectile if enough time has elapsed from the last time a projectile was fired
+	if (TimeSinceLastShot >= FireRate)
+	{
+		FireProjectile();
+	}
 }
 
 void APlayerShipPawn::FireProjectile()
@@ -302,6 +314,9 @@ void APlayerShipPawn::FireProjectile()
 			FRotator PlayerShipRotation = GetActorRotation();
 			AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, PlayerShipRotation);
 			FiredProjectile->Init(FVector::ZeroVector, FRotator::ZeroRotator); // wip
+
+			// Reset time since last shot
+			TimeSinceLastShot = 0.0f;
 		}
 	}
 }
