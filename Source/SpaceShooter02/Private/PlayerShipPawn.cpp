@@ -315,7 +315,14 @@ void APlayerShipPawn::FireProjectile()
 			// TODO: Use Firepoint
 			FVector PlayerShipPosition = GetActorLocation();
 			FRotator PlayerShipRotation = GetActorRotation();
-			AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, PlayerShipRotation);
+
+			FActorSpawnParameters ProjectileSpawnParameters;
+			ProjectileSpawnParameters.Name = TEXT("Projectile_");
+			ProjectileSpawnParameters.Instigator = this;
+			ProjectileSpawnParameters.NameMode = FActorSpawnParameters::ESpawnActorNameMode::Requested;
+			ProjectileSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+			AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, PlayerShipRotation, ProjectileSpawnParameters);
 			FiredProjectile->Init(FVector::ZeroVector, FRotator::ZeroRotator); // wip
 
 			// Play the shoot sound

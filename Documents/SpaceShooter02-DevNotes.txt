@@ -221,4 +221,55 @@ TODO:
 * Pivot
 
 ==============================================
+Projectiles
+
+When spawning projectiles dynamically (i.e. using SpawnActor()), I first just spawned them at the player position.
+This caused the projectile to immediately "collide" with the player.
+As a quick test, I added the player ship as the Instigator, immediately after spawning. However, on collision, the Instigator (using GetInstigator())was not always filled out (meaning, it was nullptr).
+My assumption is that the collision would happen in the instant in between the spawn and setting the instigator:
+
+AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, PlayerShipRotation);
+FiredProjectile->SetInstigator(this);
+
+As a test, I tried using SpawnActorDeferred(), which takes in the Instigator, and then I call FinishSpawning().
+This seems to have worked:
+
+AProjectileBase* FiredProjectile = World->SpawnActorDeferred<AProjectileBase>(
+  ProjectileClass,
+  ProjectileTransform,
+  this,
+  this,
+  ESpawnActorCollisionHandlingMethod::AlwaysSpawn,
+  ESpawnActorScaleMethod::MultiplyWithRoot);
+FiredProjectile->FinishSpawning(ProjectileTransform);
+
+NOTE:
+* This was just more of a test/experiment. I plan on adding pooling, which will prevent this, but I still do not want projectiles fired by the player to collide with the player.
+* I will experiment with collision settings to prevent this (that is, as opposed to allowing the collison and checking if OtherActor != GetInstigator())
+
+UPDATE:
+I can use FActorSpawnParameters to set the instigator
+Tested and works:
+
+FActorSpawnParameters ProjectileSpawnParameters;
+ProjectileSpawnParameters.Name = TEXT("Projectile_");
+ProjectileSpawnParameters.Instigator = this;
+ProjectileSpawnParameters.NameMode = FActorSpawnParameters::ESpawnActorNameMode::Requested;
+ProjectileSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, PlayerShipRotation, ProjectileSpawnParameters);
+
+------------------------------------------
+Custom Collision Channels:
+* Project Settings -> Engine -> Collision:
+  * Object Channels
+  * Trace Channels
+
+Adding an Object or Trace Channel will modify Config/DefaultEngine.ini in:
+
+[/Script/Engine.CollisionProfile]
+
+------------------------------------------
+
+==============================================
 
