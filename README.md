@@ -20,7 +20,7 @@
 
 VERY EARLY Work-In-Progress Screenshot: <br>
 
-<img src="./Saved/Screenshots/WindowsEditor/ScreenShot00001.png" width=400/>
+<img src="./Assets-Source/Screenshots/ScreenShot00001.png" width=400/>
 
 <br>
 
