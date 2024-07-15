@@ -59,7 +59,7 @@ APlayerShipPawn::APlayerShipPawn()
 	SpringArmComp->TargetArmLength = 1000.0f; // While armlength doesn't matter for orthographic, set far enough away so as to not be in the way
 	SpringArmComp->bDoCollisionTest = false; // Ensure the SpringArm does not collide with anything in the world (so it isn't "pushed")
 	SpringArmComp->SetAbsolute(false, true, false); // Set the SpringArm rotation to Absolute, so its rotation is not affected by the ship in any way
-	SpringArmComp->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0)); // Set the rotation so it is looking down the Y-axis towards the XZ plane (Note: Yaw is Z-axis rotation)
+	SpringArmComp->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0f)); // Set the rotation so it is looking down the Y-axis towards the XZ plane (Note: Yaw is Z-axis rotation)
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(SpringArmComp, USpringArmComponent::SocketName);
