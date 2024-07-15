@@ -41,6 +41,7 @@ protected:
 	void Fire(const struct FInputActionValue& InputActionValue);
 	
 	void FireProjectile();
+	void PlayShootSound();
 
 protected:
 	// --- Components ---
@@ -122,4 +123,10 @@ protected:
 	// Amount of time that has elapsed since the player last fired a projectile
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Weapons & Projectiles", meta = (Units = "Seconds"))
 	float TimeSinceLastShot;
+
+	// --- Audio ---
+
+	// Sound that is played when the player fires
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Audio")
+	TObjectPtr<class USoundBase> PlayerShootSound;
 };

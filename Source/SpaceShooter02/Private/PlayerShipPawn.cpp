@@ -11,13 +11,16 @@
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "InputActionValue.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "PaperFlipbook.h"
 #include "PaperFlipbookComponent.h"
 #include "PaperSprite.h"
 #include "PaperSpriteComponent.h"
+#include "Sound/SoundBase.h"
 
 #include "ProjectileBase.h"
+
 
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawn, Warning, All)
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnInput, Warning, All)
@@ -315,9 +318,21 @@ void APlayerShipPawn::FireProjectile()
 			AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, PlayerShipRotation);
 			FiredProjectile->Init(FVector::ZeroVector, FRotator::ZeroRotator); // wip
 
+			// Play the shoot sound
+			PlayShootSound();
+
 			// Reset time since last shot
 			TimeSinceLastShot = 0.0f;
 		}
+	}
+}
+
+void APlayerShipPawn::PlayShootSound()
+{
+	if (ensureMsgf(
+		PlayerShootSound != nullptr, TEXT("%s - PlayerShootSound not set. Set it in the PlayerShip blueprint."), ANSI_TO_TCHAR(__FUNCTION__)))
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), PlayerShootSound);
 	}
 }
 
