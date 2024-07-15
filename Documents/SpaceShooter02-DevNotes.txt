@@ -203,3 +203,22 @@ Input Mapping Context:
 
 
 ==============================================
+Enemy Sprites / Facing / Rotation
+
+The enemy sprites are in the Texture SpaceShooterAssetPack_Ships
+The player ships were built facing UP.
+The enemy ships were built facing DOWN.
+
+I calculate "facing" all facing directions using the World Up (+Z axis)
+
+So, when building the enemy Blueprints, the Sprite Component needs to be rotated 180 degrees around the Y axis
+Note: Y axis rotations in Unreal Engine is the "Pitch"
+
+==============================================
+TODO:
+* Extracting Sprites, Extracting Single Sprite
+* Process
+* Pivot
+
+==============================================
+
