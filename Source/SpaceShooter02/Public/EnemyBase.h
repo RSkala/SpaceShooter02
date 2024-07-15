@@ -17,6 +17,7 @@ public:
 public:	
 	AEnemyBase();
 	virtual void Tick(float DeltaTime) override;
+	void DestroyEnemy();
 
 protected:
 	virtual void BeginPlay() override;
@@ -47,6 +48,11 @@ protected:
 	// If true, enemy will rotate towards its target
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bRotateToFaceTarget = true;
+
+	// --- Effects ---
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<class USoundBase> EnemyDeathSound; // TODO: Move to global place, so this is not duplicated
+	
 
 	// TODO:
 	// * StopDistance

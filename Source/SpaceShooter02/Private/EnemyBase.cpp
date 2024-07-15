@@ -46,6 +46,18 @@ void AEnemyBase::Tick(float DeltaTime)
 	MoveTowardsTarget(DeltaTime);
 }
 
+void AEnemyBase::DestroyEnemy()
+{
+	// Play the death/explosion sound
+	if (EnemyDeathSound != nullptr)
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), EnemyDeathSound);
+	}
+
+	// Destroy this enemy
+	Destroy();
+}
+
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
