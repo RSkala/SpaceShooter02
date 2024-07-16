@@ -144,16 +144,8 @@ void APlayerShipPawn::BeginPlay()
 	// Get the ship's playercontroller 
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
-		// Ensure the mouse cursor is visible by default (TODO: Hide when the player touches gamepad controls)
-		PlayerController->SetShowMouseCursor(true);
-
-		// TEST: Get the GameViewportClient and check the settings:
-		//UGameViewportClient* GameViewportClient = GetWorld()->GetGameViewport();
-
-		// May need to change these settings to keep the mouse cursor on screen
-		//FInputModeGameAndUI InputMode;
-		//InputMode.SetHideCursorDuringCapture(false);
-		//PlayerController->SetInputMode(InputMode);
+		// Ensure the mouse cursor is visible by default (Hide when the player touches gamepad controls)
+		SetMouseCursorVisiblityFromInput(PlayerController, true);
 
 		// Register Inputs (add mapping context) from the UEnhancedInputLocalPlayerSubsystem (which is accessed from the LocalPlayer)
 		if (UEnhancedInputLocalPlayerSubsystem* InputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
@@ -282,6 +274,12 @@ void APlayerShipPawn::UpdateGamepadAimFiring()
 			//UE_LOG(LogTemp, Warning, TEXT("AimingRotation: %s"), *AimingRotation.ToString());
 
 			FireProjectile(AimingRotation);
+
+			// If the player is using the gamepad right-thumbstick, then hide the mouse cursor
+			if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+			{
+				SetMouseCursorVisiblityFromInput(PlayerController, false);
+			}
 		}
 	}
 }
@@ -356,6 +354,12 @@ void APlayerShipPawn::Fire(const FInputActionValue& InputActionValue)
 	{
 		FRotator PlayerShipRotation = GetActorRotation();
 		FireProjectile(PlayerShipRotation);
+
+		// If the player is using gamepad fire, then hide the mouse cursor
+		if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+		{
+			SetMouseCursorVisiblityFromInput(PlayerController, false);
+		}
 	}
 }
 
@@ -374,7 +378,7 @@ void APlayerShipPawn::MouseFire(const FInputActionValue& InputActionValue)
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
 		// If the player is pressing MouseFire, then ensure the mouse cursor is shown
-		PlayerController->SetShowMouseCursor(true);
+		SetMouseCursorVisiblityFromInput(PlayerController, true);
 
 		// Get the player ship's current position
 		FVector PlayerShipPosition = GetActorLocation();
@@ -446,5 +450,26 @@ void APlayerShipPawn::PlayShootSound()
 	{
 		UGameplayStatics::PlaySound2D(GetWorld(), PlayerShootSound);
 	}
+}
+
+void APlayerShipPawn::SetMouseCursorVisiblityFromInput(APlayerController* const PlayerController, bool bCursorVisible)
+{
+	if (PlayerController != nullptr)
+	{
+		PlayerController->SetShowMouseCursor(bCursorVisible);
+	}
+
+	// Force the SlateApplication to refresh the mouse cursor, otherwise it will not change until there is some mouse movement
+	FSlateApplication& SlateApplication = FSlateApplication::Get();
+	SlateApplication.SetAllUserFocusToGameViewport(); // TODO: Is this necessary?
+	SlateApplication.QueryCursor();
+
+	// TEST: Get the GameViewportClient and check the settings:
+	// UGameViewportClient* GameViewportClient = GetWorld()->GetGameViewport();
+
+	// May need to change these settings to keep the mouse cursor on screen
+	// FInputModeGameAndUI InputMode;
+	// InputMode.SetHideCursorDuringCapture(false);
+	// PlayerController->SetInputMode(InputMode);
 }
 

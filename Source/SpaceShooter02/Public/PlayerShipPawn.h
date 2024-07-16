@@ -45,6 +45,8 @@ protected:
 	void FireProjectile(FRotator ProjectileRotation);
 	void PlayShootSound();
 
+	void SetMouseCursorVisiblityFromInput(APlayerController* const PlayerController, bool bCursorVisible);
+
 protected:
 	// --- Components ---
 

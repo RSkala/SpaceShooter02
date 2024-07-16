@@ -336,3 +336,37 @@ Notes regarding software cursors:
 --------------------
 
 ==============================================
+Hiding / Showing the Mouse Cursor
+
+In theory, all you should do is the following:
+PlayerController->SetShowMouseCursor(bCursorVisible);
+
+However, I found the cursor would not refresh (hidden or unhidden) unless the mouse was moved slightly.
+So, I needed to figure out how to "refresh" the mouse cursor.
+My debugging led me to FSceneViewport::OnCursorQuery
+But I couldn't figure out how to "query" the viewport.
+After some googling, I was able to come up with this, which works:
+
+
+void APlayerShipPawn::SetMouseCursorVisiblityFromInput(APlayerController* const PlayerController, bool bCursorVisible)
+{
+  if (PlayerController != nullptr)
+  {
+    PlayerController->SetShowMouseCursor(bCursorVisible);
+  }
+
+  // Force the SlateApplication to refresh the mouse cursor, otherwise it will not change until there is some mouse movement
+  FSlateApplication& SlateApplication = FSlateApplication::Get();
+  SlateApplication.SetAllUserFocusToGameViewport(); // TODO: Is this necessary?
+  SlateApplication.QueryCursor();
+}
+
+In order to use FSlateApplication, you must edit the .Build.cs file and comment or add this:
+PrivateDependencyModuleNames.AddRange(new string[] { “Slate”, “SlateCore” });
+
+If you don't, you will likely get build errors.
+
+Source:
+https://forums.unrealengine.com/t/mouse-cursor-not-changing-until-moved/290523/15
+
+==============================================
