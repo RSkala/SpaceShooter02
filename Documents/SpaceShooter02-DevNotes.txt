@@ -287,3 +287,52 @@ UE_LOG(LogTemp, Warning, TEXT("Movement - 2D Cross Product: %f"), Cross2D);
 https://stackoverflow.com/questions/22571740/what-is-the-geometry-meaning-of-2d-cross-product
 
 ==============================================
+Custom Mouse Cursor / Crosshair
+
+Software Cursors:
+* This is assuming the cursor texture and sprite have already been set up
+* You need a Widget Blueprint in order to use custom software mouse cursors
+* After the widget blueprint is setup, it needs to be changed in Project Settings
+
+
+--- Create the Widget Blueprint ---
+
+* Create the Widget Blueprint:
+  * Content Browser -> Right-click -> User Interface -> Widget Blueprint
+    * Select "User Widget"  (naming convention: WBP_<my-widget>)
+* Open the widget and add the following classes from the Palette in the following hierarchy:
+
+WBP_MouseCursor
+ |- Canvas Panel
+     |- Image
+
+* Select the top level n the Hierarchy (e.g. WBP_MouseCursor)
+  * In the Designer window, change "Fill Screen" to Desired On Screen
+
+* Select the Image in the Hierarchy
+  * Details -> Appearance -> Brush -> Image
+    * Select your crosshair/cursor sprite
+  * Details -> Slot (Canvas Panel Slot)
+    * Anchors: In the drop-down, select "Center" (may need to hold Ctrl+Shift as well)
+    * Size X, Size Y:  
+      * Adjust these to make sense for your game
+
+--- Add Your Custom Mouse Cursor to the Project ---
+
+Project Settings:
+Edit -> Project Settings -> Engine -> User Interface -> Software Cursors
+* Click + to Add
+  * Type (1st drop-down): Default
+    * "Default" changes the "default" mouse cursor (i.e. the cursor you're almost always looking at)
+  * Set type to Default for this demo
+  * Class (2nd drop-down): Set to your cursor Widget Blueprint (e.g. WBP_MouseCursor)
+
+--------------------
+Notes regarding software cursors:
+* The mouse cursor / crosshair does not change size when resizing the screen
+* They are limited by frame rate, so if your framerate is low, the mouse cursor will be choppy
+* Software Cursors were maybe be limited by windows scaling (so different people would have different sizes)
+* Hardware cursors are supposed to be the RIGHT way to handle cursors, but this works for now.
+--------------------
+
+==============================================

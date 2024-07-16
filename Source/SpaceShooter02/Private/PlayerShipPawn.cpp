@@ -137,9 +137,21 @@ void APlayerShipPawn::BeginPlay()
 	UE_LOG(LogPlayerShipPawn, Verbose, TEXT("APlayerShipPawn::BeginPlay - %s"), *GetName());
 	Super::BeginPlay();
 
-	// Setup Input Mapping Context
+	// Get the ship's playercontroller 
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
 	{
+		// Ensure the mouse cursor is visible by default (TODO: Hide when the player touches gamepad controls)
+		PlayerController->SetShowMouseCursor(true);
+
+		// TEST: Get the GameViewportClient and check the settings:
+		//UGameViewportClient* GameViewportClient = GetWorld()->GetGameViewport();
+
+		// May need to change these settings to keep the mouse cursor on screen
+		//FInputModeGameAndUI InputMode;
+		//InputMode.SetHideCursorDuringCapture(false);
+		//PlayerController->SetInputMode(InputMode);
+
+		// Register Inputs (add mapping context) from the UEnhancedInputLocalPlayerSubsystem (which is accessed from the LocalPlayer)
 		if (UEnhancedInputLocalPlayerSubsystem* InputSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			InputSubsystem->AddMappingContext(InputMappingContext, 0);
