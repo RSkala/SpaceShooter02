@@ -39,7 +39,8 @@ protected:
 	void GamepadAimTriggered(const struct FInputActionValue& InputActionValue);
 	void GamepadAimCompleted(const struct FInputActionValue& InputActionValue);
 
-	void Fire(const struct FInputActionValue& InputActionValue);
+	void Fire(const struct FInputActionValue& InputActionValue); // TODO: Split into KeyboardFire and GamepadFire
+	void MouseFire(const struct FInputActionValue& InputActionValue);
 	
 	void FireProjectile(FRotator ProjectileRotation);
 	void PlayShootSound();
@@ -95,6 +96,9 @@ protected:
 	// Player Ship Dash, i.e. Gamepad right bumpter or SpaceBar
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
 	TObjectPtr<class UInputAction> InputActionDash;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
+	TObjectPtr<class UInputAction> InputActionMouseFire;
 
 	// --- Movement and Aiming ---
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming")

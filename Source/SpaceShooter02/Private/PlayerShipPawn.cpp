@@ -128,6 +128,10 @@ void APlayerShipPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		ensureAlways(InputActionFire != nullptr);
 		//EnhancedInputComponent->BindAction(InputActionFire, ETriggerEvent::Started, this, &ThisClass::Fire); // Started: When the player first presses the Fire button
 		EnhancedInputComponent->BindAction(InputActionFire, ETriggerEvent::Triggered, this, &ThisClass::Fire); // Triggered: When the player HOLDS down the Fire button
+
+		// Bind Mouse Firing
+		ensureAlways(InputActionMouseFire != nullptr);
+		EnhancedInputComponent->BindAction(InputActionMouseFire, ETriggerEvent::Triggered, this, &ThisClass::MouseFire); // Triggered: When the player HOLDS down the MouseFire button
 	}
 }
 
@@ -355,6 +359,55 @@ void APlayerShipPawn::Fire(const FInputActionValue& InputActionValue)
 	}
 }
 
+void APlayerShipPawn::MouseFire(const FInputActionValue& InputActionValue)
+{
+	bool MouseFireInput = InputActionValue.Get<bool>();
+	UE_LOG(LogPlayerShipPawnInput, Verbose, TEXT("APlayerShipPawn::MouseFire - FireInput: %d"), MouseFireInput);
+
+	if (TimeSinceLastShot < FireRate)
+	{
+		// Exit if not enough time has elapsed since the last time a projectile was fired
+		return;
+	}
+
+	// Get the player controller in order to get the world mouse position
+	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	{
+		// If the player is pressing MouseFire, then ensure the mouse cursor is shown
+		PlayerController->SetShowMouseCursor(true);
+
+		// Get the player ship's current position
+		FVector PlayerShipPosition = GetActorLocation();
+
+		// Get the mouse position in world coordinates in the XZ plane
+		FVector MouseWorldPosition, MouseWorldDirection;
+		PlayerController->DeprojectMousePositionToWorld(MouseWorldPosition, MouseWorldDirection);
+		MouseWorldPosition = FVector(MouseWorldPosition.X, 0.0f, MouseWorldPosition.Z); // "Flatten" the mouse position onto the XZ plane
+
+		// Note: This didn't work for some reason. Rotation seemed off by 90 degrees. Using my standard Dot and Cross calculations instead.
+		// Create a rotation representing the vector from the player position to the mouse position
+		// FRotator MouseAimingRotation = UKismetMathLibrary::FindLookAtRotation(PlayerShipPosition, MouseWorldPosition);
+
+		// Get the direction from the player ship position to the mouse world position
+		FVector MouseAimingDirection = (MouseWorldPosition - PlayerShipPosition).GetSafeNormal();
+
+		// Get the angle between the world up vector (+Z axis) and the mouse aiming direction
+		float Dot = FVector::UnitZ().Dot(MouseAimingDirection);
+		float Acos = FMath::Acos(Dot);
+		float AngleDegrees = FMath::RadiansToDegrees(Acos);
+
+		FVector Cross = FVector::CrossProduct(FVector::UnitZ(), MouseAimingDirection);
+		float AngleDirectionMultipler = Cross.Y >= 0.0f ? -1.0f : 1.0f;
+		AngleDegrees *= AngleDirectionMultipler;
+
+		// Create the rotation from the aiming angle
+		FRotator MouseAimingRotation = UKismetMathLibrary::MakeRotator(0.0f, AngleDegrees, 0.0f);
+
+		// Fire the projectile using the aiming rotation
+		FireProjectile(MouseAimingRotation);
+	}
+}
+
 void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 {
 	if (ensureMsgf(
@@ -365,7 +418,7 @@ void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 		{
 			// TODO: Use Firepoint
 			FVector PlayerShipPosition = GetActorLocation();
-			FRotator PlayerShipRotation = GetActorRotation();
+			//FRotator PlayerShipRotation = GetActorRotation();
 
 			FActorSpawnParameters ProjectileSpawnParameters;
 			ProjectileSpawnParameters.Name = TEXT("Projectile_");
