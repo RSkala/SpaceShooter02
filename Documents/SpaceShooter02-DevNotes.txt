@@ -369,4 +369,37 @@ If you don't, you will likely get build errors.
 Source:
 https://forums.unrealengine.com/t/mouse-cursor-not-changing-until-moved/290523/15
 
+---------------------------------------
+Part 2:
+
+Once I had the mouse cursor hiding/unhiding properly, there was an issue where the mouse cursor wouldnt reappear until I clicked a mouse button.
+This makes sense, as I didn't map "Mouse Move" to anything yet.
+Once I created an Input Action, with Axis2D, and successfully mapped and set its binding, there was a problem where the MouseMove doesn't register anything UNLESS I hold down a mouse button
+
+This is how it was bound:
+EnhancedInputComponent->BindAction(InputActionMouseMove, ETriggerEvent::Triggered, this, &ThisClass::MouseMove);
+
+https://forums.unrealengine.com/t/enhanced-input-system-mouse-xy-2d-axis-only-registering-input-while-holding-down-a-mouse-key/1311170
+
+https://forums.unrealengine.com/t/enhanced-input-system-mouse-xy-2d-axis-only-registering-input-while-holding-down-a-mouse-key/1311170/10?u=rskala
+* Note: I tried this fix, which uses the Legacy Input System, and the same thing occurs.
+
+---------------------------------------------------
+I'll have to leave this as a "known issue", as it will be a large amount of work to work around, and it will be very seldom when someone is switching between gamepad and mouse controls anyways.
+
+---------------------------------------------------
+For reference, this is how Legacy Input works:
+Set up in Project Settings -> Engine -> Input -> Axis Mappings
+
+Then in SetupPlayerInputComponent():
+  // Bind Legacy Input
+  UInputSettings* InputSettings = UInputSettings::GetInputSettings();
+  if (InputSettings != nullptr)
+  {
+    TArray<FInputAxisKeyMapping> AxisMappings;
+    InputSettings->GetAxisMappingByName(FName("MouseMove"), AxisMappings);
+    PlayerInputComponent->BindAxis("MouseMove", this, &ThisClass::LegacyMouseMove);
+  }
+
+
 ==============================================
