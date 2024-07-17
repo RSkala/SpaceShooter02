@@ -403,3 +403,22 @@ Then in SetupPlayerInputComponent():
 
 
 ==============================================
+Enemy Spawning
+
+For simplicity, I created AEnemySpawner as a subclass of AActor.
+This way, I could access the Tick function.
+AEnemySpawer is created in ASpaceShooterGameState, in BeginPlay()
+
+Other possibilities:
+
+UObject Subclass:
+* e.g. UEnemySpawner
+* Still could create in the gamestate and pass in DeltaTime during it's Tick()
+
+World Subsystem or TickableWorldSubsystem
+* e.g. UEnemySpawnerTickableWorldSubsystem
+* This is also a possibility, as the World Subsystems are tied to the life of the World
+* Disadvantage: I would likely need to create a tool to see the Enemy Spawner values in the editor
+
+==============================================
+
