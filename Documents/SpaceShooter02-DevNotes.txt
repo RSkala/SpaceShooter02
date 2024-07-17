@@ -417,8 +417,11 @@ UObject Subclass:
 
 World Subsystem or TickableWorldSubsystem
 * e.g. UEnemySpawnerTickableWorldSubsystem
-* This is also a possibility, as the World Subsystems are tied to the life of the World
-* Disadvantage: I would likely need to create a tool to see the Enemy Spawner values in the editor
+* Advantages:
+  * World Subsystems are tied to the life of the World (like the GameState)
+  * Can move code out of the game state
+* Disadvantage:
+  * I would likely need to create a tool to see the Enemy Spawner values in the editor
 
 ==============================================
 
