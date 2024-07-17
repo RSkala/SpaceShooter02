@@ -21,7 +21,6 @@
 
 #include "ProjectileBase.h"
 
-
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawn, Warning, All)
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnInput, Warning, All)
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnMovement, Log, All)
@@ -167,6 +166,13 @@ void APlayerShipPawn::BeginPlay()
 
 	// Initialize "time since last shot" to the fire rate, so there is no delay on the very first shot
 	TimeSinceLastShot = FireRate;
+
+	// Randomly pick a ship sprite
+	if (PlayerShipSprites.Num() > 0)
+	{
+		UPaperSprite* RandomSprite = PlayerShipSprites[FMath::RandRange(0, PlayerShipSprites.Num() - 1)];
+		PaperSpriteComp->SetSprite(RandomSprite);
+	}
 }
 
 void APlayerShipPawn::UpdateMovement(float DeltaTime)

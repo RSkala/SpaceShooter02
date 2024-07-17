@@ -136,4 +136,7 @@ protected:
 	// Sound that is played when the player fires
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Audio")
 	TObjectPtr<class USoundBase> PlayerShootSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Visual")
+	TArray<TObjectPtr<class UPaperSprite>> PlayerShipSprites;
 };
