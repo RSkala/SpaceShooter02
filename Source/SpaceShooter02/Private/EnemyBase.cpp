@@ -10,6 +10,7 @@
 #include "PaperSpriteComponent.h"
 
 #include "PlayerShipPawn.h"
+#include "SpaceShooterGameState.h"
 
 DEFINE_LOG_CATEGORY_CLASS(AEnemyBase, LogEnemy)
 
@@ -56,18 +57,26 @@ void AEnemyBase::DestroyEnemy()
 
 	// Destroy this enemy
 	Destroy();
+
+	if (UWorld* World = GetWorld())
+	{
+		if (ASpaceShooterGameState* SpaceShooterGameState = Cast<ASpaceShooterGameState>(World->GetGameState()))
+		{
+			SpaceShooterGameState->IncrementNumEnemiesDefeated();
+
+			UE_LOG(LogTemp, Warning, TEXT("NumEnemiesDefeated: %d"), SpaceShooterGameState->GetNumEnemiesDefeated());
+		}
+	}
+}
+
+void AEnemyBase::SetTarget(TSoftObjectPtr<AActor> InTargetActor)
+{
+	TargetActor = InTargetActor;
 }
 
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// TEST: Find the player character and set as Target
-	AActor* PlayerActor = UGameplayStatics::GetActorOfClass(GetWorld(), APlayerShipPawn::StaticClass());
-	if (PlayerActor != nullptr)
-	{
-		TargetActor = PlayerActor;
-	}
 }
 
 void AEnemyBase::MoveTowardsTarget(float DeltaTime)

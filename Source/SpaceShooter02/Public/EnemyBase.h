@@ -18,6 +18,7 @@ public:
 	AEnemyBase();
 	virtual void Tick(float DeltaTime) override;
 	void DestroyEnemy();
+	void SetTarget(TSoftObjectPtr<AActor> InTargetActor);
 
 protected:
 	virtual void BeginPlay() override;
