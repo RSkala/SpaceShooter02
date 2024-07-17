@@ -20,6 +20,9 @@ protected:
 	virtual void BeginPlay() override;
 	void UpdateSpawning(float DeltaTime);
 
+	UFUNCTION()
+	void OnEnemyDeath(FVector EnemyDeathPosition);
+
 #if WITH_EDITOR
 	virtual bool CanEditChange(const FProperty* InProperty) const override;
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
@@ -41,6 +44,9 @@ protected:
 	// Distance to spawn from player (max)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "50", ClampMax = "5000", UIMin = "50", UIMax = "5000"))
 	float SpawnDistanceFromPlayerMax = 1000.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<TSubclassOf<class AExplosionBase>> EnemyExplosionClasses;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<class APlayerShipPawn> PlayerShipPawn;

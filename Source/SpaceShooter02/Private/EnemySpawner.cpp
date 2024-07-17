@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "EnemyBase.h"
+#include "ExplosionBase.h"
 #include "PlayerShipPawn.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogEnemySpawner, Log, All)
@@ -63,6 +64,11 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 
 				// Spawn the enemy
 				AEnemyBase* SpawnedEnemy = World->SpawnActor<AEnemyBase>(EnemyClassToSpawn, EnemyPosition, FRotator());
+
+				// Notify the the spawner when the enemy dies
+				SpawnedEnemy->OnEnemyDeath.AddUniqueDynamic(this, &ThisClass::OnEnemyDeath);
+
+				// Set the player as the enemy's target
 				SpawnedEnemy->SetTarget(PlayerShipPawn);
 			}
 		}
@@ -71,6 +77,28 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 		TimeSinceLastEnemySpawned = 0.0f;
 	}
 }
+void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition)
+{
+	UE_LOG(LogEnemySpawner, Warning, TEXT("%s - EnemyDeathPosition: %s"), ANSI_TO_TCHAR(__FUNCTION__), *EnemyDeathPosition.ToString());
+
+	// Spawn an explosion at this enemy death position
+	if (EnemyExplosionClasses.Num() > 0)
+	{
+		if (UWorld* World = GetWorld())
+		{
+			// Randomly select an enemy type to spawn
+			TSubclassOf<AExplosionBase> ExplosionClassToSpawn = EnemyExplosionClasses[FMath::RandRange(0, EnemyExplosionClasses.Num() - 1)];
+
+			// Get a random rotation for the explosion for variety
+			FRotator RandomExplosionRotation = FRotator(FMath::FRandRange(0.0f, 360.0f), 0.0f, 0.0f);
+
+			// Create the explosion
+			World->SpawnActor<AExplosionBase>(ExplosionClassToSpawn, EnemyDeathPosition, FRotator());
+			//World->SpawnActor<AExplosionBase>(EnemyExplosionClass, EnemyDeathPosition, RandomExplosionRotation);
+		}
+	}
+}
+
 #if WITH_EDITOR
 bool AEnemySpawner::CanEditChange(const FProperty* InProperty) const
 {

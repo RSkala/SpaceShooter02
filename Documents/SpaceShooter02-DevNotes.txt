@@ -424,4 +424,28 @@ World Subsystem or TickableWorldSubsystem
   * I would likely need to create a tool to see the Enemy Spawner values in the editor
 
 ==============================================
+Explosion Sprites / Flipbooks
 
+Cannot set looping or handle animend callbacks from the UFlipBook.
+Can only do this in the UFlipbookComponent
+
+It is also not accessible via the Details window:
+
+  /** Whether the flipbook should loop when it reaches the end, or stop */
+  UPROPERTY()
+  uint32 bLooping:1;
+
+Animation Finished:
+  /** Event called whenever a non-looping flipbook finishes playing (either reaching the beginning or the end, depending on the play direction) */
+  UPROPERTY(BlueprintAssignable)
+  FFlipbookFinishedPlaySignature OnFinishedPlaying;
+
+So I will need to create a Blueprint with components for the explosions.
+
+I considered adding PaperZD for this purpose but it is overkill, as you need to create AnimationSource and AnimationSequences.
+I won't really be switching animations during the game, so I won't need PaperZD yet.
+While it is overkill for now, it is a possibility. The PaperZDAnimBP can receive animation notifies and handle when an animation finishes.
+
+-----------------------------------------------
+
+==============================================

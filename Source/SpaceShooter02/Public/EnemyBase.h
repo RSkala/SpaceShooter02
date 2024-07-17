@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "EnemyBase.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnemyDeathDelegateSignature, FVector, EnemyDeathPosition);
+
 UCLASS(Abstract)
 class SPACESHOOTER02_API AEnemyBase : public AActor
 {
@@ -23,6 +25,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void MoveTowardsTarget(float DeltaTime);
+
+public:
+	UPROPERTY(BlueprintAssignable)
+	FEnemyDeathDelegateSignature OnEnemyDeath;
 
 protected:
 	// --- Components ---

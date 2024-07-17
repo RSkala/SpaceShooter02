@@ -55,6 +55,9 @@ void AEnemyBase::DestroyEnemy()
 		UGameplayStatics::PlaySound2D(GetWorld(), EnemyDeathSound);
 	}
 
+	// Notify subscribers that an enemy died
+	OnEnemyDeath.Broadcast(GetActorLocation());
+
 	// Destroy this enemy
 	Destroy();
 
