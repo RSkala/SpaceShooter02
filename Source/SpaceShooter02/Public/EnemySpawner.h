@@ -51,10 +51,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<class APlayerShipPawn> PlayerShipPawn;
 
+	// Enable / Disable enemy spawning
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bSpawningEnabled = true;
+
 	// TODO:
 	// * DifficultySpikeInterval -- every X enemy defeated, increase difficulty
 	// * get player reference, pass to enemies
-	// 
+	
 	// Last time an enemy was spawned
 	float TimeSinceLastEnemySpawned = 0.0f;
 };

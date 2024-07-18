@@ -25,6 +25,12 @@ void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
 
+	UE_CLOG(
+		!bSpawningEnabled,
+		LogEnemySpawner,
+		Warning,
+		TEXT("Enemy Spawing is DISABLED. Ensure this spawning re-enabled before committing the Enemy Spawner blueprint"));
+
 	// Temp: Get a reference to the player ship to use as spawned enemy target - TODO: Handle on delegate
 	PlayerShipPawn = UGameplayStatics::GetActorOfClass(GetWorld(), APlayerShipPawn::StaticClass());
 	if (PlayerShipPawn == nullptr)
@@ -35,6 +41,12 @@ void AEnemySpawner::BeginPlay()
 
 void AEnemySpawner::UpdateSpawning(float DeltaTime)
 {
+	// Exit if spawning is disabled
+	if (!bSpawningEnabled)
+	{
+		return;
+	}
+
 	TimeSinceLastEnemySpawned += DeltaTime;
 	if (TimeSinceLastEnemySpawned >= TimeBetweenSpawns)
 	{
