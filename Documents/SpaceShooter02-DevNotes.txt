@@ -447,5 +447,11 @@ I won't really be switching animations during the game, so I won't need PaperZD 
 While it is overkill for now, it is a possibility. The PaperZDAnimBP can receive animation notifies and handle when an animation finishes.
 
 -----------------------------------------------
+In the Explosion's PaperFlipbookComponent:
+
+...
+ExplosionFlipbookComp->SetLooping(false);
+...
+ExplosionFlipbookComp->OnFinishedPlaying.AddUniqueDynamic(this, &ThisClass::OnExplosionAnimationFinished);
 
 ==============================================
