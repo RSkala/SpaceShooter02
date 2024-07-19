@@ -262,29 +262,85 @@ void APlayerShipPawn::UpdateGamepadAimFiring()
 		// Fire a projectile if enough time has elapsed from the last time a projectile was fired
 		if (TimeSinceLastShot >= FireRate)
 		{
-			// Get the aiming direction in 3D
-			//UE_LOG(LogTemp, Warning, TEXT("-----------------------"));
-			//UE_LOG(LogTemp, Warning, TEXT("AimingDirection: %s"), *AimingDirection.ToString());
-			FVector AimingDirection3D = FVector(AimingDirection.X, 0.0f, AimingDirection.Y);
-
-			// Get the angle between the world up vector (+Z axis) and the movement input direction
-			float Dot = FVector::UnitZ().Dot(AimingDirection3D);
-			float Acos = FMath::Acos(Dot);
-			float AngleDegrees = FMath::RadiansToDegrees(Acos);
-
-			FVector Cross = FVector::CrossProduct(FVector::UnitZ(), AimingDirection3D);
-			float AngleDirectionMultipler = Cross.Y >= 0.0f ? -1.0f : 1.0f;
-			AngleDegrees *= AngleDirectionMultipler;
-
-			FRotator AimingRotation = UKismetMathLibrary::MakeRotator(0.0f, AngleDegrees, 0.0f);
-			//UE_LOG(LogTemp, Warning, TEXT("AimingRotation: %s"), *AimingRotation.ToString());
-
-			FireProjectile(AimingRotation);
-
-			// If the player is using the gamepad right-thumbstick, then hide the mouse cursor
-			if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+			if (RightStickDebugBehavior == ERightStickDebugBehavior::FireOnly || RightStickDebugBehavior == ERightStickDebugBehavior::FireAndLineTrace)
 			{
-				SetMouseCursorVisiblityFromInput(PlayerController, false);
+				// Get the aiming direction in 3D
+				//UE_LOG(LogTemp, Warning, TEXT("-----------------------"));
+				//UE_LOG(LogTemp, Warning, TEXT("AimingDirection: %s"), *AimingDirection.ToString());
+				FVector AimingDirection3D = FVector(AimingDirection.X, 0.0f, AimingDirection.Y);
+
+				// Get the angle between the world up vector (+Z axis) and the movement input direction
+				float Dot = FVector::UnitZ().Dot(AimingDirection3D);
+				float Acos = FMath::Acos(Dot);
+				float AngleDegrees = FMath::RadiansToDegrees(Acos);
+
+				FVector Cross = FVector::CrossProduct(FVector::UnitZ(), AimingDirection3D);
+				float AngleDirectionMultipler = Cross.Y >= 0.0f ? -1.0f : 1.0f;
+				AngleDegrees *= AngleDirectionMultipler;
+
+				FRotator AimingRotation = UKismetMathLibrary::MakeRotator(0.0f, AngleDegrees, 0.0f);
+				//UE_LOG(LogTemp, Warning, TEXT("AimingRotation: %s"), *AimingRotation.ToString());
+
+				FireProjectile(AimingRotation);
+
+				// If the player is using the gamepad right-thumbstick, then hide the mouse cursor
+				if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+				{
+					SetMouseCursorVisiblityFromInput(PlayerController, false);
+				}
+			}
+		}
+
+		// ==========================================================================
+		// Check player collision with border
+		if (RightStickDebugBehavior == ERightStickDebugBehavior::LineTraceOnly || RightStickDebugBehavior == ERightStickDebugBehavior::FireAndLineTrace)
+		{
+			if (UWorld* World = GetWorld())
+			{
+				const float TraceLineLength = 1000.0f;
+				const FVector& TraceStartPos = GetActorLocation();
+				const FVector& TraceEndPos = GetActorLocation() + FVector(AimingDirection.X, 0.0f, AimingDirection.Y) * TraceLineLength;
+
+				// Draw debug line for visual feedback
+				DrawDebugLine(
+					World,
+					TraceStartPos,
+					TraceEndPos,
+					FColor::Cyan);
+
+				TArray<FHitResult> HitResults;
+				FCollisionObjectQueryParams ObjectQueryParams(FCollisionObjectQueryParams::InitType::AllStaticObjects);
+
+				bool bLineTraceSuccess =
+					World->LineTraceMultiByObjectType(
+						HitResults,
+						TraceStartPos,
+						TraceEndPos,
+						ObjectQueryParams);
+
+				if (bLineTraceSuccess)
+				{
+					if (HitResults.Num() > 0)
+					{
+						const FHitResult& HitResult = HitResults[0];
+						UE_LOG(LogTemp, Warning, TEXT("----------------------------"));
+						UE_LOG(LogTemp, Warning, TEXT("HitResult.ImpactPoint:      %s"), *HitResult.ImpactPoint.ToString());
+						UE_LOG(LogTemp, Warning, TEXT("HitResult.ImpactNormal:     %s"), *HitResult.ImpactNormal.ToString());
+						UE_LOG(LogTemp, Warning, TEXT("HitResult.Normal:           %s"), *HitResult.Normal.ToString());
+						UE_LOG(LogTemp, Warning, TEXT("HitResult.Distance:         %f"), HitResult.Distance);
+						UE_LOG(LogTemp, Warning, TEXT("HitResult.PenetrationDepth: %f"), HitResult.PenetrationDepth);
+						UE_LOG(LogTemp, Warning, TEXT("HitResult.bBlockingHit:     %d"), HitResult.bBlockingHit);
+
+						// Draw reflection vector
+						FVector ReflectionVector = FMath::GetReflectionVector(FVector(AimingDirection.X, 0.0f, AimingDirection.Y), HitResult.ImpactNormal);
+						FVector ReflectEndPos = HitResult.ImpactPoint + ReflectionVector * 500.0f;
+						DrawDebugLine(
+							World,
+							HitResult.ImpactPoint,
+							ReflectEndPos,
+							FColor::Green);
+					}
+				}
 			}
 		}
 	}

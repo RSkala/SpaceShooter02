@@ -6,6 +6,14 @@
 #include "GameFramework/Pawn.h"
 #include "PlayerShipPawn.generated.h"
 
+UENUM(BlueprintType)
+enum class ERightStickDebugBehavior : uint8 // In UE 5.4+, enums MUST be uint8
+{
+	FireOnly UMETA(ToolTip = "Pressing right-stick will fire as normal"),
+	FireAndLineTrace UMETA(ToolTip = "Pressing right-stick will fire AND do a line trace"),
+	LineTraceOnly UMETA(ToolTip = "Pressing right-stick will ONLY do a line trace in the pressed direction")
+};
+
 UCLASS()
 class SPACESHOOTER02_API APlayerShipPawn : public APawn
 {
@@ -139,4 +147,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Visual")
 	TArray<TObjectPtr<class UPaperSprite>> PlayerShipSprites;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Debug")
+	ERightStickDebugBehavior RightStickDebugBehavior = ERightStickDebugBehavior::FireOnly;
 };
