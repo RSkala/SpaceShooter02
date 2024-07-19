@@ -1,0 +1,102 @@
+Notes on Collisions / Setting up the level boundaries
+
+
+Boundaries
+
+Using T_White16px.png
+
+Collisions:
+Need OnComponentHit
+
+Was not working unless the collision was the ROOT.
+Need to enable physics
+Need to disable gravity
+
+* Simulation Generates Hit Events
+  * C++ version:  SetNotifyRigidBodyCollision()
+* Simulate Physics
+* 
+* Blocking Volumes / Blocking Sprites
+  * Mobility: Static
+    * If this is set to Movable, then the ship and the bullets will "push" the blocking objects
+
+In order for me to use OnComponentHit, I will have to rebuild all of the Player and Enemy Blueprints.
+Note: The player already has a SphereComp as its root
+
+Or, I can use:
+UKismetSystemLibrary::LineTraceSingleForObjects
+...
+World->LineTraceSingleByObjectType
+UWorld::LineTraceSingleByObjectType
+* Note that there are multiple functions here for this:
+  * LineTraceTestByObjectType
+  * LineTraceSingleByObjectType
+  * LineTraceMultiByObjectType
+
+
+NOTE:
+When I enabled physics and such on the ship, this warning popped up:
+Invalid Simulate Options: Body (BP_PlayerShipPawn_C_0.SphereComp) is set to simulate physics but Collision Enabled is incompatible
+I have mine set to QueryOnly.
+This was set to the Default, which is OverlapAllDynamic Preset, which sets CollisionEnabled to CollisionEnabled_QueryOnly
+Changing to Collision Preset: Pawn, which sets CollisionEnabled to CollisionEnabled_QueryAndPhysics
+
+Debugging:
+AActor::NotifyHit is called when I cross the BlockingVolume I added to the level.
+bSelfMoved = true... will this affect whether the OnComponentHit is called???
+ReceiveHit() is then called
+
+THIS SEEMS TO HAVE WORKED:
+APlayerShipPawn::OnCollisionHit is called!
+
+It would probably be a good idea to set my own custom collision channels
+
+NOTE:
+OnCollisionHit is ONLY when I set the player ship's collision response for WorldStatic to Block
+The BlockingVolume is set to CollisionPreset InvisibleWall, which sets everything to Block.
+
+
+--------------------------------------------------------------
+Sources:
+https://www.reddit.com/r/unrealengine/comments/bc06a6/cant_get_on_component_hit_to_work/
+
+This Post:
+
+I had a similar issue myself recently, and found the problem could not be fixed in any way I tried other than making the item I wanted to check for collisions as the root of the object. I ended up swicthing to line traces after. There's probably a better solution but nothing I could find on forums or anywhere seemed to help.
+
+NOTE: 
+the SphereComp (collision) IS the root of my object
+
+----------------------------------------------------------------
+
+
+TEST USING A LINE TRACE:
+
+Line Trace Usage:
+
+  if (UWorld* World = GetWorld())
+  {
+    const float TraceLineLength = 1000.0f;
+    const FVector& TraceStartPos = GetActorLocation();
+    const FVector& TraceEndPos = GetActorLocation() + FVector(MovementDirection.X, 0.0f, MovementDirection.Y) * TraceLineLength;
+
+    DrawDebugLine(
+      World,
+      TraceStartPos,
+      TraceEndPos,
+      FColor::Cyan);
+
+    TArray<FHitResult> HitResults;
+    FCollisionQueryParams TraceParams(SCENE_QUERY_STAT(WaterImmersionDepthTrace), true);
+    FCollisionObjectQueryParams ObjectQueryParams(FCollisionObjectQueryParams::InitType::AllStaticObjects);
+
+    bool bLineTraceSuccess = World->LineTraceMultiByObjectType(HitResults, TraceStartPos, TraceEndPos, ObjectQueryParams);
+    if (bLineTraceSuccess)
+    {
+      UE_LOG(LogTemp, Warning, TEXT("HitResults: %d"), HitResults.Num());
+    }
+
+    //World->LineTraceSingleByObjectType()
+  }
+
+==============================================
