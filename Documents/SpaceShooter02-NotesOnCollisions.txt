@@ -55,6 +55,17 @@ NOTE:
 OnCollisionHit is ONLY when I set the player ship's collision response for WorldStatic to Block
 The BlockingVolume is set to CollisionPreset InvisibleWall, which sets everything to Block.
 
+Settings needed on the Sphere Component (collision)
+
+SphereComp->SetSimulatePhysics(true); // This needs to be enabled in order to use "OnComponentHit"
+SphereComp->SetNotifyRigidBodyCollision(true); // Set "Simulation Generates Hit Events"
+SphereComp->SetEnableGravity(false); // Gravity must be disabled after enabling "SetSimulatePhysics", otherwise the ship will "fall" (-Z)
+SphereComp->SetCollisionProfileName(UCollisionProfile::Pawn_ProfileName);
+
+
+I was having issue when the player would cross the blocking volume, it would get stuck and "slow down" through it.
+All I really wanted was the collision "hit", so I can get a collision position and normal.
+This was getting out of hand, so I will likely switch to using the LineTrace
 
 --------------------------------------------------------------
 Sources:
@@ -98,5 +109,31 @@ Line Trace Usage:
 
     //World->LineTraceSingleByObjectType()
   }
+
+==============================================
+
+
+Handling OnCollisionHit:
+
+	UFUNCTION()
+	void OnCollisionOverlap(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnCollisionHit(
+		UPrimitiveComponent* HitComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		FVector NormalImpulse,
+		const FHitResult& Hit);
+
+Subscribe to the delegate:
+SphereComp->OnComponentHit.AddUniqueDynamic(this, &ThisClass::OnCollisionHit);
+
 
 ==============================================
