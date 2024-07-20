@@ -36,7 +36,7 @@ APlayerShipPawn::APlayerShipPawn()
 {
 	UE_LOG(LogPlayerShipPawn, Verbose, TEXT("APlayerShipPawn::APlayerShipPawn - %s"), *GetName());
 
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Initialize Components
@@ -198,8 +198,53 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 		FVector MovementAmount = FVector(MovementAmount2D.X, 0.0f, MovementAmount2D.Y);
 
 		// Get the new ship position and set it
-		FVector NewShipPosition = PlayerShipPosition + MovementAmount;
-		SetActorLocation(NewShipPosition);
+		//FVector NewShipPosition = PlayerShipPosition + MovementAmount;
+		//SetActorLocation(NewShipPosition);
+
+		// Line trace to check collision to create a new modified movment direction, depending on whether the player collided with walls.
+		// Separating into two separate LineTraces allows the player to "slide" along the wall in a non-collided direction
+		if (UWorld* World = GetWorld())
+		{
+			// Use the player ship's position as the line trace start position
+			const FVector& TraceStartPos = GetActorLocation();
+
+			// Check agains all static objects (TODO: Use custom collision object type, e.g. Walls)
+			FCollisionObjectQueryParams ObjectQueryParams(FCollisionObjectQueryParams::InitType::AllStaticObjects);
+
+			// Distance of the LineTrace. Adjust with the movement speed and deltatime
+			float CollisionDistance = MoveSpeed * DeltaTime * CollisionLineTraceOffset;
+
+			// Check collision against walls in the X movement direction
+			TArray<FHitResult> HitResultsXDir;
+			const FVector& TraceEndPosXDir = TraceStartPos + FVector(MovementDirection.X, 0.0f, 0.0f).GetSafeNormal() * CollisionDistance;
+			if (World->LineTraceMultiByObjectType(HitResultsXDir, TraceStartPos, TraceEndPosXDir, ObjectQueryParams))
+			{
+				// Successful line trace hit in the X direction. Zero out the X movement amount.
+				MovementAmount.X = 0.0f;
+			}
+			
+			// Check collision against walls in the Y movement direction (Z world direction)
+			TArray<FHitResult> HitResultsYDir;
+			const FVector& TraceEndPosYDir = TraceStartPos + FVector(0.0f, 0.0f, MovementDirection.Y).GetSafeNormal() * CollisionDistance;
+			if (World->LineTraceMultiByObjectType(HitResultsYDir, TraceStartPos, TraceEndPosYDir, ObjectQueryParams))
+			{
+				// Successful line trace hit in the Y direction. Zero out the Y movement amount.
+				MovementAmount.Z = 0.0f;
+			}
+
+			if (bShowMovementCollisionDebug)
+			{
+				UE_LOG(LogPlayerShipPawnMovement, Log, TEXT("CollisionDistance: %f"), CollisionDistance);
+				DrawDebugLine(World, TraceStartPos, TraceEndPosXDir, FColor::Red);
+				DrawDebugLine(World, TraceStartPos, TraceEndPosYDir, FColor::Green);
+			}
+
+			FVector AdjustedShipPosition = PlayerShipPosition + MovementAmount;
+			SetActorLocation(AdjustedShipPosition);
+		}
+
+
+		/////////////////////////////////////////////////////////////////
 
 		// ---------------------------------------------------------
 		// Update the ship facing direction

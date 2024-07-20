@@ -148,6 +148,15 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Visual")
 	TArray<TObjectPtr<class UPaperSprite>> PlayerShipSprites;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Debug")
+	// --- Collision ---
+
+	// Extra offset for movement collision checking
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Collision")
+	float CollisionLineTraceOffset = 3.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Collision|Debug")
+	bool bShowMovementCollisionDebug = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Collision|Debug")
 	ERightStickDebugBehavior RightStickDebugBehavior = ERightStickDebugBehavior::FireOnly;
 };
