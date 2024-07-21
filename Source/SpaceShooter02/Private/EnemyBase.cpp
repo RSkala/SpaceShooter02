@@ -84,6 +84,15 @@ void AEnemyBase::BeginPlay()
 
 void AEnemyBase::MoveTowardsTarget(float DeltaTime)
 {
+	// Do not move if the player is the target and the player is dead.
+	if (APlayerShipPawn* PlayerShipPawn = Cast<APlayerShipPawn>(TargetActor.Get()))
+	{
+		if (PlayerShipPawn->GetPlayerDead())
+		{
+			return;
+		}
+	}
+
 	// Get this enemy's movement direction depending on whether or not it has a target
 	FVector MovementDirection;
 	if (TargetActor == nullptr)

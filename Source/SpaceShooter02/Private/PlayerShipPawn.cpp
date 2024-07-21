@@ -19,6 +19,7 @@
 #include "PaperSpriteComponent.h"
 #include "Sound/SoundBase.h"
 
+#include "EnemyBase.h"
 #include "ProjectileBase.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawn, Warning, All)
@@ -173,6 +174,8 @@ void APlayerShipPawn::BeginPlay()
 		UPaperSprite* RandomSprite = PlayerShipSprites[FMath::RandRange(0, PlayerShipSprites.Num() - 1)];
 		PaperSpriteComp->SetSprite(RandomSprite);
 	}
+
+	SphereComp->OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::OnCollisionOverlap);
 }
 
 void APlayerShipPawn::UpdateMovement(float DeltaTime)
@@ -241,6 +244,10 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 
 			FVector AdjustedShipPosition = PlayerShipPosition + MovementAmount;
 			SetActorLocation(AdjustedShipPosition);
+
+			// TODO: Save for sweeps later
+			//FHitResult SweepHitResult;
+			//bool bActorLocationSet = SetActorLocation(AdjustedShipPosition, true, &SweepHitResult, ETeleportType::None);
 		}
 
 
@@ -412,6 +419,30 @@ void APlayerShipPawn::UpdateExhaust()
 	}
 }
 
+void APlayerShipPawn::DisablePlayer()
+{
+	// Hides visible components
+	SetActorHiddenInGame(true);
+
+	// Disables collision components
+	SetActorEnableCollision(false);
+
+	// Stops the Actor from ticking
+	SetActorTickEnabled(false);
+}
+
+void APlayerShipPawn::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	FString OtherActorName = OtherActor != nullptr ? OtherActor->GetName() : "(invalid)";
+	UE_LOG(LogPlayerShipPawn, Verbose, TEXT("APlayerShipPawn::OnCollisionOverlap - OtherActor: %s"), *OtherActorName);
+
+	if (AEnemyBase* OverlappedEnemy = Cast<AEnemyBase>(OtherActor))
+	{
+		// Player has collided with an enemy. Kill the player.
+		KillPlayer();
+	}
+}
+
 void APlayerShipPawn::KeyboardMoveTriggered(const FInputActionValue& InputActionValue)
 {
 	FVector2D MoveTriggeredInput = InputActionValue.Get<FVector2D>();
@@ -557,6 +588,28 @@ void APlayerShipPawn::PlayShootSound()
 	{
 		UGameplayStatics::PlaySound2D(GetWorld(), PlayerShootSound);
 	}
+}
+
+void APlayerShipPawn::KillPlayer()
+{
+	// Play death sound
+	if (ensureMsgf(
+		PlayerDeathSound != nullptr, TEXT("%s - PlayerDeathSound not set. Set it in the PlayerShip blueprint."), ANSI_TO_TCHAR(__FUNCTION__)))
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), PlayerDeathSound);
+	}
+
+	// Play explosion effect
+	// TODO
+
+	// Destroy player ship
+	//Destroy();
+
+	// Disable the player ship instead of destroying it (so the camera doesn't look in the wrong place)
+	DisablePlayer();
+
+	// Mark player as dead. TODO: Add delegate and notify.
+	bPlayerDead = true;
 }
 
 void APlayerShipPawn::SetMouseCursorVisiblityFromInput(APlayerController* const PlayerController, bool bCursorVisible)

@@ -29,6 +29,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	bool GetPlayerDead() const { return bPlayerDead; }
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -36,6 +38,17 @@ protected:
 	void UpdateMovement(float DeltaTime);
 	void UpdateGamepadAimFiring();
 	void UpdateExhaust();
+
+	void DisablePlayer();
+
+	UFUNCTION()
+	virtual void OnCollisionOverlap(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult);
 
 protected:
 	void KeyboardMoveTriggered(const struct FInputActionValue& InputActionValue);
@@ -52,6 +65,8 @@ protected:
 	
 	void FireProjectile(FRotator ProjectileRotation);
 	void PlayShootSound();
+
+	void KillPlayer();
 
 	void SetMouseCursorVisiblityFromInput(APlayerController* const PlayerController, bool bCursorVisible);
 
@@ -145,6 +160,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Audio")
 	TObjectPtr<class USoundBase> PlayerShootSound;
 
+	// Sound that is played when the player dies
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Audio")
+	TObjectPtr<class USoundBase> PlayerDeathSound;
+
+	// --- Visual ---
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Visual")
 	TArray<TObjectPtr<class UPaperSprite>> PlayerShipSprites;
 
@@ -159,4 +180,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Collision|Debug")
 	ERightStickDebugBehavior RightStickDebugBehavior = ERightStickDebugBehavior::FireOnly;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bPlayerDead = false;
 };
