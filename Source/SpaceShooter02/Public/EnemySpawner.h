@@ -15,6 +15,7 @@ class SPACESHOOTER02_API AEnemySpawner : public AActor
 public:	
 	AEnemySpawner();
 	virtual void Tick(float DeltaTime) override;
+	void SetSpawningEnabled(bool bInSpawningEnabled) { bSpawningEnabled = bInSpawningEnabled; }
 
 protected:
 	virtual void BeginPlay() override;

@@ -22,6 +22,7 @@
 #include "Sound/SoundBase.h"
 
 #include "EnemyBase.h"
+#include "EnemySpawner.h"
 #include "ProjectileBase.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawn, Warning, All)
@@ -615,6 +616,14 @@ void APlayerShipPawn::KillPlayer()
 
 	// Mark player as dead. TODO: Add delegate and notify.
 	bPlayerDead = true;
+
+	// TEMP: Stop enemy spawning manually
+	AEnemySpawner* EnemySpawner = Cast<AEnemySpawner>(UGameplayStatics::GetActorOfClass(GetWorld(), AEnemySpawner::StaticClass()));
+	if (EnemySpawner != nullptr)
+	{
+		// Disable enemy spawning
+		EnemySpawner->SetSpawningEnabled(false);
+	}
 }
 
 void APlayerShipPawn::SetMouseCursorVisiblityFromInput(APlayerController* const PlayerController, bool bCursorVisible)
