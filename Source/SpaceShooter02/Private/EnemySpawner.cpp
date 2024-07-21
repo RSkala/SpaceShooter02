@@ -74,14 +74,23 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 				FVector SourcePosition = PlayerShipPawn != nullptr ? PlayerShipPawn->GetActorLocation() : FVector();
 				FVector EnemyPosition = SourcePosition + FVector(RandomPosition.X, 0.0f, RandomPosition.Y);
 
+				FActorSpawnParameters EnemySpawnParams;
+				EnemySpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
 				// Spawn the enemy
-				AEnemyBase* SpawnedEnemy = World->SpawnActor<AEnemyBase>(EnemyClassToSpawn, EnemyPosition, FRotator());
+				AEnemyBase* SpawnedEnemy = World->SpawnActor<AEnemyBase>(EnemyClassToSpawn, EnemyPosition, FRotator(), EnemySpawnParams);
+				if (SpawnedEnemy != nullptr)
+				{
+					// Notify the the spawner when the enemy dies
+					SpawnedEnemy->OnEnemyDeath.AddUniqueDynamic(this, &ThisClass::OnEnemyDeath);
 
-				// Notify the the spawner when the enemy dies
-				SpawnedEnemy->OnEnemyDeath.AddUniqueDynamic(this, &ThisClass::OnEnemyDeath);
-
-				// Set the player as the enemy's target
-				SpawnedEnemy->SetTarget(PlayerShipPawn);
+					// Set the player as the enemy's target
+					SpawnedEnemy->SetTarget(PlayerShipPawn);
+				}
+				else
+				{
+					UE_LOG(LogEnemySpawner, Warning, TEXT("%s - Spawn enemy FAILED"), ANSI_TO_TCHAR(__FUNCTION__));
+				}
 			}
 		}
 

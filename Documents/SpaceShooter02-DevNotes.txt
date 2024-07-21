@@ -512,3 +512,41 @@ if (bLineTraceSuccess)
 ----------------------------------------------------------
 
 ==============================================
+Particles
+
+Player Explosion Particle
+
+-----------------------------
+Using Niagara in the Project
+-----------------------------
+
+In order to use Niagara in C++, you must add "Niagara" to your project dependencies, e.g.
+
+PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Paper2D", "Niagara" });
+
+Note that you DON'T need this if you're not using Niagara in C++ (i.e. only in Blueprints)
+
+
+---------------------
+Using Niagara in C++
+---------------------
+
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+
+  UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Visual")
+  TObjectPtr<class UNiagaraSystem> PlayerExplosionEffect;
+
+  // Play explosion effect
+  if (PlayerExplosionEffect != nullptr && PlayerExplosionEffect->IsValid())
+  {
+    UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), PlayerExplosionEffect.Get(), GetActorLocation());
+  }
+
+/Script/Niagara.NiagaraSystem'/Game/FX/FXS_TestExplosion_001.FXS_TestExplosion_001'
+
+Source:
+https://dev.epicgames.com/community/learning/tutorials/Gx5j/using-niagara-in-c
+
+==============================================
+

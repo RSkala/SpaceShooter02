@@ -13,6 +13,8 @@
 #include "InputActionValue.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "NiagaraFunctionLibrary.h"
+//#include "NiagaraComponent.h" // Uncomment when needed
 #include "PaperFlipbook.h"
 #include "PaperFlipbookComponent.h"
 #include "PaperSprite.h"
@@ -600,7 +602,10 @@ void APlayerShipPawn::KillPlayer()
 	}
 
 	// Play explosion effect
-	// TODO
+	if (PlayerExplosionEffect != nullptr && PlayerExplosionEffect->IsValid())
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), PlayerExplosionEffect.Get(), GetActorLocation());
+	}
 
 	// Destroy player ship
 	//Destroy();

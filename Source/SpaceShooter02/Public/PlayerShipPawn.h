@@ -169,6 +169,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Visual")
 	TArray<TObjectPtr<class UPaperSprite>> PlayerShipSprites;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Visual")
+	TObjectPtr<class UNiagaraSystem> PlayerExplosionEffect;
+
 	// --- Collision ---
 
 	// Extra offset for movement collision checking
