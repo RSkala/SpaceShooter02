@@ -133,6 +133,9 @@ void AProjectileBase::UpdateMovement(float DeltaTime)
 
 	FVector NewProjectilePosition = ProjectilePosition + MovementAmount;
 	SetActorLocation(NewProjectilePosition);
+
+	//FHitResult SweepHitResult;
+	//SetActorLocation(NewProjectilePosition, true, &SweepHitResult, ETeleportType::None)
 }
 
 void AProjectileBase::UpdateLifetime(float DeltaTime)
