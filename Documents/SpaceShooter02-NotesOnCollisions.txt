@@ -137,3 +137,71 @@ SphereComp->OnComponentHit.AddUniqueDynamic(this, &ThisClass::OnCollisionHit);
 
 
 ==============================================
+
+Drawing Debug Objects:
+
+#include "DrawDebugHelpers.h"
+
+		const float TraceLineLength = 1000.0f;
+		const FVector& TraceStartPos = GetActorLocation();
+		const FVector& TraceEndPos = GetActorLocation() + FVector(MovementDirection.X, 0.0f, MovementDirection.Y) * TraceLineLength;
+
+		DrawDebugLine(
+			World,
+			TraceStartPos,
+			TraceEndPos,
+			FColor::Cyan);
+
+		DrawDebugSphere(GetWorld(), SweepResult.ImpactPoint, 100.0f, 50, FColor::Magenta, true, -1.0f, 1, 10.0f);
+
+
+==============================================
+
+More Notes on Collision Hit / Impact Points / Impact Normals
+
+---------------
+OnComponentHit
+---------------
+
+In order to use OnComponentHit, you do NOT need to enable physics simulation.
+However, there are specific things that MUST be set up in order to capture collision Hit:
+
+* A "Hit" is a BLOCKING response. In other words, BOTH actors must BLOCK each other
+* CollionEnabled MUST be "Query and Probe" OR "Probe Only" (Also) (The "Hit" is a probing action) (Also "Collision Enabled", I think)
+* If the collision volume is NOT the Root Component, the ComponentHit will NOT work for an actor without a volume as the root component.
+* Since a "Hit" is a Blocking respose, the actors will STOP moving once they collide.
+
+I originally had enemies and projectiles have their collision volumes NOT the root, so my OnCollisionHit callbacks were NOT getting called.
+Once I changed them so the collision volumes were the RootComponent, then OnCollisionHit was called (after setting the correct CollisionEnabled and Responses of course).
+
+-------------------------------------------
+Getting Impact Info Without OnComponentHit
+-------------------------------------------
+
+When moving an actor manually, that is, using:
+AddActorWorldOffset()
+SetActorLocation()
+SetWorldLocation() (for Components)
+
+You do NOT need to use OnComponentHit in order to get HitResults.
+You can actually do this in OnComponentOverlap (so they do not need to be set to Block).
+But you need to enable sweep when calling those functions:
+
+FHitResult SweepHitResult;
+SetActorLocation(NewProjectilePosition, true, &SweepHitResult, ETeleportType::None);
+
+You can check the return value of those functions to see if movement occurred (true = movement occurred).
+The SweepHitResult will contain the Location/ImpactPoint as well as the Normal/ImpactNormal.
+
+Also, in your OnComponentBeginOverlap callback, 
+
+bool bFromSweep will be true
+const FHitResult& SweepResult will have valid data.
+
+Using this, we can spawn impact particles or "reflect" bullets and such.
+
+For my purposes, using Overlaps and Sweeps/Probes is the best way.
+
+
+
+==============================================
