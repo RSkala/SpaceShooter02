@@ -12,12 +12,12 @@ DEFINE_LOG_CATEGORY(LogSpaceShooter02Editor)
 
 void FSpaceShooter02EditorModule::StartupModule()
 {
-	UE_LOG(LogSpaceShooter02Editor, Warning, TEXT("SpaceShooter02Editor: Module Started"));
+	//UE_LOG(LogSpaceShooter02Editor, Warning, TEXT("SpaceShooter02Editor: Module Started"));
 }
 
 void FSpaceShooter02EditorModule::ShutdownModule()
 {
-	UE_LOG(LogSpaceShooter02Editor, Warning, TEXT("SpaceShooter02Editor: Module Shutdown"));
+	//UE_LOG(LogSpaceShooter02Editor, Warning, TEXT("SpaceShooter02Editor: Module Shutdown"));
 }
 
 #undef LOCTEXT_NAMESPACE
