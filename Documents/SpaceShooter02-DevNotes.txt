@@ -606,5 +606,6 @@ https://docs.unrealengine.com/4.27/en-US/TestingAndOptimization/PerformanceAndPr
 https://dev.epicgames.com/documentation/en-us/unreal-engine/testing-and-optimizing-your-content?application_version=5.4
 https://www.youtube.com/watch?v=f9hMB_50B5o
 https://www.reddit.com/r/unrealengine/comments/1bofih5/how_to_reduce_package_size_for_unreal_engine_game/
+https://cobracode.notion.site/How-to-reduce-Package-Size-for-Unreal-Engine-Game-Builds-7993544e050041f9800512acd3500cfc
 
 ==============================================
