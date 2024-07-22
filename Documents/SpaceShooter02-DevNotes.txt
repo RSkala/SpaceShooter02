@@ -550,3 +550,43 @@ https://dev.epicgames.com/community/learning/tutorials/Gx5j/using-niagara-in-c
 
 ==============================================
 
+BUILDS
+
+Editor Build Module
+
+Error when building project:
+Unable to instantiate module 'UnrealEd': Unable to instantiate UnrealEd module for non-editor targets.
+(referenced via Target -> SpaceShooter02.Build.cs -> Blutility.Build.cs -> MainFrame.Build.cs -> Documentation.Build.cs)
+
+This is due to having Blutility as a dependency in the Game module.
+So, I need to create an Editor module and move editor-only classes there.
+
+------------------------------------------
+Sources:
+https://unrealcommunity.wiki/creating-an-editor-module-x64nt5g3
+
+https://dev.epicgames.com/documentation/en-us/unreal-engine/unreal-engine-modules?application_version=5.4
+
+https://www.youtube.com/watch?v=DqqQ_wiWYOw
+
+https://www.youtube.com/watch?v=wJquw_-X4YQ
+
+-------------------------------------------
+
+SpaceeShooter02.Target.cs:
+
+    // Apparently, we do not need to check for editor in more recent UE versions
+    // If I do, I get errors when generated the VS project files from the uproject
+    // https://forums.unrealengine.com/t/what-happend-to-targetinfo-target-in-4-19/106118/11
+    //if (Target.Type == TargetType.Editor)
+    //{
+    //  ExtraModuleNames.AddRange( 
+    //    new string[]
+    //    {
+    //      "SpaceShooter02Editor"
+    //    });
+    //}
+
+
+==============================================
+

@@ -19,7 +19,7 @@ public class SpaceShooter02Editor : ModuleRules
 			{
 				"Core",
 				"CoreUObject",
-				//"Engine"
+				"Engine",
 				//"UnrealEd",
 				//"Slate",
 				//"SlateCore"

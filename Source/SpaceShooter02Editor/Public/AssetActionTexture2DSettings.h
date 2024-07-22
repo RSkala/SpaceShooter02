@@ -9,7 +9,7 @@
 // This class contains custom context-menu actions (i.e. right-click an asset in the Content Browser) for Texture2D settings.
 // These actions will appear under "Scripted Asset Actions" after right-clicking a Texture2D asset.
 UCLASS()
-class SPACESHOOTER02_API UAssetActionTexture2DSettings : public UAssetActionUtility
+class SPACESHOOTER02EDITOR_API UAssetActionTexture2DSettings : public UAssetActionUtility
 {
 	GENERATED_BODY()
 
