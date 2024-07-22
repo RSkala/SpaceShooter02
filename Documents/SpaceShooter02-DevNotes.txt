@@ -549,8 +549,7 @@ Source:
 https://dev.epicgames.com/community/learning/tutorials/Gx5j/using-niagara-in-c
 
 ==============================================
-
-BUILDS
+MODULES
 
 Editor Build Module
 
@@ -587,6 +586,25 @@ SpaceeShooter02.Target.cs:
     //    });
     //}
 
+--------------------------------------------
+After moving the Blutility Dependency out of the Game module and into a new Editor module (and therefore needing to move the AssetAction class over as well), the packaging succeeded.
+
 
 ==============================================
+BUILDS
 
+To create a build:
+
+* Click Platforms button
+  * Windows -> Package Project
+
+TODO:
+* Reduce packaged project sizes
+
+Resources:
+https://docs.unrealengine.com/4.27/en-US/TestingAndOptimization/PerformanceAndProfiling/ReducingPackageSize/
+https://dev.epicgames.com/documentation/en-us/unreal-engine/testing-and-optimizing-your-content?application_version=5.4
+https://www.youtube.com/watch?v=f9hMB_50B5o
+https://www.reddit.com/r/unrealengine/comments/1bofih5/how_to_reduce_package_size_for_unreal_engine_game/
+
+==============================================
