@@ -13,6 +13,14 @@
 				"Blutility",
 				"CoreUObject"
 			]
+		},
+		{
+			"Name": "SpaceShooter02Editor",
+			"Type": "Editor",
+			"LoadingPhase": "PostEngineInit",
+			"AdditionalDependencies": [
+				"Blutility"
+			]
 		}
 	],
 	"Plugins": [

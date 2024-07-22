@@ -10,6 +10,12 @@ public class SpaceShooter02EditorTarget : TargetRules
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V5;
 		IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_4;
-		ExtraModuleNames.Add("SpaceShooter02");
+
+		ExtraModuleNames.AddRange(
+			new string[]
+			{
+				"SpaceShooter02",
+				"SpaceShooter02Editor"
+			});
 	}
 }
