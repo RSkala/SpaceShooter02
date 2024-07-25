@@ -151,6 +151,12 @@ Using 3840, so the size will be:
 3840 x 2160 (i.e. 4K, although that doesn't really matter)
 
 ==============================================
+Note Regarding Orthographic Camera
+* If Orthographic Camera is enabled, then Camera Lag DOES NOT work.
+* It seems you MUST have a Perspective Camera in order for Camera Lag to work.
+* This seems like an Unreal Engine bug.
+
+==============================================
 Player Input:
 
 NOTES:
