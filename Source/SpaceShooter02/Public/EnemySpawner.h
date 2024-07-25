@@ -49,7 +49,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TSubclassOf<class AExplosionBase>> EnemyExplosionClasses;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// Used for setting the player as a target
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<class APlayerShipPawn> PlayerShipPawn;
 
 	// Enable / Disable enemy spawning
