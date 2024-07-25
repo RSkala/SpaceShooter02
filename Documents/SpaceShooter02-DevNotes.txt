@@ -615,3 +615,35 @@ https://www.reddit.com/r/unrealengine/comments/1bofih5/how_to_reduce_package_siz
 https://cobracode.notion.site/How-to-reduce-Package-Size-for-Unreal-Engine-Game-Builds-7993544e050041f9800512acd3500cfc
 
 ==============================================
+PERSPECTIVE / ORTHOGRAPHIC CAMERAS
+
+I may change the camera projection mode to Perspective for a few reasons:
+* Camera Lag doesn't work in Orthographic
+* Can add "layers" to the background "stars" sprites to give a parallax effect.
+
+Settings for Perspective:
+* PlayerShip -> CameraComp -> Camera Settings:
+  * Projection Mode: Perspective
+  * Field Of View: (TBD, but 115 - 135 degrees seem like a good place to start)
+* PlayerShip -> SpringArmComp -> Lag
+  * Enable Camera Lag: TRUE
+  * Enable Camera Rotation Lag: FALSE (default)
+  * Draw Debug Lag Markers: TRUE
+  * Camera Lag Speed: 8.0f (TBD)
+* PlayerShip -> SpringArmComp -> Camera
+  * Target Arm Length: (TBD, currently 1000. Will depend on Camera FOV).
+
+Note on Perspective:
+* I need to be very conscious now that the player and all enemies are at Y-position 0, so they all appear the same distance from the camera.
+* I can either adjust the SpringArm's TargetArm Length or the Perspective Field of View.
+
+Note on Camera Lag:
+* The LOWER the number, the SLOWER the camera moves back to its look-at position.
+
+AIMING BUG AFTER SETTING PERSPECTIVE PROJECTION:
+* When I changed to Perspective Projection, the Mouse aiming is broken (always fires backwards).
+* This only seems to occur while MOVING. If not moving, mouse aiming works.
+* Update: This is due to the Camera Lag. If Camera Lag is enabled (in Perspective Projection), then the bullets fire backwards from the player ship, IF the player is MOVING.
+
+
+==============================================
