@@ -66,6 +66,7 @@ APlayerShipPawn::APlayerShipPawn()
 	//SpringArmComp->bEnableCameraLag = true; // Note: Camera lag doesn't work with Orthographic
 	//SpringArmComp->CameraLagSpeed = 8.0f;
 	//SpringArmComp->bDrawDebugLagMarkers = false;
+	//SpringArmComp->TargetArmLength = 1500.0f; // Better value for Perspective projection (depending on FOV)
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(SpringArmComp, USpringArmComponent::SocketName);
