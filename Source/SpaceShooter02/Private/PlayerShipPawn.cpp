@@ -63,11 +63,16 @@ APlayerShipPawn::APlayerShipPawn()
 	SpringArmComp->bDoCollisionTest = false; // Ensure the SpringArm does not collide with anything in the world (so it isn't "pushed")
 	SpringArmComp->SetAbsolute(false, true, false); // Set the SpringArm rotation to Absolute, so its rotation is not affected by the ship in any way
 	SpringArmComp->SetWorldRotation(FRotator(0.0f, -90.0f, 0.0f)); // Set the rotation so it is looking down the Y-axis towards the XZ plane (Note: Yaw is Z-axis rotation)
+	//SpringArmComp->bEnableCameraLag = true; // Note: Camera lag doesn't work with Orthographic
+	//SpringArmComp->CameraLagSpeed = 8.0f;
+	//SpringArmComp->bDrawDebugLagMarkers = false;
 
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(SpringArmComp, USpringArmComponent::SocketName);
 	CameraComp->SetProjectionMode(ECameraProjectionMode::Orthographic);
 	CameraComp->OrthoWidth = 3840.0f;
+	//CameraComp->SetProjectionMode(ECameraProjectionMode::Perspective);
+	//CameraComp->FieldOfView = 115.0f;
 	//CameraComp->bConstrainAspectRatio = true; // TODO: Test this value to see if it has any positive or negative effects
 
 	FirePointComp = CreateDefaultSubobject<USceneComponent>(TEXT("FirePointComp"));
