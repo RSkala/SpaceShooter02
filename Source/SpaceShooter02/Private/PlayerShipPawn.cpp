@@ -555,6 +555,37 @@ void APlayerShipPawn::MouseFire(const FInputActionValue& InputActionValue)
 		// Note: This didn't work for some reason. Rotation seemed off by 90 degrees. Using my standard Dot and Cross calculations instead.
 		// Create a rotation representing the vector from the player position to the mouse position
 		// FRotator MouseAimingRotation = UKismetMathLibrary::FindLookAtRotation(PlayerShipPosition, MouseWorldPosition);
+	
+		// Use mouse hit for more accurate/consistent mouse targeting. This is needed in order to use a Perspective Projection camera.
+		FVector MouseHitPosition;
+		FHitResult CursorHitResultByChannel;
+		bool bMouseClickHItResult = PlayerController->GetHitResultUnderCursorByChannel(
+			UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), // MouseBlockerTrace
+			true, // bTraceComplex -- set to false
+			CursorHitResultByChannel);
+		if (bMouseClickHItResult)
+		{
+			// Get the mouse hit position of the line trace onto the mouse blocking object
+			//MouseHitPosition = CursorHitResultByChannel.ImpactPoint;
+			MouseWorldPosition = CursorHitResultByChannel.ImpactPoint; // Set the position in case the mouse trace hit fails
+
+			// Draw debug hit
+			if (bShowMouseHitDebug)
+			{
+				AActor* HitActor = CursorHitResultByChannel.GetActor();
+				FString HitActorName = HitActor != nullptr ? HitActor->GetName() : "(invalid HitActor)";
+				//UE_LOG(LogTemp, Warning, TEXT("Channel HitActorName: %s"), *HitActorName);
+				DrawDebugSphere(GetWorld(),
+					CursorHitResultByChannel.ImpactPoint, // Can also use CursorHitResultByChannel.Location
+					10.0f, // radius
+					10, // segments
+					FColor::Emerald,
+					true, // persistent
+					100.0f, // lifetime
+					ESceneDepthPriorityGroup::SDPG_World,
+					5.0f); // thickness
+			}
+		}
 
 		// Get the direction from the player ship position to the mouse world position
 		FVector MouseAimingDirection = (MouseWorldPosition - PlayerShipPosition).GetSafeNormal();

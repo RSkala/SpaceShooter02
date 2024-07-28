@@ -187,6 +187,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Collision|Debug")
 	ERightStickDebugBehavior RightStickDebugBehavior = ERightStickDebugBehavior::FireOnly;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bShowMouseHitDebug = false;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bPlayerDead = false;
 };
