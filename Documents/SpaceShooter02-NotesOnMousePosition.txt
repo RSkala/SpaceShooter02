@@ -1,0 +1,128 @@
+
+---------------------------------------------------------------------
+TODO:
+Add a mouse "capture" object behind the player.
+
+Using the DeprojectScreenToWorld or DeprojectMouseToWorld DOES NOT work for my purposes.
+It always seems to get the position of the camera look-at position.
+
+
+Make a subclass of APaperSpriteActor:
+Place a very large one behind the player.
+
+====================================================
+
+Custom Collision Objects and Channels:
+
+Project Settings -> Engine -> Collision
+* New Object Channel
+OR
+* New Trace Channel
+
+Set Default Response to IGNORE
+
+---------------
+This changes:
+
+Config/DefaultEngine.ini
+
++DefaultChannelResponses=(Channel=ECC_GameTraceChannel1,DefaultResponse=ECR_Block,bTraceType=False,bStaticObject=False,Name="MouseBlockerObject")
+
++DefaultChannelResponses=(Channel=ECC_GameTraceChannel2,DefaultResponse=ECR_Block,bTraceType=True,bStaticObject=False,Name="MouseBlockerChannel")
+
+Use these in the LineTraces:
+
+ECC_GameTraceChannel1
+ECC_GameTraceChannel2
+
+------------------------------
+Example:
+TRACE:
+bool bResult1 = PlayerController->GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_GameTraceChannel2), true, CursorHitResultByChannel);
+
+OBJECT:
+TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypeQueries;
+EObjectTypeQuery ObjectTypeQuery4 = UEngineTypes::ConvertToObjectType(ECC_GameTraceChannel1);
+EObjectTypeQuery ObjectTypeQuery5 = UEngineTypes::ConvertToObjectType(ECC_GameTraceChannel2);
+ObjectTypeQueries.Add(ObjectTypeQuery4);
+ObjectTypeQueries.Add(ObjectTypeQuery5);
+
+bool bResult2 = PlayerController->GetHitResultUnderCursorForObjects(ObjectTypeQueries, true, CursorHitResultForObjects);
+
+
+====================================================
+
+---------------------------------------------------------------------
+
+Use one of the following instead:
+
+---------------------------------------------------------------------
+
+FHitResult CursorHitResultByChannel;
+bool bResult1 = PlayerController->GetHitResultUnderCursorByChannel(UEngineTypes::ConvertToTraceType(ECC_WorldStatic), true, CursorHitResultByChannel);
+
+---------------------------------------------------------------------
+
+
+EObjectTypeQuery ObjectTypeQuery1 = UEngineTypes::ConvertToObjectType(ECC_WorldStatic);
+EObjectTypeQuery ObjectTypeQuery2 = UEngineTypes::ConvertToObjectType(ECC_WorldDynamic);
+EObjectTypeQuery ObjectTypeQuery3 = UEngineTypes::ConvertToObjectType(ECC_Pawn);
+TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypeQueries;
+ObjectTypeQueries.Add(ObjectTypeQuery1);
+ObjectTypeQueries.Add(ObjectTypeQuery2);
+ObjectTypeQueries.Add(ObjectTypeQuery3);
+FHitResult CursorHitResultForObjects;
+bool bResult2 = PlayerController->GetHitResultUnderCursorForObjects(ObjectTypeQueries, true, CursorHitResultForObjects);
+
+		if (bResult2)
+		{
+			int stophere = 0;
+			stophere++;
+
+			AActor* HitActor = CursorHitResultForObjects.GetActor();
+			//HitActor->
+			FString HitActorName = HitActor != nullptr ? HitActor->GetName() : "(invalid HitActor)";
+			UE_LOG(LogTemp, Warning, TEXT("Object HitActorName: %s"), *HitActorName);
+
+			//CursorHitResultByChannel.ImpactPoint
+			//CursorHitResultByChannel.Location
+
+			DrawDebugSphere(GetWorld(),
+				CursorHitResultForObjects.Location,
+				100.0f, // radius
+				10, // segments
+				FColor::Blue,
+				true, // persistent
+				100.0f, // lifetime
+				ESceneDepthPriorityGroup::SDPG_World,
+				5.0f); // thickness
+		}
+
+---------------------------------------------------------------------
+Be sure to set "Actor Hidden in Game":
+
+AActor:
+
+UPROPERTY(Interp, EditAnywhere, Category=Rendering, BlueprintReadOnly, Replicated, meta=(AllowPrivateAccess="true", DisplayName="Actor Hidden In Game", SequencerTrackClass="/Script/MovieSceneTracks.MovieSceneVisibilityTrack"))
+uint8 bHidden:1;
+
+------------
+
+SceneComponent:
+
+	/** Whether to completely draw the primitive; if false, the primitive is not drawn, does not cast a shadow. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing=OnRep_Visibility,  Category = Rendering, meta=(AllowPrivateAccess="true"))
+	uint8 bVisible:1;
+
+
+-------------------------------
+These are both in:
+Details -> Rendering
+* Visible: FALSE
+* Actor Hidden in Game: TRUE
+
+* Can also set the Component:
+  * Hidden in Game: TRUE
+
+
+---------------------------------------------------------------------
