@@ -13,8 +13,8 @@
 #include "InputActionValue.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
-//#include "NiagaraComponent.h" // Uncomment when needed
 #include "PaperFlipbook.h"
 #include "PaperFlipbookComponent.h"
 #include "PaperSprite.h"
@@ -82,6 +82,9 @@ APlayerShipPawn::APlayerShipPawn()
 		ConstructorHelpers::FObjectFinderOptional<UPaperFlipbook> DefaultPlayerShipExhaustFlipbookFinder(DefaultPlayerShipExhaustFlipbookPath);
 		ShipExhaustFlipbookComp->SetFlipbook(DefaultPlayerShipExhaustFlipbookFinder.Get());
 	}
+
+	ShipExhaustParticleComp = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ShipExhaustParticleComp"));
+	ShipExhaustParticleComp->SetupAttachment(RootComponent);
 }
 
 // Called every frame
@@ -179,6 +182,12 @@ void APlayerShipPawn::BeginPlay()
 	}
 
 	SphereComp->OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::OnCollisionOverlap);
+
+	// Start ship exhaust particle deactivated
+	if (ShipExhaustParticleComp != nullptr)
+	{
+		ShipExhaustParticleComp->Deactivate();
+	}
 }
 
 void APlayerShipPawn::UpdateMovement(float DeltaTime)
@@ -306,6 +315,20 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 		// FRotator NewPlayerShipRotation = UKismetMathLibrary::MakeRotator(0.0f, AtanAngleDegrees, 0.0f);
 		// SetActorRotation(NewPlayerShipRotation);
 		// UE_LOG(LogPlayerShipPawnMovement, Log, TEXT("AtanAngleDegrees: %0.3f"), AtanAngleDegrees);
+
+		// Activate the ship exhaust particle
+		if (ShipExhaustParticleComp != nullptr)
+		{
+			ShipExhaustParticleComp->Activate();
+		}
+	}
+	else
+	{
+		// Deactivate the ship exhaust particle
+		if (ShipExhaustParticleComp != nullptr)
+		{
+			ShipExhaustParticleComp->Deactivate();
+		}
 	}
 }
 

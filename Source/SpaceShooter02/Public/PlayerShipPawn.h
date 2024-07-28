@@ -79,6 +79,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
 	TObjectPtr<class UPaperSpriteComponent> PaperSpriteComp;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
+	TObjectPtr<class UNiagaraComponent> ShipExhaustParticleComp;
+
 	// --- Camera ---
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components|Camera")
