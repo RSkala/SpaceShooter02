@@ -2,8 +2,8 @@
 
 #include "EnemyBase.h"
 
+#include "Components/BoxComponent.h"
 #include "Components/SceneComponent.h"
-#include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "PaperSprite.h"
@@ -23,11 +23,14 @@ AEnemyBase::AEnemyBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	RootSceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComp"));
-	SetRootComponent(RootSceneComp);
+	//RootSceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComp"));
+	//SetRootComponent(RootSceneComp);
 
-	SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
-	SphereComp->SetupAttachment(RootComponent);
+	//SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
+	//SphereComp->SetupAttachment(RootComponent);
+
+	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
+	SetRootComponent(BoxComp);
 
 	PaperSpriteComp = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("PaperSpriteComp"));
 	PaperSpriteComp->SetupAttachment(RootComponent);

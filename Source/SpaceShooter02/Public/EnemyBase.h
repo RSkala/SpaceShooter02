@@ -38,7 +38,10 @@ protected:
 	TObjectPtr<class USceneComponent> RootSceneComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class USphereComponent> SphereComp;
+	TObjectPtr<class USphereComponent> SphereComp; // RKS: To be removed
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UBoxComponent> BoxComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UPaperSpriteComponent> PaperSpriteComp;
