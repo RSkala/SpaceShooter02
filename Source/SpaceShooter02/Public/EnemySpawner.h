@@ -57,6 +57,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bSpawningEnabled = true;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<class UNiagaraSystem> EnemyExplosionEffect;
+
 	// TODO:
 	// * DifficultySpikeInterval -- every X enemy defeated, increase difficulty
 	// * get player reference, pass to enemies

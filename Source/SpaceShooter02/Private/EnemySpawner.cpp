@@ -6,6 +6,8 @@
 
 #include "EnemyBase.h"
 #include "ExplosionBase.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraSystem.h"
 #include "PlayerShipPawn.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogEnemySpawner, Log, All)
@@ -107,7 +109,7 @@ void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition)
 	{
 		if (UWorld* World = GetWorld())
 		{
-			// Randomly select an enemy type to spawn
+			// Randomly select an enemy explosion type to spawn
 			TSubclassOf<AExplosionBase> ExplosionClassToSpawn = EnemyExplosionClasses[FMath::RandRange(0, EnemyExplosionClasses.Num() - 1)];
 
 			// Get a random rotation for the explosion for variety
@@ -117,6 +119,23 @@ void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition)
 			World->SpawnActor<AExplosionBase>(ExplosionClassToSpawn, EnemyDeathPosition, FRotator());
 			//World->SpawnActor<AExplosionBase>(EnemyExplosionClass, EnemyDeathPosition, RandomExplosionRotation);
 		}
+	}
+
+	// Spawn an explosion particle at the enemy death position
+	if (EnemyExplosionEffect != nullptr)
+	{
+		//UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), EnemyExplosionEffect.Get(), EnemyDeathPosition);
+		FFXSystemSpawnParameters SpawnParams;
+		SpawnParams.WorldContextObject = GetWorld();
+		SpawnParams.SystemTemplate = EnemyExplosionEffect.Get();
+		SpawnParams.Location = EnemyDeathPosition;
+		SpawnParams.Rotation = FRotator::ZeroRotator;
+		SpawnParams.Scale = FVector::OneVector;
+		SpawnParams.bAutoDestroy = true;
+		SpawnParams.bAutoActivate = true;
+		SpawnParams.PoolingMethod = ToPSCPoolMethod(ENCPoolMethod::None);
+		SpawnParams.bPreCullCheck = true;
+		UNiagaraFunctionLibrary::SpawnSystemAtLocationWithParams(SpawnParams);
 	}
 }
 
