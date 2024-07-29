@@ -76,4 +76,9 @@ protected:
 	// How long this projectile has been active
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectileBase|Behavior")
 	float TimeAlive = 0.0f;
+
+	// NOTE: This is just temporary. This MUST be moved into a ProjectileController once pooling is implemented!
+	// Each Projectile should NOT be carrying a hard reference to an asset like this!
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<class UNiagaraSystem> ProjectileImpactEffect;
 };

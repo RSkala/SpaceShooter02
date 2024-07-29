@@ -3,6 +3,8 @@
 #include "ProjectileBase.h"
 
 #include "Components/ShapeComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraSystem.h"
 #include "PaperSprite.h"
 #include "PaperSpriteComponent.h"
 
@@ -134,8 +136,31 @@ void AProjectileBase::UpdateMovement(float DeltaTime)
 	FVector NewProjectilePosition = ProjectilePosition + MovementAmount;
 	SetActorLocation(NewProjectilePosition);
 
-	//FHitResult SweepHitResult;
-	//SetActorLocation(NewProjectilePosition, true, &SweepHitResult, ETeleportType::None)
+	// Line trace to check collision with static objects to destroy this projectile
+	if (UWorld* World = GetWorld())
+	{
+		// Use the player ship's position as the line trace start position
+		const FVector& TraceStartPos = GetActorLocation();
+
+		// Check agains all static objects (TODO: Use custom collision object type, e.g. Walls)
+		FCollisionObjectQueryParams ObjectQueryParams(FCollisionObjectQueryParams::InitType::AllStaticObjects);
+
+		// Distance of the LineTrace. Adjust with the movement speed and deltatime
+		static const float CollisionLineTraceOffset = 2.0f;
+		float CollisionDistance = MoveSpeed * DeltaTime * CollisionLineTraceOffset;
+
+		// Check collision against walls in its movement direction
+		TArray<FHitResult> HitResult;
+		const FVector& TraceEndPosXDir = TraceStartPos + FVector(MovementDirection.X, 0.0f, 0.0f).GetSafeNormal() * CollisionDistance;
+		if (World->LineTraceMultiByObjectType(HitResult, TraceStartPos, TraceEndPosXDir, ObjectQueryParams))
+		{
+			FVector ImpactEffectSpawnPos = HitResult.Num() > 0 ? HitResult[0].ImpactPoint : TraceStartPos;
+
+			// Successful line trace into walls. Spawn a particle at the position and destroy this particle.
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, ProjectileImpactEffect, ImpactEffectSpawnPos);
+			Destroy();
+		}
+	}
 }
 
 void AProjectileBase::UpdateLifetime(float DeltaTime)
