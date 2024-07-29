@@ -76,8 +76,20 @@ APlayerShipPawn::APlayerShipPawn()
 	//CameraComp->FieldOfView = 115.0f;
 	//CameraComp->bConstrainAspectRatio = true; // TODO: Test this value to see if it has any positive or negative effects
 
+	// Fire Points
+	//TObjectPtr<class USceneComponent> FirePointRotatorComp;
+
 	FirePointComp = CreateDefaultSubobject<USceneComponent>(TEXT("FirePointComp"));
 	FirePointComp->SetupAttachment(RootComponent);
+
+	FirePointRotatorComp = CreateDefaultSubobject<USceneComponent>(TEXT("FirePointRotatorComp"));
+	FirePointRotatorComp->SetupAttachment(RootComponent);
+
+	FirePointComp1 = CreateDefaultSubobject<USceneComponent>(TEXT("FirePointComp1"));
+	FirePointComp1->SetupAttachment(FirePointRotatorComp);
+
+	FirePointComp2 = CreateDefaultSubobject<USceneComponent>(TEXT("FirePointComp2"));
+	FirePointComp2->SetupAttachment(FirePointRotatorComp);
 
 	ShipExhaustFlipbookComp = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("ShipExhaustFlipbookComp"));
 	ShipExhaustFlipbookComp->SetupAttachment(RootComponent);
@@ -625,15 +637,28 @@ void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 			FVector PlayerShipPosition = GetActorLocation();
 			//FRotator PlayerShipRotation = GetActorRotation();
 
+			FirePointRotatorComp->SetWorldRotation(ProjectileRotation);
+
 			FActorSpawnParameters ProjectileSpawnParameters;
 			ProjectileSpawnParameters.Name = TEXT("Projectile_");
 			ProjectileSpawnParameters.Instigator = this;
 			ProjectileSpawnParameters.NameMode = FActorSpawnParameters::ESpawnActorNameMode::Requested;
 			ProjectileSpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
+
+			if (FirePointComp1 != nullptr)
+			{
+				AProjectileBase* FiredProjectile1 = World->SpawnActor<AProjectileBase>(ProjectileClass, FirePointComp1->GetComponentLocation(), FirePointComp1->GetComponentRotation(), ProjectileSpawnParameters);
+			}
+
+			if (FirePointComp2 != nullptr)
+			{
+				AProjectileBase* FiredProjectile2 = World->SpawnActor<AProjectileBase>(ProjectileClass, FirePointComp2->GetComponentLocation(), FirePointComp2->GetComponentRotation(), ProjectileSpawnParameters);
+			}
+
 			//AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, PlayerShipRotation, ProjectileSpawnParameters);
-			AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, ProjectileRotation, ProjectileSpawnParameters);
-			FiredProjectile->Init(FVector::ZeroVector, FRotator::ZeroRotator); // wip
+			//AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, ProjectileRotation, ProjectileSpawnParameters);
+			//FiredProjectile->Init(FVector::ZeroVector, FRotator::ZeroRotator); // wip
 
 			// Play the shoot sound
 			PlayShootSound();

@@ -96,6 +96,15 @@ protected:
 	TObjectPtr<class USceneComponent> FirePointComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components|Scene")
+	TObjectPtr<class USceneComponent> FirePointRotatorComp; // Should always be at the player ship's center
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components|Scene")
+	TObjectPtr<class USceneComponent> FirePointComp1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components|Scene")
+	TObjectPtr<class USceneComponent> FirePointComp2;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components|Scene")
 	TObjectPtr<class UPaperFlipbookComponent> ShipExhaustFlipbookComp;
 
 	// --- Input ---
