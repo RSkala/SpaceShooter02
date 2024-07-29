@@ -671,11 +671,14 @@ void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 
 void APlayerShipPawn::PlayShootSound()
 {
-	if (ensureMsgf(
-		PlayerShootSound != nullptr, TEXT("%s - PlayerShootSound not set. Set it in the PlayerShip blueprint."), ANSI_TO_TCHAR(__FUNCTION__)))
+	if (ShootSoundEnabled)
 	{
-		float ShootSoundPitch = 1.0f + FMath::FRandRange(-ShootSoundPitchAdjust, ShootSoundPitchAdjust);
-		UGameplayStatics::PlaySound2D(GetWorld(), PlayerShootSound, ShootSoundVolume, ShootSoundPitch);
+		if (ensureMsgf(
+			PlayerShootSound != nullptr, TEXT("%s - PlayerShootSound not set. Set it in the PlayerShip blueprint."), ANSI_TO_TCHAR(__FUNCTION__)))
+		{
+			float ShootSoundPitch = 1.0f + FMath::FRandRange(-ShootSoundPitchAdjust, ShootSoundPitchAdjust);
+			UGameplayStatics::PlaySound2D(GetWorld(), PlayerShootSound, ShootSoundVolume, ShootSoundPitch);
+		}
 	}
 }
 

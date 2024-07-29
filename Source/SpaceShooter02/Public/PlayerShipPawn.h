@@ -182,6 +182,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ShootSoundPitchAdjust = 0.0f; // + and - pitch range to add to the pitch
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool ShootSoundEnabled = true;
+
 	// --- Visual ---
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Visual")
