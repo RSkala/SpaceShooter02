@@ -167,6 +167,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Audio")
 	TObjectPtr<class USoundBase> PlayerDeathSound;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ShootSoundVolume = 1.0f; // Volume of shoot sound
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ShootSoundPitchAdjust = 0.0f; // + and - pitch range to add to the pitch
+
 	// --- Visual ---
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Visual")
