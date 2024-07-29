@@ -9,19 +9,27 @@
  As I develop this game, I will update this document with various notes:
  https://github.com/RSkala/SpaceShooter02/blob/main/Documents/SpaceShooter02-DevNotes.txt
 
- Once core gameplay and a game loop is implemented, my intention is to implement the following features:
+<br>
+
+Very early Work-In-Progress Screenshots: <br>
+
+<!--
+<img src="./Assets-Source/Screenshots/ScreenShot00001.png" width=400/>
+-->
+<img src="./Assets-Source/Screenshots/ScreenShot00005.png" width=400/> <br> <br>
+<img src="./Assets-Source/Screenshots/ScreenShot00007.png" width=400/> <br> <br>
+<img src="./Assets-Source/Screenshots/ScreenShot00008.png" width=400/> <br> <br>
+<img src="./Assets-Source/Screenshots/ScreenShot00009.png" width=400/> <br> <br>
+
+<br>
+
+#
+
+ Once core gameplay and a game loop is implemented, I hope to implement the following features:
  * Local Co-op
  * Gameplay Ability System
  * Network Replication
  * Blockchain (maybe!)
  * ???
-
-<br>
-
-VERY EARLY Work-In-Progress Screenshot: <br>
-
-<img src="./Assets-Source/Screenshots/ScreenShot00001.png" width=400/>
-
-<br>
 
 #
