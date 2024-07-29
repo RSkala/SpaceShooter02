@@ -46,6 +46,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "50", ClampMax = "5000", UIMin = "50", UIMax = "5000"))
 	float SpawnDistanceFromPlayerMax = 1000.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bShowDebugSpawnRadius = false;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TSubclassOf<class AExplosionBase>> EnemyExplosionClasses;
 

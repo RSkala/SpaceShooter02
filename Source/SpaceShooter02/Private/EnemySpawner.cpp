@@ -2,6 +2,7 @@
 
 #include "EnemySpawner.h"
 
+#include "DrawDebugHelpers.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "EnemyBase.h"
@@ -47,6 +48,17 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 	if (!bSpawningEnabled)
 	{
 		return;
+	}
+
+	// Debug Spawn Radiuses
+	if(bShowDebugSpawnRadius)
+	{
+		FVector EnemySpawnSourcePos = PlayerShipPawn != nullptr ? PlayerShipPawn->GetActorLocation() : FVector();
+		FVector UpAxis = FVector(0.0f, 0.0f, 1.0f);
+		FVector ForwardAxis = FVector(1.0f, 0.0f, 0.0f);
+
+		DrawDebugCircle(GetWorld(), EnemySpawnSourcePos, SpawnDistanceFromPlayerMin, 25, FColor::Cyan, false, -1.0f, 0, 0.0f, UpAxis, ForwardAxis, false);
+		DrawDebugCircle(GetWorld(), EnemySpawnSourcePos, SpawnDistanceFromPlayerMax, 25, FColor::Emerald, false, -1.0f, 0, 0.0f, UpAxis, ForwardAxis, false);
 	}
 
 	TimeSinceLastEnemySpawned += DeltaTime;
