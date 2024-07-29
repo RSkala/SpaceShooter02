@@ -650,7 +650,6 @@ void APlayerShipPawn::PlayShootSound()
 		PlayerShootSound != nullptr, TEXT("%s - PlayerShootSound not set. Set it in the PlayerShip blueprint."), ANSI_TO_TCHAR(__FUNCTION__)))
 	{
 		float ShootSoundPitch = 1.0f + FMath::FRandRange(-ShootSoundPitchAdjust, ShootSoundPitchAdjust);
-		UE_LOG(LogTemp, Warning, TEXT("ShootSoundPitch: %f"), ShootSoundPitch);
 		UGameplayStatics::PlaySound2D(GetWorld(), PlayerShootSound, ShootSoundVolume, ShootSoundPitch);
 	}
 }
