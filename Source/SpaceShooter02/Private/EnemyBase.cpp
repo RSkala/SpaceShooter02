@@ -55,7 +55,9 @@ void AEnemyBase::DestroyEnemy()
 	// Play the death/explosion sound
 	if (EnemyDeathSound != nullptr)
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), EnemyDeathSound);
+		static const float ExplodeSoundPitchAdjust = 0.1f;
+		float ShootSoundPitch = 1.0f + FMath::FRandRange(-ExplodeSoundPitchAdjust, ExplodeSoundPitchAdjust);
+		UGameplayStatics::PlaySound2D(GetWorld(), EnemyDeathSound, 1.0f, ShootSoundPitch);
 	}
 
 	// Notify subscribers that an enemy died
