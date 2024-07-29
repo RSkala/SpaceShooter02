@@ -684,6 +684,11 @@ void APlayerShipPawn::PlayShootSound()
 
 void APlayerShipPawn::KillPlayer()
 {
+	if (bPlayerInvincible)
+	{
+		return;
+	}
+
 	// Play death sound
 	if (ensureMsgf(
 		PlayerDeathSound != nullptr, TEXT("%s - PlayerDeathSound not set. Set it in the PlayerShip blueprint."), ANSI_TO_TCHAR(__FUNCTION__)))

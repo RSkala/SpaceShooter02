@@ -210,4 +210,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bPlayerDead = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool bPlayerInvincible = false;
 };
