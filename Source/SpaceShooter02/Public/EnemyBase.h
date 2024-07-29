@@ -6,7 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "EnemyBase.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnemyDeathDelegateSignature, FVector, EnemyDeathPosition);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnemyDeathDelegateSignature, FVector, EnemyDeathPosition, class UNiagaraSystem*, EnemyDeathEffect);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnemyDeathDelegateSignature, FVector, EnemyDeathPosition, class UNiagaraSystem*, EnemyDeathEffect);
 
 UCLASS(Abstract)
 class SPACESHOOTER02_API AEnemyBase : public AActor
@@ -59,10 +60,11 @@ protected:
 	// --- Effects ---
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class USoundBase> EnemyDeathSound; // TODO: Move to global place, so this is not duplicated
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<class UNiagaraSystem> EnemyExplosionEffect;
 	
 
 	// TODO:
 	// * StopDistance
-	// * DeathSound
-	// * Death particle
 };

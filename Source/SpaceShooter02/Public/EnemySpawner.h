@@ -22,7 +22,7 @@ protected:
 	void UpdateSpawning(float DeltaTime);
 
 	UFUNCTION()
-	void OnEnemyDeath(FVector EnemyDeathPosition);
+	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect);
 
 #if WITH_EDITOR
 	virtual bool CanEditChange(const FProperty* InProperty) const override;

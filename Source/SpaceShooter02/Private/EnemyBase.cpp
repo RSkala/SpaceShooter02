@@ -56,7 +56,7 @@ void AEnemyBase::DestroyEnemy()
 	}
 
 	// Notify subscribers that an enemy died
-	OnEnemyDeath.Broadcast(GetActorLocation());
+	OnEnemyDeath.Broadcast(GetActorLocation(), EnemyExplosionEffect.Get());
 
 	// Destroy this enemy
 	Destroy();

@@ -100,7 +100,7 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 		TimeSinceLastEnemySpawned = 0.0f;
 	}
 }
-void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition)
+void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect)
 {
 	UE_LOG(LogEnemySpawner, Warning, TEXT("%s - EnemyDeathPosition: %s"), ANSI_TO_TCHAR(__FUNCTION__), *EnemyDeathPosition.ToString());
 
@@ -122,12 +122,14 @@ void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition)
 	}
 
 	// Spawn an explosion particle at the enemy death position
-	if (EnemyExplosionEffect != nullptr)
+	//if (EnemyExplosionEffect != nullptr)
+	if(EnemyDeathEffect != nullptr)
 	{
 		//UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), EnemyExplosionEffect.Get(), EnemyDeathPosition);
 		FFXSystemSpawnParameters SpawnParams;
 		SpawnParams.WorldContextObject = GetWorld();
-		SpawnParams.SystemTemplate = EnemyExplosionEffect.Get();
+		//SpawnParams.SystemTemplate = EnemyExplosionEffect.Get();
+		SpawnParams.SystemTemplate = EnemyDeathEffect;
 		SpawnParams.Location = EnemyDeathPosition;
 		SpawnParams.Rotation = FRotator::ZeroRotator;
 		SpawnParams.Scale = FVector::OneVector;
