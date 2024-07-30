@@ -1,5 +1,5 @@
-# SpaceShooter02
- 2D Twin Stick Shooter built in **Unreal Engine 5**
+# GENERIC SPACE SHOOTER 02
+ 2D Twin Stick Shooter built harnessing the power of **Unreal Engine 5**!!!
 
  Lately, I've been doing a bit of research with 2D development with Unreal Engine, so I decided to rebuild this project in UE5 that I previously built in Unity: <br>
  https://github.com/RSkala/SpaceShooter01
