@@ -22,10 +22,19 @@ class SPACESHOOTER02_API UMainMenuWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, meta = (DeprecatedFunction, DeprecationMessage = "Function has been deprecated, use NativeTick"))
 	void OnTick(float DeltaTime);
 
 protected:
+	virtual void NativeOnInitialized() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
+
+	/*UMG_API virtual void NativeOnInitialized();
+	UMG_API virtual void NativePreConstruct();
+	UMG_API virtual void NativeConstruct();
+	UMG_API virtual void NativeDestruct();
+	UMG_API virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);*/
+
 	void UpdateMainMenuTitleTextColor(float DeltaTime);
 	void SwitchToNextColorCyclingMode();
 

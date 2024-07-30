@@ -7,7 +7,20 @@
 void UMainMenuWidget::OnTick(float DeltaTime)
 {
 	// Note: This is set to update from the MainMenu level blueprint graph
-	UpdateMainMenuTitleTextColor(DeltaTime);
+	// Update: I forgot that UUserWidget has a NativeTick function, so this was disconnected.
+	//UpdateMainMenuTitleTextColor(DeltaTime);
+}
+
+void UMainMenuWidget::NativeOnInitialized()
+{
+	Super::NativeOnInitialized();
+}
+
+void UMainMenuWidget::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
+{
+	Super::NativeTick(MyGeometry, InDeltaTime);
+
+	UpdateMainMenuTitleTextColor(InDeltaTime);
 }
 
 void UMainMenuWidget::UpdateMainMenuTitleTextColor(float DeltaTime)
