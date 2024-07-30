@@ -31,15 +31,15 @@ void UMainMenuWidget::UpdateMainMenuTitleTextColor(float DeltaTime)
 
 	switch (ColorCyclingMode)
 	{
-		case EColorCyclingMode::RedToGreen:
+		case EMainMenuColorCyclingMode::RedToGreen:
 			LerpedColor = FMath::Lerp(FLinearColor::Red, FLinearColor::Green, ColorCyclingTimer);
 			break;
 
-		case EColorCyclingMode::GreenToBlue:
+		case EMainMenuColorCyclingMode::GreenToBlue:
 			LerpedColor = FMath::Lerp(FLinearColor::Green, FLinearColor::Blue, ColorCyclingTimer);
 			break;
 
-		case EColorCyclingMode::BlueToRed:
+		case EMainMenuColorCyclingMode::BlueToRed:
 			LerpedColor = FMath::Lerp(FLinearColor::Blue, FLinearColor::Red, ColorCyclingTimer);
 			break;
 
@@ -61,8 +61,8 @@ void UMainMenuWidget::UpdateMainMenuTitleTextColor(float DeltaTime)
 
 void UMainMenuWidget::SwitchToNextColorCyclingMode()
 {
-	uint8 NextColorCyclingMode = ((uint8)ColorCyclingMode + 1) % (uint8)EColorCyclingMode::NumColorCyclingModes;
-	ColorCyclingMode = (EColorCyclingMode)NextColorCyclingMode;
+	uint8 NextColorCyclingMode = ((uint8)ColorCyclingMode + 1) % (uint8)EMainMenuColorCyclingMode::NumColorCyclingModes;
+	ColorCyclingMode = (EMainMenuColorCyclingMode)NextColorCyclingMode;
 
 	//uint8 NextColorCyclingMode = (uint8)ColorCyclingMode + 1;
 	//if (NextColorCyclingMode >= (uint8)EColorCyclingMode::NumColorCyclingModes)

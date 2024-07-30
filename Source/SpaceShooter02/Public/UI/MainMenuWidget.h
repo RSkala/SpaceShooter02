@@ -6,15 +6,16 @@
 #include "Blueprint/UserWidget.h"
 #include "MainMenuWidget.generated.h"
 
+// TODO: Move to global so this doesn't have to be duplicated
 UENUM(BlueprintType)
-enum class EColorCyclingMode : uint8
+enum class EMainMenuColorCyclingMode : uint8
 {
 	RedToGreen,
 	GreenToBlue,
 	BlueToRed,
 	NumColorCyclingModes UMETA(Hidden)
 };
-ENUM_RANGE_BY_COUNT(EColorCyclingMode, EColorCyclingMode::NumColorCyclingModes); // This is REQUIRED in order to iterate over it in C++ (i.e. TEnumRange)
+ENUM_RANGE_BY_COUNT(EMainMenuColorCyclingMode, EMainMenuColorCyclingMode::NumColorCyclingModes); // This is REQUIRED in order to iterate over it in C++ (i.e. TEnumRange)
 
 UCLASS()
 class SPACESHOOTER02_API UMainMenuWidget : public UUserWidget
@@ -43,7 +44,7 @@ protected:
 	TObjectPtr<class UTextBlock> MainMenuTitleText;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	EColorCyclingMode ColorCyclingMode = EColorCyclingMode::RedToGreen;
+	EMainMenuColorCyclingMode ColorCyclingMode = EMainMenuColorCyclingMode::RedToGreen;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float ColorCyclingTimer = 0.0f;
