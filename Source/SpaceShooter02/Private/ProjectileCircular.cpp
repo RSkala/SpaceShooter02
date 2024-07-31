@@ -4,7 +4,7 @@
 
 #include "Components/SphereComponent.h"
 
-namespace
+namespace ProjectileCircular
 {
 	static const TCHAR* DefaultProjectileSpritePath = TEXT("/Game/Sprites/Projectiles/SPR_Projectile_02");
 }
@@ -31,7 +31,7 @@ TSubclassOf<UShapeComponent> AProjectileCircular::GetCollisionVolumeComponentCla
 
 const TCHAR* AProjectileCircular::GetDefaultSpritePath() const
 {
-	return DefaultProjectileSpritePath;
+	return ProjectileCircular::DefaultProjectileSpritePath;
 }
 
 void AProjectileCircular::OnCollisionOverlap(

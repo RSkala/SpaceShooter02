@@ -6,7 +6,7 @@
 
 #include "EnemyBase.h"
 
-namespace
+namespace ProjectileRectangular
 {
 	static const TCHAR* DefaultProjectileSpritePath = TEXT("/Game/Sprites/Projectiles/SPR_Projectile_01");
 }
@@ -33,7 +33,7 @@ TSubclassOf<UShapeComponent> AProjectileRectangular::GetCollisionVolumeComponent
 
 const TCHAR* AProjectileRectangular::GetDefaultSpritePath() const
 {
-	return DefaultProjectileSpritePath;
+	return ProjectileRectangular::DefaultProjectileSpritePath;
 }
 
 void AProjectileRectangular::OnCollisionOverlap(
