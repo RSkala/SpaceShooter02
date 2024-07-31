@@ -44,17 +44,7 @@ protected:
 	TObjectPtr<class UTextBlock> MainMenuTitleText;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
-	TObjectPtr<class UImage> Image_Border_Left;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
-	TObjectPtr<class UImage> Image_Border_Right;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
-	TObjectPtr<class UImage> Image_Border_Top;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
-	TObjectPtr<class UImage> Image_Border_Bottom;
-
+	TObjectPtr<class UMenuScreenBorder> MenuScreenBorder;
 
 	// --- Color Cycling ---
 

@@ -5,6 +5,8 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 
+#include "UI/MenuScreenBorder.h"
+
 void UMainMenuWidget::OnTick(float DeltaTime)
 {
 	// Note: This is set to update from the MainMenu level blueprint graph
@@ -49,10 +51,10 @@ void UMainMenuWidget::UpdateMainMenuTitleTextColor(float DeltaTime)
 	}
 
 	SetColorForTextBlock(MainMenuTitleText, LerpedColor);
-	SetColorForImage(Image_Border_Left, LerpedColor);
-	SetColorForImage(Image_Border_Right, LerpedColor);
-	SetColorForImage(Image_Border_Top, LerpedColor);
-	SetColorForImage(Image_Border_Bottom, LerpedColor);
+	if (MenuScreenBorder != nullptr)
+	{
+		MenuScreenBorder->UpdateBorderImageColors(LerpedColor);
+	}
 
 	if (ColorCyclingTimer >= 1.0f)
 	{
