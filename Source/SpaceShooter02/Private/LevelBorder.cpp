@@ -3,8 +3,11 @@
 #include "LevelBorder.h"
 
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "PaperSprite.h"
 #include "PaperSpriteComponent.h"
+
+#include "ColorShiftLocalPlayerSubsystem.h"
 
 namespace
 {
@@ -38,51 +41,28 @@ ALevelBorder::ALevelBorder()
 void ALevelBorder::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	UpdateLevelBorderSpriteColor(DeltaTime);
 }
 
 void ALevelBorder::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Subscribe to the color shift delegate
+	if (APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+	{
+		if (UColorShiftLocalPlayerSubsystem* ColorShiftSubsystem = ULocalPlayer::GetSubsystem<UColorShiftLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			ColorShiftSubsystem->OnColorShift.AddUniqueDynamic(this, &ThisClass::OnColorShift);
+		}
+	}
 }
 
-void ALevelBorder::UpdateLevelBorderSpriteColor(float DeltaTime)
+void ALevelBorder::OnColorShift(FLinearColor LinearColor)
 {
-	// Update color hue shift
-	ColorCyclingTimer += DeltaTime / SecondsPerCyclingMode;
-	FLinearColor LerpedColor(FLinearColor::White);
-
-	switch (ColorCyclingMode)
-	{
-		case EColorCyclingMode::RedToGreen: LerpedColor = FMath::Lerp(FLinearColor::Red, FLinearColor::Green, ColorCyclingTimer); break;
-		case EColorCyclingMode::GreenToBlue: LerpedColor = FMath::Lerp(FLinearColor::Green, FLinearColor::Blue, ColorCyclingTimer); break;
-		case EColorCyclingMode::BlueToRed: LerpedColor = FMath::Lerp(FLinearColor::Blue, FLinearColor::Red, ColorCyclingTimer); break;
-		default: break;
-	}
-
 	// Update the sprite color
 	if (PaperSpriteComp != nullptr)
 	{
-		PaperSpriteComp->SetSpriteColor(LerpedColor);
+		PaperSpriteComp->SetSpriteColor(LinearColor);
 	}
-
-	// If the color cycling timer has elapsed, change color cycling modes
-	if (ColorCyclingTimer >= 1.0f)
-	{
-		SwitchToNextColorCyclingMode();
-		ColorCyclingTimer = 0.0f;
-	}
-}
-
-void ALevelBorder::SwitchToNextColorCyclingMode()
-{
-	uint8 NextColorCyclingMode = ((uint8)ColorCyclingMode + 1) % (uint8)EColorCyclingMode::NumColorCyclingModes;
-	ColorCyclingMode = (EColorCyclingMode)NextColorCyclingMode;
-
-	//uint8 NextColorCyclingMode = (uint8)ColorCyclingMode + 1;
-	//if (NextColorCyclingMode >= (uint8)EColorCyclingMode::NumColorCyclingModes)
-	//{
-	//	NextColorCyclingMode = (uint8)EColorCyclingMode::RedToGreen;
-	//}
 }
 

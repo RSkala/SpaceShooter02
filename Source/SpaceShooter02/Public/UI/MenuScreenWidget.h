@@ -4,18 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "MenuScreenBorder.generated.h"
+#include "MenuScreenWidget.generated.h"
 
-// Widget defining a border around a menu. Supports color shifting.
-UCLASS()
-class SPACESHOOTER02_API UMenuScreenBorder : public UUserWidget
+UCLASS(Abstract)
+class SPACESHOOTER02_API UMenuScreenWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
 public:
-	void UpdateBorderImageColors(FLinearColor LinearColor);
+	DECLARE_LOG_CATEGORY_CLASS(LogMenus, Log, All)
 
 protected:
+	virtual void NativeOnInitialized() override;
+	
+	UFUNCTION()
+	virtual void OnColorShift(FLinearColor LinearColor);
+
 	void SetColorForImage(class UImage* Image, FLinearColor LinearColor);
 
 protected:
