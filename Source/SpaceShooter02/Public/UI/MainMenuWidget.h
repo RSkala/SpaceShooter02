@@ -30,18 +30,33 @@ protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
-	/*UMG_API virtual void NativeOnInitialized();
-	UMG_API virtual void NativePreConstruct();
-	UMG_API virtual void NativeConstruct();
-	UMG_API virtual void NativeDestruct();
-	UMG_API virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);*/
-
 	void UpdateMainMenuTitleTextColor(float DeltaTime);
 	void SwitchToNextColorCyclingMode();
 
+	void SetColorForTextBlock(class UTextBlock* TextBlock, FLinearColor LinearColor);
+	void SetColorForImage(class UImage* Image, FLinearColor LinearColor);
+
 protected:
+
+	// --- Main Menu Elements ----
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UTextBlock> MainMenuTitleText;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<class UImage> Image_Border_Left;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<class UImage> Image_Border_Right;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<class UImage> Image_Border_Top;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<class UImage> Image_Border_Bottom;
+
+
+	// --- Color Cycling ---
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	EMainMenuColorCyclingMode ColorCyclingMode = EMainMenuColorCyclingMode::RedToGreen;

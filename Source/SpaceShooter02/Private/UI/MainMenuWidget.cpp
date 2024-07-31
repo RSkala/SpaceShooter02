@@ -2,6 +2,7 @@
 
 #include "UI/MainMenuWidget.h"
 
+#include "Components/Image.h"
 #include "Components/TextBlock.h"
 
 void UMainMenuWidget::OnTick(float DeltaTime)
@@ -47,10 +48,11 @@ void UMainMenuWidget::UpdateMainMenuTitleTextColor(float DeltaTime)
 			break;
 	}
 
-	if (MainMenuTitleText != nullptr)
-	{
-		MainMenuTitleText->SetColorAndOpacity(FSlateColor(LerpedColor));
-	}
+	SetColorForTextBlock(MainMenuTitleText, LerpedColor);
+	SetColorForImage(Image_Border_Left, LerpedColor);
+	SetColorForImage(Image_Border_Right, LerpedColor);
+	SetColorForImage(Image_Border_Top, LerpedColor);
+	SetColorForImage(Image_Border_Bottom, LerpedColor);
 
 	if (ColorCyclingTimer >= 1.0f)
 	{
@@ -69,4 +71,20 @@ void UMainMenuWidget::SwitchToNextColorCyclingMode()
 	//{
 	//	NextColorCyclingMode = (uint8)EColorCyclingMode::RedToGreen;
 	//}
+}
+
+void UMainMenuWidget::SetColorForTextBlock(UTextBlock* TextBlock, FLinearColor LinearColor)
+{
+	if (TextBlock != nullptr)
+	{
+		TextBlock->SetColorAndOpacity(FSlateColor(LinearColor));
+	}
+}
+
+void UMainMenuWidget::SetColorForImage(UImage* Image, FLinearColor LinearColor)
+{
+	if (Image != nullptr)
+	{
+		Image->SetColorAndOpacity(LinearColor);
+	}
 }
