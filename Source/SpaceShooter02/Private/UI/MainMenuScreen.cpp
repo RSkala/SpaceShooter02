@@ -7,6 +7,8 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "SpaceShooterGameState.h"
+
 void UMainMenuScreen::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
@@ -36,7 +38,15 @@ void UMainMenuScreen::OnPlayButtonClicked()
 {
 	UE_LOG(LogMenus, Log, TEXT("OnPlayButtonClicked"));
 
-	// If I were to load a level, use: UGameplayStatics::OpenLevel() or UGameplayStatics::OpenLevelBySoftObjectPtr
+	// NOTE: If I were to load a level, use: UGameplayStatics::OpenLevel() or UGameplayStatics::OpenLevelBySoftObjectPtr
+
+	if (UWorld* World = GetWorld())
+	{
+		if (ASpaceShooterGameState* SpaceShooterGameState = World->GetGameState<ASpaceShooterGameState>())
+		{
+			SpaceShooterGameState->StartGame();
+		}
+	}
 }
 
 void UMainMenuScreen::OnExitButtonClicked()

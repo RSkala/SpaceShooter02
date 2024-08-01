@@ -16,6 +16,8 @@ public:
 	int32 GetNumEnemiesDefeated() const { return NumEnemiesDefeated; }
 	void IncrementNumEnemiesDefeated() { NumEnemiesDefeated++; }
 
+	void StartGame();
+
 protected:
 	virtual void BeginPlay() override;
 

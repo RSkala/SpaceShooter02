@@ -11,6 +11,14 @@ ASpaceShooterGameState::ASpaceShooterGameState()
 	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::ASpaceShooterGameState - %s"), *GetName());
 }
 
+void ASpaceShooterGameState::StartGame()
+{
+	if (EnemySpawner != nullptr)
+	{
+		EnemySpawner->SetSpawningEnabled(true);
+	}
+}
+
 void ASpaceShooterGameState::BeginPlay()
 {
 	Super::BeginPlay();
@@ -22,6 +30,7 @@ void ASpaceShooterGameState::BeginPlay()
 		{
 			EnemySpawner = World->SpawnActor<AEnemySpawner>(EnemySpawnerClass, FVector::ZeroVector, FRotator::ZeroRotator);
 			EnemySpawner->SetOwner(this);
+			EnemySpawner->SetSpawningEnabled(false);
 		}
 	}
 }

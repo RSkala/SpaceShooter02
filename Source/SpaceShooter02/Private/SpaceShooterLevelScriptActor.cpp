@@ -5,6 +5,7 @@
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
+//#include "SpaceShooterGameState.h"
 #include "UI/MainMenuScreen.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSpaceShooterLevelScript, Log, All)
@@ -20,6 +21,15 @@ void ASpaceShooterLevelScriptActor::StartMainMenu()
 	if (bSkipMainMenuLoad)
 	{
 		UE_LOG(LogSpaceShooterLevelScript, Warning, TEXT("Skipping Main Menu load"));
+
+		// This is loaded before the GameState, so this doesn't work
+		/*if (UWorld* World = GetWorld())
+		{
+			if (ASpaceShooterGameState* SpaceShooterGameState = World->GetGameState<ASpaceShooterGameState>())
+			{
+				SpaceShooterGameState->StartGame();
+			}
+		}*/
 		return;
 	}
 
