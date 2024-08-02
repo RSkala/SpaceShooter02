@@ -36,6 +36,12 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void OnPlayerShipSpawned(class APlayerShipPawn* const InPlayerShipPawn);
+
+	UFUNCTION()
+	void OnPlayerShipDestroyed();
+
 public:
 	// Delegate called when the player starts a game (either from main menu or game over)
 	static FGameStartedDelegateSignature OnGameStarted;

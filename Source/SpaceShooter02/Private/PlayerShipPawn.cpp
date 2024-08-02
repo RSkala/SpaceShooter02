@@ -29,6 +29,9 @@ DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawn, Warning, All)
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnInput, Warning, All)
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnMovement, Log, All)
 
+FPlayerShipSpawnedDelegateSignature APlayerShipPawn::OnPlayerShipSpawned;
+FPlayerShipDestroyedDelegateSignature APlayerShipPawn::OnPlayerShipDestroyed;
+
 namespace
 {
 	static const TCHAR* DefaultPlayerShipSpritePath = TEXT("/Game/Sprites/PlayerShips/SPR_PlayerShip_2");
@@ -733,6 +736,8 @@ void APlayerShipPawn::KillPlayer()
 		// Disable enemy spawning
 		EnemySpawner->SetSpawningEnabled(false);
 	}
+
+	OnPlayerShipDestroyed.Broadcast();
 }
 
 void APlayerShipPawn::SetMouseCursorVisiblityFromInput(APlayerController* const PlayerController, bool bCursorVisible)

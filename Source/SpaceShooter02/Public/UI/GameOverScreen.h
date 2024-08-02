@@ -17,6 +17,8 @@ public:
 protected:
 	virtual void NativeOnInitialized() override;
 
+	virtual void OnColorShift(FLinearColor LinearColor) override;
+
 	UFUNCTION()
 	void OnPlayAgainButtonClicked();
 

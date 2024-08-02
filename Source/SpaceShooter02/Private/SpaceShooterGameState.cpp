@@ -54,11 +54,17 @@ void ASpaceShooterGameState::StartGame()
 void ASpaceShooterGameState::EndGame()
 {
 	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::EndGame - %s"), *GetName());
+
+	OnGameEnded.Broadcast();
 }
 
 void ASpaceShooterGameState::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Get notified when the player's ship spawns and is destroyed
+	APlayerShipPawn::OnPlayerShipSpawned.AddUniqueDynamic(this, &ThisClass::OnPlayerShipSpawned);
+	APlayerShipPawn::OnPlayerShipDestroyed.AddUniqueDynamic(this, &ThisClass::OnPlayerShipDestroyed);
 
 	// Start game in Main Menu
 	ShooterMenuGameState = EShooterMenuGameState::MainMenu;
@@ -66,8 +72,8 @@ void ASpaceShooterGameState::BeginPlay()
 	// Create the MenuController
 	if (ensure(MenuControllerClass != nullptr))
 	{
-		MenuController = NewObject<USpaceShooterMenuController>(this, MenuControllerClass);
 		//MenuController = NewObject<USpaceShooterMenuController>(this);
+		MenuController = NewObject<USpaceShooterMenuController>(this, MenuControllerClass);
 		if (ensure(MenuController != nullptr))
 		{
 			MenuController->StartMainMenu();
@@ -84,4 +90,24 @@ void ASpaceShooterGameState::BeginPlay()
 			EnemySpawner->SetSpawningEnabled(false);
 		}
 	}
+}
+
+void ASpaceShooterGameState::OnPlayerShipSpawned(APlayerShipPawn* const InPlayerShipPawn)
+{
+	PlayerShipPawn = InPlayerShipPawn;
+}
+
+void ASpaceShooterGameState::OnPlayerShipDestroyed()
+{
+	UE_LOG(LogTemp, Warning, TEXT("ASpaceShooterGameState::OnPlayerShipDestroyed"));
+
+	//ASpaceShooterGameState::OnGameEnded.AddUniqueDynamic(this, &ThisClass::OnGameplayEnd);
+	OnGameEnded.Broadcast();
+	
+	//MenuController = NewObject<USpaceShooterMenuController>(this, MenuControllerClass);
+	////MenuController = NewObject<USpaceShooterMenuController>(this);
+	//if (ensure(MenuController != nullptr))
+	//{
+	//	MenuController->StartMainMenu();
+	//}
 }

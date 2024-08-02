@@ -6,6 +6,13 @@
 #include "GameFramework/Pawn.h"
 #include "PlayerShipPawn.generated.h"
 
+// Delegate for when the player ship spawns in
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerShipSpawnedDelegateSignature, APlayerShipPawn*, PlayerShipPawn);
+
+// Delegate for when the player ship is destroyed (i.e. Game Over)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerShipDestroyedDelegateSignature);
+
+
 UENUM(BlueprintType)
 enum class ERightStickDebugBehavior : uint8 // In UE 5.4+, enums MUST be uint8
 {
@@ -32,6 +39,9 @@ public:
 	bool GetPlayerDead() const { return bPlayerDead; }
 
 	void EnablePlayer();
+
+	static FPlayerShipSpawnedDelegateSignature OnPlayerShipSpawned;
+	static FPlayerShipDestroyedDelegateSignature OnPlayerShipDestroyed;
 
 protected:
 	// Called when the game starts or when spawned

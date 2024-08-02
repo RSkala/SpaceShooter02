@@ -23,6 +23,31 @@ void UGameOverScreen::NativeOnInitialized()
 	{
 		PlayAgainButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnPlayAgainButtonClicked);
 	}
+
+	if (SelectNewShipButton != nullptr)
+	{
+		SelectNewShipButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnSelectNewShipButtonClicked);
+	}
+
+	if (QuitGameButton != nullptr)
+	{
+		QuitGameButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnQuitGameButtonClicked);
+	}
+}
+
+void UGameOverScreen::OnColorShift(FLinearColor LinearColor)
+{
+	Super::OnColorShift(LinearColor);
+
+	if (GameOverText != nullptr)
+	{
+		GameOverText->SetColorAndOpacity(LinearColor);
+	}
+
+	if (FinalScoreText != nullptr)
+	{
+		FinalScoreText->SetColorAndOpacity(LinearColor);
+	}
 }
 
 void UGameOverScreen::OnPlayAgainButtonClicked()
