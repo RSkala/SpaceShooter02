@@ -58,7 +58,10 @@ protected:
 
 	// Enable / Disable enemy spawning
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bSpawningEnabled = true;
+	bool bSpawningEnabled = true; // Set during game
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bSpawningEnabledDebug = true; // Set manually for debugging
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class UNiagaraSystem> EnemyExplosionEffect;

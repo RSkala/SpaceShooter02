@@ -49,7 +49,7 @@ void AEnemySpawner::BeginPlay()
 void AEnemySpawner::UpdateSpawning(float DeltaTime)
 {
 	// Exit if spawning is disabled
-	if (!bSpawningEnabled)
+	if (!bSpawningEnabled || !bSpawningEnabledDebug)
 	{
 		return;
 	}
