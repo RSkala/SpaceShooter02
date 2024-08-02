@@ -31,6 +31,8 @@ public:
 
 	bool GetPlayerDead() const { return bPlayerDead; }
 
+	void EnablePlayer();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -40,6 +42,7 @@ protected:
 	void UpdateExhaust();
 
 	void DisablePlayer();
+	//void EnablePlayer();
 
 	UFUNCTION()
 	virtual void OnCollisionOverlap(

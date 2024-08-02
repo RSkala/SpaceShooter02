@@ -206,6 +206,9 @@ void APlayerShipPawn::BeginPlay()
 	{
 		ShipExhaustParticleComp->Deactivate();
 	}
+
+	// Start the player disabled
+	DisablePlayer();
 }
 
 void APlayerShipPawn::UpdateMovement(float DeltaTime)
@@ -473,6 +476,18 @@ void APlayerShipPawn::DisablePlayer()
 
 	// Stops the Actor from ticking
 	SetActorTickEnabled(false);
+}
+
+void APlayerShipPawn::EnablePlayer()
+{
+	// Hides visible components
+	SetActorHiddenInGame(false);
+
+	// Disables collision components
+	SetActorEnableCollision(true);
+
+	// Stops the Actor from ticking
+	SetActorTickEnabled(true);
 }
 
 void APlayerShipPawn::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
