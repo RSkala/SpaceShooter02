@@ -10,7 +10,7 @@ void UGameOverScreen::InitGameOverScreen(int32 FinalScore)
 {
 	if (FinalScoreText != nullptr)
 	{
-		FText ScoreText = FText::FromString(FString::Printf(TEXT("%d"), (int32)FinalScore));
+		FText ScoreText = FText::FromString(FString::Printf(TEXT("FINAL SCORE: %d"), (int32)FinalScore));
 		FinalScoreText->SetText(ScoreText);
 	}
 }

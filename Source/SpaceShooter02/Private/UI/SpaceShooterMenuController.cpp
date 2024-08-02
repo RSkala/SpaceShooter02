@@ -10,6 +10,8 @@
 #include "UI/MainMenuScreen.h"
 #include "UI/PlayerShipSelectScreen.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogMenuController, Warning, All)
+
 USpaceShooterMenuController::USpaceShooterMenuController()
 {
 }
@@ -28,12 +30,13 @@ void USpaceShooterMenuController::PostInitProperties()
 
 void USpaceShooterMenuController::PostLoad()
 {
-	UE_LOG(LogTemp, Warning, TEXT("USpaceShooterMenuController::PostLoad"));
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::PostLoad"));
 	Super::PostLoad(); // NOTE: This is never called
 }
 
 void USpaceShooterMenuController::StartMainMenu()
 {
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::StartMainMenu"));
 	CurrentMenuState = EMenuState::MainMenu;
 
 	// Create the Main Menu Screen
@@ -65,19 +68,21 @@ void USpaceShooterMenuController::OnPlayerShipSelectStart()
 
 void USpaceShooterMenuController::OnGameplayStart()
 {
-	UE_LOG(LogTemp, Warning, TEXT("USpaceShooterMenuController::OnGameplayStart"));
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::OnGameplayStart"));
 	CurrentMenuState = EMenuState::Gameplay;
 
 	// Remove the Main Menu or ShipSelectMenu from the viewport
 	if (MainMenuScreen != nullptr)
 	{
-		MainMenuScreen->RemoveFromViewport();
+		//MainMenuScreen->RemoveFromViewport(); // deprecated
+		MainMenuScreen->RemoveFromParent();
 	}
 	MainMenuScreen = nullptr;
 
 	if (PlayerShipSelectScreen != nullptr)
 	{
-		PlayerShipSelectScreen->RemoveFromViewport();
+		//PlayerShipSelectScreen->RemoveFromViewport(); // deprecated
+		PlayerShipSelectScreen->RemoveFromParent();
 	}
 	PlayerShipSelectScreen = nullptr;
 
@@ -86,7 +91,7 @@ void USpaceShooterMenuController::OnGameplayStart()
 
 void USpaceShooterMenuController::OnGameplayEnd()
 {
-	UE_LOG(LogTemp, Warning, TEXT("USpaceShooterMenuController::OnGameplayEnd"));
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::OnGameplayEnd"));
 	CurrentMenuState = EMenuState::GameOver;
 
 	// Create the Game Over screen
@@ -99,6 +104,12 @@ void USpaceShooterMenuController::OnGameplayEnd()
 		if (ensure(GameOverScreen != nullptr))
 		{
 			GameOverScreen->AddToViewport(0);
+
+			// Set game over screen score
+			if (ASpaceShooterGameState* GameState = World->GetGameState<ASpaceShooterGameState>())
+			{
+				GameOverScreen->InitGameOverScreen(GameState->GetPlayerScore());
+			}
 		}
 	}
 }

@@ -28,8 +28,8 @@ protected:
 	virtual void MoveTowardsTarget(float DeltaTime);
 
 public:
-	UPROPERTY(BlueprintAssignable)
-	FEnemyDeathDelegateSignature OnEnemyDeath;
+	//UPROPERTY(BlueprintAssignable)
+	static FEnemyDeathDelegateSignature OnEnemyDeath;
 
 protected:
 	// --- Components ---

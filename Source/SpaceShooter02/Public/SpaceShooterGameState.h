@@ -7,7 +7,7 @@
 #include "SpaceShooterGameState.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameStartedDelegateSignature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameEndedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameEndedDelegateSignature); // TODO int32, FinalScore
 
 UENUM(BlueprintType)
 enum class EShooterMenuGameState : uint8
@@ -33,6 +33,8 @@ public:
 	void StartGame();
 	void EndGame();
 
+	int32 GetPlayerScore() const { return PlayerScore; }
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -42,6 +44,9 @@ protected:
 	UFUNCTION()
 	void OnPlayerShipDestroyed();
 
+	UFUNCTION()
+	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect);
+
 public:
 	// Delegate called when the player starts a game (either from main menu or game over)
 	static FGameStartedDelegateSignature OnGameStarted;
@@ -49,9 +54,15 @@ public:
 	// Delegate called when the player is defeated (game over)
 	static FGameEndedDelegateSignature OnGameEnded;
 
+	// Delegate called when an enemy is killed
+	//static FEnemyDeathDelegateSignature OnEnemyDeath;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 NumEnemiesDefeated = 0;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 PlayerScore = 0;
 
 	// Class for creating the enemy spawner
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -71,5 +82,14 @@ protected:
 	TObjectPtr<class USpaceShooterMenuController> MenuController;
 
 	// Reference to player's ship
+	UPROPERTY()
 	TSoftObjectPtr<class APlayerShipPawn> PlayerShipPawn;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 CurrentScoreMultiplier = 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 EnemyScoreValue = 1; // first implementation: all enemies have a score value of 1
+
+
 };

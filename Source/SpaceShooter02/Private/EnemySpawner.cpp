@@ -3,13 +3,14 @@
 #include "EnemySpawner.h"
 
 #include "DrawDebugHelpers.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraSystem.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "EnemyBase.h"
 #include "ExplosionBase.h"
-#include "NiagaraFunctionLibrary.h"
-#include "NiagaraSystem.h"
 #include "PlayerShipPawn.h"
+#include "SpaceShooterGameState.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogEnemySpawner, Log, All)
 
@@ -40,6 +41,9 @@ void AEnemySpawner::BeginPlay()
 	{
 		UE_LOG(LogEnemySpawner, Warning, TEXT("%s - PlayerShipPawn not found"), ANSI_TO_TCHAR(__FUNCTION__));
 	}
+
+	// Notify the spawner when an enemy dies
+	AEnemyBase::OnEnemyDeath.AddUniqueDynamic(this, &ThisClass::OnEnemyDeath);
 }
 
 void AEnemySpawner::UpdateSpawning(float DeltaTime)
@@ -95,9 +99,6 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 				AEnemyBase* SpawnedEnemy = World->SpawnActor<AEnemyBase>(EnemyClassToSpawn, EnemyPosition, FRotator(), EnemySpawnParams);
 				if (SpawnedEnemy != nullptr)
 				{
-					// Notify the the spawner when the enemy dies
-					SpawnedEnemy->OnEnemyDeath.AddUniqueDynamic(this, &ThisClass::OnEnemyDeath);
-
 					// Set the player as the enemy's target
 					SpawnedEnemy->SetTarget(PlayerShipPawn);
 				}

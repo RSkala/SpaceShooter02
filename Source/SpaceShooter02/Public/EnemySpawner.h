@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "EnemySpawner.generated.h"
 
-// Class for handling enemy spawning. TODO: Make this into Subsystem
+// Class for handling enemy spawning
 UCLASS()
 class SPACESHOOTER02_API AEnemySpawner : public AActor
 {

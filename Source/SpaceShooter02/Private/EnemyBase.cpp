@@ -9,10 +9,13 @@
 #include "PaperSprite.h"
 #include "PaperSpriteComponent.h"
 
+#include "EnemySpawner.h"
 #include "PlayerShipPawn.h"
 #include "SpaceShooterGameState.h"
 
 DEFINE_LOG_CATEGORY_CLASS(AEnemyBase, LogEnemy)
+
+FEnemyDeathDelegateSignature AEnemyBase::OnEnemyDeath;
 
 namespace
 {

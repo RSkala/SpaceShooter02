@@ -4,6 +4,7 @@
 
 #include "Kismet/GameplayStatics.h"
 
+#include "EnemyBase.h"
 #include "EnemySpawner.h"
 #include "PlayerShipPawn.h"
 #include "UI/SpaceShooterMenuController.h"
@@ -49,6 +50,10 @@ void ASpaceShooterGameState::StartGame()
 
 	// Set game state to "Gameplay"
 	ShooterMenuGameState = EShooterMenuGameState::Gameplay;
+
+	// Reset Score and Multiplier
+	PlayerScore = 0;
+	CurrentScoreMultiplier = 1;
 }
 
 void ASpaceShooterGameState::EndGame()
@@ -90,6 +95,9 @@ void ASpaceShooterGameState::BeginPlay()
 			EnemySpawner->SetSpawningEnabled(false);
 		}
 	}
+
+	// Notify the spawner when an enemy dies
+	AEnemyBase::OnEnemyDeath.AddUniqueDynamic(this, &ThisClass::OnEnemyDeath);
 }
 
 void ASpaceShooterGameState::OnPlayerShipSpawned(APlayerShipPawn* const InPlayerShipPawn)
@@ -110,4 +118,10 @@ void ASpaceShooterGameState::OnPlayerShipDestroyed()
 	//{
 	//	MenuController->StartMainMenu();
 	//}
+}
+
+void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect)
+{
+	int32 ScoreToAdd = EnemyScoreValue * CurrentScoreMultiplier;
+	PlayerScore += ScoreToAdd;
 }
