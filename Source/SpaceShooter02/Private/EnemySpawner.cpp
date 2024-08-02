@@ -30,7 +30,7 @@ void AEnemySpawner::BeginPlay()
 	Super::BeginPlay();
 
 	UE_CLOG(
-		!bSpawningEnabled,
+		!bSpawningEnabledDebug,
 		LogEnemySpawner,
 		Warning,
 		TEXT("Enemy Spawing is DISABLED. Ensure this spawning re-enabled before committing the Enemy Spawner blueprint"));
