@@ -15,6 +15,15 @@ class SPACESHOOTER02_API UGameplayScreen : public UMenuScreenWidget
 protected:
 	virtual void NativeOnInitialized() override;
 
+	UFUNCTION()
+	void OnPlayerScoreUpdated(int32 PlayerScore);
+
+	UFUNCTION()
+	void OnPlayerScoreMultiplierUpdated(int32 PlayerScoreMultiplier);
+
+	UFUNCTION()
+	void OnPlayerHighScoreUpdated(int32 PlayerHighScore);
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UTextBlock> CurrentScoreText;

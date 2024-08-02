@@ -14,6 +14,9 @@ DEFINE_LOG_CATEGORY_STATIC(LogSpaceShooterGameState, Log, All)
 // static member initialization
 FGameStartedDelegateSignature ASpaceShooterGameState::OnGameStarted;
 FGameEndedDelegateSignature ASpaceShooterGameState::OnGameEnded;
+FPlayerScoreChangedDelegateSignature ASpaceShooterGameState::OnPlayerScoreChanged;
+FPlayerMultiplierChangedDelegateSignature ASpaceShooterGameState::OnPlayerMultiplierChanged;
+FHighScoreChangedDelegateSignature ASpaceShooterGameState::OnPlayerHighScoreChanged;
 
 ASpaceShooterGameState::ASpaceShooterGameState()
 {
@@ -54,6 +57,11 @@ void ASpaceShooterGameState::StartGame()
 	// Reset Score and Multiplier
 	PlayerScore = 0;
 	CurrentScoreMultiplier = 1;
+
+	// Notify player score changes with "default" values
+	OnPlayerScoreChanged.Broadcast(0);
+	OnPlayerMultiplierChanged.Broadcast(1);
+	OnPlayerHighScoreChanged.Broadcast(PlayerHighScore);
 }
 
 void ASpaceShooterGameState::EndGame()
@@ -124,4 +132,14 @@ void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSy
 {
 	int32 ScoreToAdd = EnemyScoreValue * CurrentScoreMultiplier;
 	PlayerScore += ScoreToAdd;
+
+	// Notify listeners that the score has been updated
+	OnPlayerScoreChanged.Broadcast(PlayerScore);
+
+	// Check if the new score beats the current high score. Set and notify listeners.
+	if (PlayerScore > PlayerHighScore)
+	{
+		PlayerHighScore = PlayerScore;
+		OnPlayerHighScoreChanged.Broadcast(PlayerHighScore);
+	}
 }

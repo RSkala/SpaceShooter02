@@ -8,6 +8,10 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameStartedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameEndedDelegateSignature); // TODO int32, FinalScore
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerScoreChangedDelegateSignature, int32, PlayerScore);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerMultiplierChangedDelegateSignature, int32, ScoreMultiplier);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHighScoreChangedDelegateSignature, int32, HighScore);
+
 
 UENUM(BlueprintType)
 enum class EShooterMenuGameState : uint8
@@ -48,14 +52,11 @@ protected:
 	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect);
 
 public:
-	// Delegate called when the player starts a game (either from main menu or game over)
-	static FGameStartedDelegateSignature OnGameStarted;
-
-	// Delegate called when the player is defeated (game over)
-	static FGameEndedDelegateSignature OnGameEnded;
-
-	// Delegate called when an enemy is killed
-	//static FEnemyDeathDelegateSignature OnEnemyDeath;
+	static FGameStartedDelegateSignature OnGameStarted; // Delegate called when the player starts a game (either from main menu or game over)
+	static FGameEndedDelegateSignature OnGameEnded; // Delegate called when the player is defeated (game over)
+	static FPlayerScoreChangedDelegateSignature OnPlayerScoreChanged; // Delegate called when the player's current score is updated
+	static FPlayerMultiplierChangedDelegateSignature OnPlayerMultiplierChanged; // Delegate called when the player's current multiplier is updated
+	static FHighScoreChangedDelegateSignature OnPlayerHighScoreChanged; // Delegate called when the player beats the current high score
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -91,5 +92,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 EnemyScoreValue = 1; // first implementation: all enemies have a score value of 1
 
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 PlayerHighScore = 0;
 };
