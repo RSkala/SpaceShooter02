@@ -57,7 +57,7 @@ protected:
 	TSoftObjectPtr<class APlayerShipPawn> PlayerShipPawn;
 
 	// Enable / Disable enemy spawning
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool bSpawningEnabled = true; // Set during game
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
