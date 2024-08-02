@@ -5,6 +5,7 @@
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "SpaceShooterGameState.h"
 #include "UI/GameplayScreen.h"
 
 void ASpaceShooterHUD::BeginPlay()
@@ -16,16 +17,27 @@ void ASpaceShooterHUD::BeginPlay()
 		if (APlayerController* PlayerController = UGameplayStatics::GetPlayerController(GetWorld(), 0))
 		{
 			GameplayScreen = Cast<UGameplayScreen>(UWidgetBlueprintLibrary::Create(GetWorld(), GameplayScreenClass, PlayerController));
-			if (ensure(GameplayScreen != nullptr))
-			{
-				GameplayScreen->AddToViewport(0);
-			}
+			ensure(GameplayScreen != nullptr);
 		}
 	}
 
-	// TODO: Listen for GameState events:
-	// * Main Menu:  Disable GameplayScreen
-	// * Ship Select: Disable GameplayScreen
-	// * Game Over: Disable GameplayScreen
-	// * Game Started: Show GameplayScreen
+	// Listen for Game Start and Game Ended events
+	ASpaceShooterGameState::OnGameStarted.AddUniqueDynamic(this, &ThisClass::OnGameStarted);
+	ASpaceShooterGameState::OnGameEnded.AddUniqueDynamic(this, &ThisClass::OnGameEnded);
+}
+
+void ASpaceShooterHUD::OnGameStarted()
+{
+	if (ensure(GameplayScreen != nullptr))
+	{
+		GameplayScreen->AddToViewport(0);
+	}
+}
+
+void ASpaceShooterHUD::OnGameEnded()
+{
+	if (ensure(GameplayScreen != nullptr))
+	{
+		GameplayScreen->RemoveFromParent();
+	}
 }

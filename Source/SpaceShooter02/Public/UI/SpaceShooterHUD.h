@@ -14,6 +14,12 @@ class SPACESHOOTER02_API ASpaceShooterHUD : public AHUD
 protected:
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+	void OnGameStarted();
+	
+	UFUNCTION()
+	void OnGameEnded();
+
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class UUserWidget> GameplayScreenClass;
