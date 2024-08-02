@@ -63,6 +63,12 @@ protected:
 		bool bFromSweep,
 		const FHitResult& SweepResult);
 
+	UFUNCTION()
+	void OnGameStarted();
+
+	UFUNCTION()
+	void OnGameEnded();
+
 protected:
 	void KeyboardMoveTriggered(const struct FInputActionValue& InputActionValue);
 	void KeyboardMoveCompleted(const struct FInputActionValue& InputActionValue);

@@ -24,6 +24,7 @@
 #include "EnemyBase.h"
 #include "EnemySpawner.h"
 #include "ProjectileBase.h"
+#include "SpaceShooterGameState.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawn, Warning, All)
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnInput, Warning, All)
@@ -212,6 +213,10 @@ void APlayerShipPawn::BeginPlay()
 
 	// Start the player disabled
 	DisablePlayer();
+
+	// Listen for Game Start and Game End
+	ASpaceShooterGameState::OnGameStarted.AddUniqueDynamic(this, &ThisClass::OnGameStarted);
+	ASpaceShooterGameState::OnGameEnded.AddUniqueDynamic(this, &ThisClass::OnGameEnded);
 }
 
 void APlayerShipPawn::UpdateMovement(float DeltaTime)
@@ -503,6 +508,17 @@ void APlayerShipPawn::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponen
 		// Player has collided with an enemy. Kill the player.
 		KillPlayer();
 	}
+}
+
+void APlayerShipPawn::OnGameStarted()
+{
+	// TODO: Call enabled function here, but first ensure NOT dead
+	bPlayerDead = false;
+}
+
+void APlayerShipPawn::OnGameEnded()
+{
+	UE_LOG(LogPlayerShipPawnInput, Warning, TEXT("APlayerShipPawn::OnGameEnded -- Need implementation"));
 }
 
 void APlayerShipPawn::KeyboardMoveTriggered(const FInputActionValue& InputActionValue)

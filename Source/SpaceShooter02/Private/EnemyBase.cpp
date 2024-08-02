@@ -97,6 +97,10 @@ void AEnemyBase::MoveTowardsTarget(float DeltaTime)
 	{
 		if (PlayerShipPawn->GetPlayerDead())
 		{
+			if (!IsActorBeingDestroyed())
+			{
+				Destroy(); // TEMP!!!!! Enemies should be added to a pool then removed on gameplay start
+			}
 			return;
 		}
 	}

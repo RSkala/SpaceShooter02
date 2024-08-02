@@ -42,6 +42,9 @@ void AEnemySpawner::BeginPlay()
 		UE_LOG(LogEnemySpawner, Warning, TEXT("%s - PlayerShipPawn not found"), ANSI_TO_TCHAR(__FUNCTION__));
 	}
 
+	// Notify the spawner when gameplay starts
+	ASpaceShooterGameState::OnGameStarted.AddUniqueDynamic(this, &ThisClass::OnGameStarted);
+
 	// Notify the spawner when an enemy dies
 	AEnemyBase::OnEnemyDeath.AddUniqueDynamic(this, &ThisClass::OnEnemyDeath);
 }
@@ -113,6 +116,13 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 		TimeSinceLastEnemySpawned = 0.0f;
 	}
 }
+
+void AEnemySpawner::OnGameStarted()
+{
+	// Gameplay has started. Start enemy spawning.
+	SetSpawningEnabled(true);
+}
+
 void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect)
 {
 	UE_LOG(LogEnemySpawner, Warning, TEXT("%s - EnemyDeathPosition: %s"), ANSI_TO_TCHAR(__FUNCTION__), *EnemyDeathPosition.ToString());

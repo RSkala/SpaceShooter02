@@ -25,17 +25,7 @@ ASpaceShooterGameState::ASpaceShooterGameState()
 
 void ASpaceShooterGameState::StartGame()
 {
-	// ------------------------------------------------------
-	OnGameStarted.Broadcast();
-
-	// ------------------------------------------------------
-	if (EnemySpawner != nullptr)
-	{
-		EnemySpawner->SetSpawningEnabled(true);
-	}
-
 	// Get the player ship in the scene. TODO: Add delegate when player spawns
-	//if (!PlayerShipPawn.IsValid())
 	if(PlayerShipPawn == nullptr)
 	{
 		// Temp: Get a reference to the player ship to use as spawned enemy target - TODO: Handle on delegate
@@ -46,6 +36,7 @@ void ASpaceShooterGameState::StartGame()
 		}
 	}
 
+	// Enable the player ship (set visible and allow controlling of the ship)
 	if (PlayerShipPawn != nullptr)
 	{
 		PlayerShipPawn->EnablePlayer();
@@ -57,6 +48,9 @@ void ASpaceShooterGameState::StartGame()
 	// Reset Score and Multiplier
 	PlayerScore = 0;
 	CurrentScoreMultiplier = 1;
+
+	// Notify all listeners that gameplay has started
+	OnGameStarted.Broadcast();
 
 	// Notify player score changes with "default" values
 	OnPlayerScoreChanged.Broadcast(0);

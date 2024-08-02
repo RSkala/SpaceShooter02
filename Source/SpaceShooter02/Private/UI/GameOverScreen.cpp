@@ -6,6 +6,8 @@
 #include "Components/TextBlock.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+#include "SpaceShooterGameState.h"
+
 void UGameOverScreen::InitGameOverScreen(int32 FinalScore)
 {
 	if (FinalScoreText != nullptr)
@@ -53,6 +55,13 @@ void UGameOverScreen::OnColorShift(FLinearColor LinearColor)
 void UGameOverScreen::OnPlayAgainButtonClicked()
 {
 	UE_LOG(LogTemp, Warning, TEXT("UGameOverScreen::OnPlayAgainButtonClicked"));
+	if (UWorld* World = GetWorld())
+	{
+		if (ASpaceShooterGameState* SpaceShooterGameState = World->GetGameState<ASpaceShooterGameState>())
+		{
+			SpaceShooterGameState->StartGame();
+		}
+	}
 }
 
 void UGameOverScreen::OnSelectNewShipButtonClicked()

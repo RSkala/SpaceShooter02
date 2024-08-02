@@ -71,7 +71,8 @@ void USpaceShooterMenuController::OnGameplayStart()
 	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::OnGameplayStart"));
 	CurrentMenuState = EMenuState::Gameplay;
 
-	// Remove the Main Menu or ShipSelectMenu from the viewport
+	// Remove any active menu screens from the viewport
+
 	if (MainMenuScreen != nullptr)
 	{
 		//MainMenuScreen->RemoveFromViewport(); // deprecated
@@ -81,10 +82,15 @@ void USpaceShooterMenuController::OnGameplayStart()
 
 	if (PlayerShipSelectScreen != nullptr)
 	{
-		//PlayerShipSelectScreen->RemoveFromViewport(); // deprecated
 		PlayerShipSelectScreen->RemoveFromParent();
 	}
 	PlayerShipSelectScreen = nullptr;
+
+	if (GameOverScreen != nullptr)
+	{
+		GameOverScreen->RemoveFromParent();
+	}
+	GameOverScreen = nullptr;
 
 	// TODO: Enable the player HUD
 }

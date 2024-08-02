@@ -22,6 +22,9 @@ protected:
 	void UpdateSpawning(float DeltaTime);
 
 	UFUNCTION()
+	void OnGameStarted();
+
+	UFUNCTION()
 	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect);
 
 #if WITH_EDITOR
