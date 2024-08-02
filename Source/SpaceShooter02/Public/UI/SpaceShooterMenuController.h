@@ -6,6 +6,11 @@
 #include "UObject/NoExportTypes.h"
 #include "SpaceShooterMenuController.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuPlayClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FShipSelectedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverSelectShipClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverPlayAgainClickedDelegateSignature);
+
 UENUM(BlueprintType)
 enum class EMenuState : uint8
 {
@@ -38,6 +43,27 @@ protected:
 
 	UFUNCTION()
 	void OnGameplayEnd();
+
+	UFUNCTION()
+	void MainMenuPlayClicked();
+
+	UFUNCTION()
+	void PlayerShipSelected();
+
+	UFUNCTION()
+	void GameOverSelectShipClicked();
+
+	UFUNCTION()
+	void GameOverPlayAgainClicked();
+
+	UUserWidget* OpenScreen(TSubclassOf<class UUserWidget> ScreenClass);
+	void CloseScreen(UUserWidget* const ScreenToClose);
+
+public:
+	static FMainMenuPlayClickedDelegateSignature OnMainMenuPlayClicked;
+	static FShipSelectedDelegateSignature OnPlayerShipSelected;
+	static FGameOverSelectShipClickedDelegateSignature OnGameOverSelectShipClicked;
+	static FGameOverPlayAgainClickedDelegateSignature OnGameOverPlayAgainClicked;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))

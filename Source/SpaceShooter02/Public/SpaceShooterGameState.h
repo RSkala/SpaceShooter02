@@ -51,6 +51,18 @@ protected:
 	UFUNCTION()
 	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect);
 
+	UFUNCTION()
+	void OnMainMenuPlayClicked(); // When the player clicks "Play" from the Main Menu
+
+	UFUNCTION()
+	void OnPlayerShipSelected(); // When the player selects their ship (from the Ship Select screen)
+
+	UFUNCTION()
+	void OnGameOverSelectShipSelected(); // When the user selects "Select Ship" from the Game Over screen
+
+	UFUNCTION()
+	void OnGameOverPlayAgainSelected(); // When the user selects "Play Again" from the Game Over screen
+
 public:
 	static FGameStartedDelegateSignature OnGameStarted; // Delegate called when the player starts a game (either from main menu or game over)
 	static FGameEndedDelegateSignature OnGameEnded; // Delegate called when the player is defeated (game over)

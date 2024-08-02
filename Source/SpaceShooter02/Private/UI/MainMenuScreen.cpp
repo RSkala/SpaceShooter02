@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "SpaceShooterGameState.h"
+#include "UI/SpaceShooterMenuController.h"
 
 void UMainMenuScreen::NativeOnInitialized()
 {
@@ -37,16 +38,7 @@ void UMainMenuScreen::OnColorShift(FLinearColor LinearColor)
 void UMainMenuScreen::OnPlayButtonClicked()
 {
 	UE_LOG(LogMenus, Log, TEXT("OnPlayButtonClicked"));
-
-	// NOTE: If I were to load a level, use: UGameplayStatics::OpenLevel() or UGameplayStatics::OpenLevelBySoftObjectPtr
-
-	if (UWorld* World = GetWorld())
-	{
-		if (ASpaceShooterGameState* SpaceShooterGameState = World->GetGameState<ASpaceShooterGameState>())
-		{
-			SpaceShooterGameState->StartGame();
-		}
-	}
+	USpaceShooterMenuController::OnMainMenuPlayClicked.Broadcast();
 }
 
 void UMainMenuScreen::OnExitButtonClicked()
@@ -54,3 +46,4 @@ void UMainMenuScreen::OnExitButtonClicked()
 	UE_LOG(LogMenus, Warning, TEXT("Quitting game from MainMenu..."));
 	UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
 }
+

@@ -30,4 +30,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UButton> ExitButton;
+
+	// May use this in the future if going from Main Menu -> Ship Select is annoying
+	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
+	//TObjectPtr<class UButton> ShipSelectButton;
 };

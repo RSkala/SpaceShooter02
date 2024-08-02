@@ -7,6 +7,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 
 #include "SpaceShooterGameState.h"
+#include "UI/SpaceShooterMenuController.h"
 
 void UGameOverScreen::InitGameOverScreen(int32 FinalScore)
 {
@@ -54,23 +55,18 @@ void UGameOverScreen::OnColorShift(FLinearColor LinearColor)
 
 void UGameOverScreen::OnPlayAgainButtonClicked()
 {
-	UE_LOG(LogTemp, Warning, TEXT("UGameOverScreen::OnPlayAgainButtonClicked"));
-	if (UWorld* World = GetWorld())
-	{
-		if (ASpaceShooterGameState* SpaceShooterGameState = World->GetGameState<ASpaceShooterGameState>())
-		{
-			SpaceShooterGameState->StartGame();
-		}
-	}
+	UE_LOG(LogMenus, Log, TEXT("UGameOverScreen::OnPlayAgainButtonClicked"));
+	USpaceShooterMenuController::OnGameOverPlayAgainClicked.Broadcast();
 }
 
 void UGameOverScreen::OnSelectNewShipButtonClicked()
 {
-	UE_LOG(LogMenus, Warning, TEXT("UGameOverScreen::OnSelectNewShipButtonClicked"));
+	UE_LOG(LogMenus, Log, TEXT("UGameOverScreen::OnSelectNewShipButtonClicked"));
+	USpaceShooterMenuController::OnGameOverSelectShipClicked.Broadcast();
 }
 
 void UGameOverScreen::OnQuitGameButtonClicked()
 {
-	UE_LOG(LogMenus, Warning, TEXT("Quitting game from Game Over Screen..."));
+	UE_LOG(LogMenus, Log, TEXT("Quitting game from Game Over Screen..."));
 	UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
 }

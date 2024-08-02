@@ -61,7 +61,6 @@ void ASpaceShooterGameState::StartGame()
 void ASpaceShooterGameState::EndGame()
 {
 	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::EndGame - %s"), *GetName());
-
 	OnGameEnded.Broadcast();
 }
 
@@ -98,8 +97,14 @@ void ASpaceShooterGameState::BeginPlay()
 		}
 	}
 
-	// Notify the spawner when an enemy dies
+	// Get notified when an enemy dies
 	AEnemyBase::OnEnemyDeath.AddUniqueDynamic(this, &ThisClass::OnEnemyDeath);
+
+	// Listen to menu delegates
+	USpaceShooterMenuController::OnMainMenuPlayClicked.AddUniqueDynamic(this, &ThisClass::OnMainMenuPlayClicked);
+	USpaceShooterMenuController::OnPlayerShipSelected.AddUniqueDynamic(this, &ThisClass::OnPlayerShipSelected);
+	USpaceShooterMenuController::OnGameOverSelectShipClicked.AddUniqueDynamic(this, &ThisClass::OnGameOverSelectShipSelected);
+	USpaceShooterMenuController::OnGameOverPlayAgainClicked.AddUniqueDynamic(this, &ThisClass::OnGameOverPlayAgainSelected);
 }
 
 void ASpaceShooterGameState::OnPlayerShipSpawned(APlayerShipPawn* const InPlayerShipPawn)
@@ -109,17 +114,7 @@ void ASpaceShooterGameState::OnPlayerShipSpawned(APlayerShipPawn* const InPlayer
 
 void ASpaceShooterGameState::OnPlayerShipDestroyed()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ASpaceShooterGameState::OnPlayerShipDestroyed"));
-
-	//ASpaceShooterGameState::OnGameEnded.AddUniqueDynamic(this, &ThisClass::OnGameplayEnd);
 	OnGameEnded.Broadcast();
-	
-	//MenuController = NewObject<USpaceShooterMenuController>(this, MenuControllerClass);
-	////MenuController = NewObject<USpaceShooterMenuController>(this);
-	//if (ensure(MenuController != nullptr))
-	//{
-	//	MenuController->StartMainMenu();
-	//}
 }
 
 void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect)
@@ -137,3 +132,26 @@ void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSy
 		OnPlayerHighScoreChanged.Broadcast(PlayerHighScore);
 	}
 }
+
+void ASpaceShooterGameState::OnMainMenuPlayClicked()
+{
+	ShooterMenuGameState = EShooterMenuGameState::ShipSelect;
+}
+
+void ASpaceShooterGameState::OnPlayerShipSelected()
+{
+	ShooterMenuGameState = EShooterMenuGameState::Gameplay;
+	StartGame();
+}
+
+void ASpaceShooterGameState::OnGameOverSelectShipSelected()
+{
+	ShooterMenuGameState = EShooterMenuGameState::ShipSelect;
+}
+
+void ASpaceShooterGameState::OnGameOverPlayAgainSelected()
+{
+	ShooterMenuGameState = EShooterMenuGameState::Gameplay;
+	StartGame();
+}
+

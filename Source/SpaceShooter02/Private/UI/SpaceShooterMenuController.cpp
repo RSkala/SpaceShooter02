@@ -12,6 +12,11 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogMenuController, Warning, All)
 
+FMainMenuPlayClickedDelegateSignature USpaceShooterMenuController::OnMainMenuPlayClicked;
+FShipSelectedDelegateSignature USpaceShooterMenuController::OnPlayerShipSelected;
+FGameOverSelectShipClickedDelegateSignature USpaceShooterMenuController::OnGameOverSelectShipClicked;
+FGameOverPlayAgainClickedDelegateSignature USpaceShooterMenuController::OnGameOverPlayAgainClicked;
+
 USpaceShooterMenuController::USpaceShooterMenuController()
 {
 }
@@ -25,6 +30,12 @@ void USpaceShooterMenuController::PostInitProperties()
 		// Subscribe to the GameState delegates
 		ASpaceShooterGameState::OnGameStarted.AddUniqueDynamic(this, &ThisClass::OnGameplayStart);
 		ASpaceShooterGameState::OnGameEnded.AddUniqueDynamic(this, &ThisClass::OnGameplayEnd);
+
+		// Subscribe to all menu delegates
+		OnMainMenuPlayClicked.AddUniqueDynamic(this, &ThisClass::MainMenuPlayClicked);
+		OnPlayerShipSelected.AddUniqueDynamic(this, &ThisClass::PlayerShipSelected);
+		OnGameOverSelectShipClicked.AddUniqueDynamic(this, &ThisClass::GameOverSelectShipClicked);
+		OnGameOverPlayAgainClicked.AddUniqueDynamic(this, &ThisClass::GameOverPlayAgainClicked);
 	}
 }
 
@@ -40,25 +51,15 @@ void USpaceShooterMenuController::StartMainMenu()
 	CurrentMenuState = EMenuState::MainMenu;
 
 	// Create the Main Menu Screen
-	if (ensure(MainMenuScreenClass != nullptr))
-	{
-		UWorld* World = GetWorld();
-		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, 0);
+	MainMenuScreen = Cast<UMainMenuScreen>(OpenScreen(MainMenuScreenClass));
+	ensure(MainMenuScreen != nullptr);
 
-		MainMenuScreen = Cast<UMainMenuScreen>(UWidgetBlueprintLibrary::Create(World, MainMenuScreenClass, PlayerController));
-		if (ensure(MainMenuScreen != nullptr))
-		{
-			MainMenuScreen->AddToViewport(0);
-		}
-
-		// TODO: Set proper "Input Mode"
-
-		//FInputModeGameAndUI InputMode;
-		//InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
-		//InputMode.SetHideCursorDuringCapture(false);
-		//PlayerController->SetInputMode(InputMode);
-		//PlayerController->SetShowMouseCursor(true);
-	}
+	// TODO: Set proper "Input Mode"
+	//FInputModeGameAndUI InputMode;
+	//InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::LockAlways);
+	//InputMode.SetHideCursorDuringCapture(false);
+	//PlayerController->SetInputMode(InputMode);
+	//PlayerController->SetShowMouseCursor(true);
 }
 
 void USpaceShooterMenuController::OnPlayerShipSelectStart()
@@ -73,26 +74,14 @@ void USpaceShooterMenuController::OnGameplayStart()
 
 	// Remove any active menu screens from the viewport
 
-	if (MainMenuScreen != nullptr)
-	{
-		//MainMenuScreen->RemoveFromViewport(); // deprecated
-		MainMenuScreen->RemoveFromParent();
-	}
+	CloseScreen(MainMenuScreen);
 	MainMenuScreen = nullptr;
 
-	if (PlayerShipSelectScreen != nullptr)
-	{
-		PlayerShipSelectScreen->RemoveFromParent();
-	}
+	CloseScreen(PlayerShipSelectScreen);
 	PlayerShipSelectScreen = nullptr;
 
-	if (GameOverScreen != nullptr)
-	{
-		GameOverScreen->RemoveFromParent();
-	}
+	CloseScreen(GameOverScreen);
 	GameOverScreen = nullptr;
-
-	// TODO: Enable the player HUD
 }
 
 void USpaceShooterMenuController::OnGameplayEnd()
@@ -101,21 +90,81 @@ void USpaceShooterMenuController::OnGameplayEnd()
 	CurrentMenuState = EMenuState::GameOver;
 
 	// Create the Game Over screen
-	if (ensure(GameOverScreenClass != nullptr))
+	GameOverScreen = Cast<UGameOverScreen>(OpenScreen(GameOverScreenClass));
+	if (ensure(GameOverScreen != nullptr))
+	{
+		// Set game over screen score
+		if (UWorld* World = GetWorld())
+		{
+			if (ASpaceShooterGameState* GameState = World->GetGameState<ASpaceShooterGameState>())
+			{
+				GameOverScreen->InitGameOverScreen(GameState->GetPlayerScore()); // MARKED FOR DEATH. This should be handled by delegates.
+			}
+		}
+	}
+}
+
+void USpaceShooterMenuController::MainMenuPlayClicked()
+{
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::MainMenuPlayClicked"));
+
+	// Close the Main Menu screen
+	CloseScreen(MainMenuScreen);
+	MainMenuScreen = nullptr;
+
+	// Open the Player Ship Select screen
+	PlayerShipSelectScreen = Cast<UPlayerShipSelectScreen>(OpenScreen(PlayerShipSelectScreenClass));
+	ensure(PlayerShipSelectScreen != nullptr);
+}
+
+void USpaceShooterMenuController::PlayerShipSelected()
+{
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::PlayerShipSelected"));
+	CloseScreen(PlayerShipSelectScreen);
+	PlayerShipSelectScreen = nullptr;
+}
+
+void USpaceShooterMenuController::GameOverSelectShipClicked()
+{
+	// Close the Game Over screen
+	CloseScreen(GameOverScreen);
+	GameOverScreen = nullptr;
+
+	// Open the Ship Select screen
+	PlayerShipSelectScreen = Cast<UPlayerShipSelectScreen>(OpenScreen(PlayerShipSelectScreenClass));
+	ensure(PlayerShipSelectScreen != nullptr);
+}
+
+void USpaceShooterMenuController::GameOverPlayAgainClicked()
+{
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::GameOverPlayAgainClicked"));
+
+	// Close the Game Over screen. The GameState will handle starting the game.
+	CloseScreen(GameOverScreen);
+	GameOverScreen = nullptr;
+}
+
+UUserWidget* USpaceShooterMenuController::OpenScreen(TSubclassOf<class UUserWidget> ScreenClass)
+{
+	UUserWidget* NewScreen = nullptr;
+	if (ensure(ScreenClass != nullptr))
 	{
 		UWorld* World = GetWorld();
 		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(World, 0);
-
-		GameOverScreen = Cast<UGameOverScreen>(UWidgetBlueprintLibrary::Create(World, GameOverScreenClass, PlayerController));
-		if (ensure(GameOverScreen != nullptr))
+		NewScreen = UWidgetBlueprintLibrary::Create(World, ScreenClass, PlayerController);
+		if (NewScreen != nullptr)
 		{
-			GameOverScreen->AddToViewport(0);
-
-			// Set game over screen score
-			if (ASpaceShooterGameState* GameState = World->GetGameState<ASpaceShooterGameState>())
-			{
-				GameOverScreen->InitGameOverScreen(GameState->GetPlayerScore());
-			}
+			NewScreen->AddToViewport(0);
 		}
+	}
+	return NewScreen;
+}
+
+void USpaceShooterMenuController::CloseScreen(UUserWidget* const ScreenToClose)
+{
+	if (ScreenToClose != nullptr)
+	{
+		//ScreenToClose->RemoveFromViewport(); // deprecated
+		ScreenToClose->RemoveFromParent();
 	}
 }
