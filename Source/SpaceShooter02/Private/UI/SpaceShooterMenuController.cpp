@@ -19,6 +19,7 @@ FGameOverSelectShipClickedDelegateSignature USpaceShooterMenuController::OnGameO
 FGameOverPlayAgainClickedDelegateSignature USpaceShooterMenuController::OnGameOverPlayAgainClicked;
 FMainMenuCreditsClickedDelegateSignature USpaceShooterMenuController::OnMainMenuCreditsClicked;
 FCreditsMenuBackClickedDelegateSignature USpaceShooterMenuController::OnCreditsMenuBackClicked;
+FShipSelectBackButtonClickedDelegateSignature USpaceShooterMenuController::OnShipSelectBackClicked;
 
 USpaceShooterMenuController::USpaceShooterMenuController()
 {
@@ -41,6 +42,7 @@ void USpaceShooterMenuController::PostInitProperties()
 		OnGameOverPlayAgainClicked.AddUniqueDynamic(this, &ThisClass::GameOverPlayAgainClicked);
 		OnMainMenuCreditsClicked.AddUniqueDynamic(this, &ThisClass::MainMenuCreditsClicked);
 		OnCreditsMenuBackClicked.AddUniqueDynamic(this, &ThisClass::CreditsMenuBackClicked);
+		OnShipSelectBackClicked.AddUniqueDynamic(this, &ThisClass::ShipSelectBackClicked);
 	}
 }
 
@@ -169,6 +171,17 @@ void USpaceShooterMenuController::CreditsMenuBackClicked()
 	// Close the Credits screen
 	CloseScreen(CreditsScreen);
 	CreditsScreen = nullptr;
+
+	// Open the Main Menu screen
+	MainMenuScreen = Cast<UMainMenuScreen>(OpenScreen(MainMenuScreenClass));
+	ensure(MainMenuScreen != nullptr);
+}
+
+void USpaceShooterMenuController::ShipSelectBackClicked()
+{
+	// Close the Ship Select screen
+	CloseScreen(PlayerShipSelectScreen);
+	PlayerShipSelectScreen = nullptr;
 
 	// Open the Main Menu screen
 	MainMenuScreen = Cast<UMainMenuScreen>(OpenScreen(MainMenuScreenClass));

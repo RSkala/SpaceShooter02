@@ -24,6 +24,8 @@ protected:
 	UFUNCTION() void OnShipSelectButton4Clicked();
 	UFUNCTION() void OnShipSelectButton5Clicked();
 
+	UFUNCTION() void OnBackButtonClicked();
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UButton> LaunchButton; // TEMP: Will be removed once ship selection widget is implemented
@@ -60,4 +62,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class UPaperSprite> ShipSprite5;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UButton> BackButton;
 };

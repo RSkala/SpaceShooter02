@@ -43,6 +43,11 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 	{
 		ShipSelectButton5->OnClicked.AddUniqueDynamic(this, &ThisClass::OnShipSelectButton5Clicked);
 	}
+
+	if (BackButton != nullptr)
+	{
+		BackButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnBackButtonClicked);
+	}
 }
 
 void UPlayerShipSelectScreen::OnColorShift(FLinearColor LinearColor)
@@ -53,6 +58,7 @@ void UPlayerShipSelectScreen::OnColorShift(FLinearColor LinearColor)
 	SetColorShiftForButton(ShipSelectButton3, LinearColor);
 	SetColorShiftForButton(ShipSelectButton4, LinearColor);
 	SetColorShiftForButton(ShipSelectButton5, LinearColor);
+	SetColorShiftForButton(BackButton, LinearColor);
 }
 
 void UPlayerShipSelectScreen::OnLaunchButtonClicked()
@@ -83,4 +89,9 @@ void UPlayerShipSelectScreen::OnShipSelectButton4Clicked()
 void UPlayerShipSelectScreen::OnShipSelectButton5Clicked()
 {
 	USpaceShooterMenuController::OnPlayerShipSelected.Broadcast(ShipSprite5);
+}
+
+void UPlayerShipSelectScreen::OnBackButtonClicked()
+{
+	USpaceShooterMenuController::OnShipSelectBackClicked.Broadcast();
 }

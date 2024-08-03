@@ -12,6 +12,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverSelectShipClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverPlayAgainClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuCreditsClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCreditsMenuBackClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FShipSelectBackButtonClickedDelegateSignature);
 
 UENUM(BlueprintType)
 enum class EMenuState : uint8
@@ -48,6 +49,7 @@ protected:
 	UFUNCTION() void GameOverPlayAgainClicked();
 	UFUNCTION() void MainMenuCreditsClicked();
 	UFUNCTION() void CreditsMenuBackClicked();
+	UFUNCTION() void ShipSelectBackClicked();
 
 	UUserWidget* OpenScreen(TSubclassOf<class UUserWidget> ScreenClass);
 	void CloseScreen(UUserWidget* const ScreenToClose);
@@ -59,6 +61,7 @@ public:
 	static FGameOverPlayAgainClickedDelegateSignature OnGameOverPlayAgainClicked;
 	static FMainMenuCreditsClickedDelegateSignature OnMainMenuCreditsClicked;
 	static FCreditsMenuBackClickedDelegateSignature OnCreditsMenuBackClicked;
+	static FShipSelectBackButtonClickedDelegateSignature OnShipSelectBackClicked;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
