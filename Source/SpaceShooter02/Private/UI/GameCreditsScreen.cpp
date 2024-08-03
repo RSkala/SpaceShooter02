@@ -49,6 +49,11 @@ void UGameCreditsScreen::OnColorShift(FLinearColor LinearColor)
 {
 	Super::OnColorShift(LinearColor);
 	SetColorShiftForButton(BackButton, LinearColor);
+
+	if (CreditsTextBlock != nullptr)
+	{
+		CreditsTextBlock->SetColorAndOpacity(LinearColor);
+	}
 }
 
 void UGameCreditsScreen::OnBackButtonClicked()
