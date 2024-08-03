@@ -25,6 +25,7 @@
 #include "EnemySpawner.h"
 #include "ProjectileBase.h"
 #include "SpaceShooterGameState.h"
+#include "UI/SpaceShooterMenuController.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawn, Warning, All)
 DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnInput, Warning, All)
@@ -217,6 +218,9 @@ void APlayerShipPawn::BeginPlay()
 	// Listen for Game Start and Game End
 	ASpaceShooterGameState::OnGameStarted.AddUniqueDynamic(this, &ThisClass::OnGameStarted);
 	ASpaceShooterGameState::OnGameEnded.AddUniqueDynamic(this, &ThisClass::OnGameEnded);
+
+	// Listen for Player Ship selection
+	USpaceShooterMenuController::OnPlayerShipSelected.AddUniqueDynamic(this, &ThisClass::OnPlayerShipSelected);
 }
 
 void APlayerShipPawn::UpdateMovement(float DeltaTime)
@@ -519,6 +523,14 @@ void APlayerShipPawn::OnGameStarted()
 void APlayerShipPawn::OnGameEnded()
 {
 	UE_LOG(LogPlayerShipPawnInput, Warning, TEXT("APlayerShipPawn::OnGameEnded -- Need implementation"));
+}
+
+void APlayerShipPawn::OnPlayerShipSelected(UPaperSprite* SelectedShipSprite)
+{
+	if (PaperSpriteComp != nullptr && SelectedShipSprite != nullptr)
+	{
+		PaperSpriteComp->SetSprite(SelectedShipSprite);
+	}
 }
 
 void APlayerShipPawn::KeyboardMoveTriggered(const FInputActionValue& InputActionValue)

@@ -69,6 +69,9 @@ protected:
 	UFUNCTION()
 	void OnGameEnded();
 
+	UFUNCTION()
+	void OnPlayerShipSelected(class UPaperSprite* SelectedShipSprite);
+
 protected:
 	void KeyboardMoveTriggered(const struct FInputActionValue& InputActionValue);
 	void KeyboardMoveCompleted(const struct FInputActionValue& InputActionValue);

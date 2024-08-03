@@ -117,7 +117,7 @@ void USpaceShooterMenuController::MainMenuPlayClicked()
 	ensure(PlayerShipSelectScreen != nullptr);
 }
 
-void USpaceShooterMenuController::PlayerShipSelected()
+void USpaceShooterMenuController::PlayerShipSelected(UPaperSprite* SelectedShipSprite)
 {
 	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::PlayerShipSelected"));
 	CloseScreen(PlayerShipSelectScreen);

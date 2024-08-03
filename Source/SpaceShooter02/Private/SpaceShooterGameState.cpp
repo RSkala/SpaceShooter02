@@ -3,6 +3,7 @@
 #include "SpaceShooterGameState.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "PaperSprite.h"
 
 #include "EnemyBase.h"
 #include "EnemySpawner.h"
@@ -138,7 +139,7 @@ void ASpaceShooterGameState::OnMainMenuPlayClicked()
 	ShooterMenuGameState = EShooterMenuGameState::ShipSelect;
 }
 
-void ASpaceShooterGameState::OnPlayerShipSelected()
+void ASpaceShooterGameState::OnPlayerShipSelected(UPaperSprite* SelectedShipSprite)
 {
 	ShooterMenuGameState = EShooterMenuGameState::Gameplay;
 	StartGame();

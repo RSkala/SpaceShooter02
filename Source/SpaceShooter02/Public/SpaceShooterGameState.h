@@ -55,7 +55,7 @@ protected:
 	void OnMainMenuPlayClicked(); // When the player clicks "Play" from the Main Menu
 
 	UFUNCTION()
-	void OnPlayerShipSelected(); // When the player selects their ship (from the Ship Select screen)
+	void OnPlayerShipSelected(class UPaperSprite* SelectedShipSprite); // When the player selects their ship (from the Ship Select screen)
 
 	UFUNCTION()
 	void OnGameOverSelectShipSelected(); // When the user selects "Select Ship" from the Game Over screen
