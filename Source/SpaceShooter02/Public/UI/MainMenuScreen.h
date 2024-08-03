@@ -15,11 +15,10 @@ protected:
 	virtual void NativeOnInitialized() override;
 	virtual void OnColorShift(FLinearColor LinearColor) override;
 
-	UFUNCTION()
-	void OnPlayButtonClicked();
+	UFUNCTION() void OnPlayButtonClicked();
 
-	UFUNCTION()
-	void OnExitButtonClicked();
+	UFUNCTION() void OnExitButtonClicked();
+	UFUNCTION() void OnCreditsButtonClicked();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
@@ -30,6 +29,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UButton> ExitButton;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<class UButton> CreditsButton;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<class UTextBlock> VersionText;
 
 	// May use this in the future if going from Main Menu -> Ship Select is annoying
 	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))

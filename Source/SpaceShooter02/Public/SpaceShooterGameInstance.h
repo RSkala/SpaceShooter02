@@ -11,6 +11,12 @@ class SPACESHOOTER02_API USpaceShooterGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 
+public:
+	static FString GetGameVersionString() { return GameVersion; }
+
 protected:
 	virtual void OnStart() override;
+
+private:
+	static FString GameVersion;
 };

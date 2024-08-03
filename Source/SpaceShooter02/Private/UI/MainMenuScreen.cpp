@@ -7,6 +7,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "SpaceShooterGameInstance.h"
 #include "SpaceShooterGameState.h"
 #include "UI/SpaceShooterMenuController.h"
 
@@ -22,6 +23,17 @@ void UMainMenuScreen::NativeOnInitialized()
 	if (ExitButton != nullptr)
 	{
 		ExitButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnExitButtonClicked);
+	}
+
+	if (CreditsButton != nullptr)
+	{
+		CreditsButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnCreditsButtonClicked);
+	}
+
+	if (VersionText != nullptr)
+	{
+		FText GameVersionString = FText::FromString(USpaceShooterGameInstance::GetGameVersionString());
+		VersionText->SetText(GameVersionString);
 	}
 }
 
@@ -45,5 +57,10 @@ void UMainMenuScreen::OnExitButtonClicked()
 {
 	UE_LOG(LogMenus, Warning, TEXT("Quitting game from MainMenu..."));
 	UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
+}
+
+void UMainMenuScreen::OnCreditsButtonClicked()
+{
+	UE_LOG(LogMenus, Warning, TEXT("OnCreditsButtonClicked"));
 }
 
