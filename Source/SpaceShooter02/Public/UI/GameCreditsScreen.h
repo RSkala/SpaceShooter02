@@ -32,4 +32,5 @@ private:
 	static FString CreditsLine3;
 	static FString CreditsLine4;
 	static FString CreditsLine5;
+	static FString CreditsLine6;
 };
