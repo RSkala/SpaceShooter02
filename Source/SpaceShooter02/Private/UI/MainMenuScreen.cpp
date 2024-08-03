@@ -11,6 +11,22 @@
 #include "SpaceShooterGameState.h"
 #include "UI/SpaceShooterMenuController.h"
 
+
+namespace MainMenuScreen
+{
+	static const TCHAR* VOTestAssetPath = TEXT("/Game/Sounds/A_VO_Test_01");
+}
+
+UMainMenuScreen::UMainMenuScreen()
+{
+	if (!HasAnyFlags(EObjectFlags::RF_ClassDefaultObject))
+	{
+		// Get the Test VO asset
+		ConstructorHelpers::FObjectFinderOptional<USoundBase> VOTestAssetFinder(MainMenuScreen::VOTestAssetPath);
+		VOTestSound = VOTestAssetFinder.Get();
+	}
+}
+
 void UMainMenuScreen::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
@@ -37,6 +53,9 @@ void UMainMenuScreen::NativeOnInitialized()
 		FText GameVersionString = FText::FromString(USpaceShooterGameInstance::GetGameVersionString());
 		VersionText->SetText(GameVersionString);
 	}
+
+	// Play the VO test sound
+	//UGameplayStatics::PlaySound2D(GetWorld(), VOTestSound, 1.0f, 1.0f);
 }
 
 void UMainMenuScreen::OnColorShift(FLinearColor LinearColor)

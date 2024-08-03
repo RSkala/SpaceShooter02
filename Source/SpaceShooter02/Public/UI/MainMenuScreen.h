@@ -11,6 +11,9 @@ class SPACESHOOTER02_API UMainMenuScreen : public UMenuScreenWidget
 {
 	GENERATED_BODY()
 
+public:
+	UMainMenuScreen();
+
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void OnColorShift(FLinearColor LinearColor) override;
@@ -41,4 +44,7 @@ protected:
 	// May use this in the future if going from Main Menu -> Ship Select is annoying
 	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	//TObjectPtr<class UButton> ShipSelectButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class USoundBase> VOTestSound;
 };
