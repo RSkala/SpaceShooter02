@@ -25,4 +25,11 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UButton> BackButton;
+
+	// --- Lines for Credits Text ---
+	static FString CreditsLine1;
+	static FString CreditsLine2;
+	static FString CreditsLine3;
+	static FString CreditsLine4;
+	static FString CreditsLine5;
 };

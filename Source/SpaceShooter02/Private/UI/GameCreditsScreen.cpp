@@ -7,15 +7,22 @@
 
 #include "UI/SpaceShooterMenuController.h"
 
-// NOTE: These do not update when using Live Coding
-namespace GameCreditsScreen
-{
-	static const FString CreditsLine1 = "PROGRAMMING & DESIGN\nRichard Skala\nrskala.github.io\n\n\n";
-	static const FString CreditsLine2 = "ART\nGustavo Vituri\ngvituri.itch.io\n\n\n";
-	static const FString CreditsLine3 = "SOUND EFFECTS\nSubspaceAudio\nsubspaceaudio.itch.io\n\n\n";
-	static const FString CreditsLine4 = "PIXEL CROSSHAIRS\nDonut Studio\ndonut-studio.itch.io\n\n\n";
-	static const FString CreditsLine5 = "\n\nBuilt in Unreal Engine 5.4\n\n";
-}
+// NOTE: These do not update or are sometimes empty when using Live Coding, so moved as static members
+//namespace GameCreditsScreen
+//{
+//	static const FString CreditsLine1 = "PROGRAMMING & DESIGN\nRichard Skala\nrskala.github.io\n\n\n";
+//	static const FString CreditsLine2 = "ART\nGustavo Vituri\ngvituri.itch.io\n\n\n";
+//	static const FString CreditsLine3 = "SOUND EFFECTS\nSubspaceAudio\nsubspaceaudio.itch.io\n\n\n";
+//	static const FString CreditsLine4 = "PIXEL CROSSHAIRS\nDonut Studio\ndonut-studio.itch.io\n\n\n";
+//	static const FString CreditsLine5 = "\n\nBuilt in Unreal Engine 5.4\n\n";
+//}
+
+// NOTE 2: These also do not update when using Live Coding. Be wary!
+FString UGameCreditsScreen::CreditsLine1 = "PROGRAMMING & DESIGN\nRichard Skala\nrskala.github.io\n\n\n";
+FString UGameCreditsScreen::CreditsLine2 = "ART\nGustavo Vituri\ngvituri.itch.io\n\n\n";
+FString UGameCreditsScreen::CreditsLine3 = "SOUND EFFECTS\nSubspaceAudio\nsubspaceaudio.itch.io\n\n\n";
+FString UGameCreditsScreen::CreditsLine4 = "PIXEL CROSSHAIRS\nDonut Studio\ndonut-studio.itch.io\n\n\n";
+FString UGameCreditsScreen::CreditsLine5 = "\n\nBuilt in Unreal Engine 5.4\n\n";
 
 void UGameCreditsScreen::NativeOnInitialized()
 {
@@ -24,11 +31,11 @@ void UGameCreditsScreen::NativeOnInitialized()
 	if (CreditsTextBlock != nullptr)
 	{
 		FText CreditsText = FText::FromString(
-			GameCreditsScreen::CreditsLine1 +
-			GameCreditsScreen::CreditsLine2 +
-			GameCreditsScreen::CreditsLine3 +
-			GameCreditsScreen::CreditsLine4 +
-			GameCreditsScreen::CreditsLine5);
+			CreditsLine1 +
+			CreditsLine2 +
+			CreditsLine3 +
+			CreditsLine4 +
+			CreditsLine5);
 		CreditsTextBlock->SetText(CreditsText);
 	}
 
