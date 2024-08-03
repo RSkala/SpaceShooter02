@@ -1,0 +1,25 @@
+
+----------------------------------------------------
+Credits:
+
+Programming and Design:
+Richard Skala
+
+Art:
+Gustavo Vituri
+https://gvituri.itch.io/space-shooter
+
+Sound Effects:
+SubspaceAudio
+https://subspaceaudio.itch.io/6000-retro-sound-effects
+
+Pixel Crosshairs:
+Donut Studio
+https://donut-studio.itch.io/pixel-crosshaires
+
+Game Engine:
+Unreal Engine 5.4
+https://www.unrealengine.com/
+
+----------------------------------------------------
+
