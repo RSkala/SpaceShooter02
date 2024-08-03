@@ -38,6 +38,12 @@ void UGameCreditsScreen::NativeOnInitialized()
 	}
 }
 
+void UGameCreditsScreen::OnColorShift(FLinearColor LinearColor)
+{
+	Super::OnColorShift(LinearColor);
+	SetColorShiftForButton(BackButton, LinearColor);
+}
+
 void UGameCreditsScreen::OnBackButtonClicked()
 {
 	USpaceShooterMenuController::OnCreditsMenuBackClicked.Broadcast();

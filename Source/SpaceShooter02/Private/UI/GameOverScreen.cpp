@@ -51,6 +51,10 @@ void UGameOverScreen::OnColorShift(FLinearColor LinearColor)
 	{
 		FinalScoreText->SetColorAndOpacity(LinearColor);
 	}
+
+	SetColorShiftForButton(PlayAgainButton, LinearColor);
+	SetColorShiftForButton(SelectNewShipButton, LinearColor);
+	SetColorShiftForButton(QuitGameButton, LinearColor);
 }
 
 void UGameOverScreen::OnPlayAgainButtonClicked()

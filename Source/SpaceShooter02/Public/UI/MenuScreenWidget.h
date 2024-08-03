@@ -23,6 +23,8 @@ protected:
 	void SetColorForImage(class UImage* Image, FLinearColor LinearColor);
 	void DisableHitTestForImage(class UImage* Image);
 
+	void SetColorShiftForButton(class UButton* Button, FLinearColor ShiftColor);
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UImage> Image_Screen_Border_L;

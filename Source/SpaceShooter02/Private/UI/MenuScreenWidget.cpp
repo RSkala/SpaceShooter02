@@ -2,6 +2,7 @@
 
 #include "UI/MenuScreenWidget.h"
 
+#include "Components/Button.h"
 #include "Components/Image.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -50,5 +51,15 @@ void UMenuScreenWidget::DisableHitTestForImage(UImage* Image)
 	if (Image != nullptr)
 	{
 		Image->SetVisibility(ESlateVisibility::HitTestInvisible);
+	}
+}
+
+void UMenuScreenWidget::SetColorShiftForButton(UButton* Button, FLinearColor ShiftColor)
+{
+	if (Button != nullptr)
+	{
+		FLinearColor LinearColor = Button->IsHovered() ? ShiftColor : FLinearColor::White;
+		//Button->SetColorAndOpacity(LinearColor); // This sets the text color
+		Button->SetBackgroundColor(LinearColor);
 	}
 }

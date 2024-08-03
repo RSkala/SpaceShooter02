@@ -13,6 +13,7 @@ class SPACESHOOTER02_API UGameCreditsScreen : public UMenuScreenWidget
 
 protected:
 	virtual void NativeOnInitialized() override;
+	virtual void OnColorShift(FLinearColor LinearColor);
 
 private:
 	UFUNCTION()

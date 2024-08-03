@@ -16,6 +16,7 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 	if (LaunchButton != nullptr)
 	{
 		LaunchButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnLaunchButtonClicked);
+		LaunchButton->SetVisibility(ESlateVisibility::Collapsed); // Hide the launch button
 	}
 
 	if (ShipSelectButton1 != nullptr)
@@ -42,6 +43,16 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 	{
 		ShipSelectButton5->OnClicked.AddUniqueDynamic(this, &ThisClass::OnShipSelectButton5Clicked);
 	}
+}
+
+void UPlayerShipSelectScreen::OnColorShift(FLinearColor LinearColor)
+{
+	Super::OnColorShift(LinearColor);
+	SetColorShiftForButton(ShipSelectButton1, LinearColor);
+	SetColorShiftForButton(ShipSelectButton2, LinearColor);
+	SetColorShiftForButton(ShipSelectButton3, LinearColor);
+	SetColorShiftForButton(ShipSelectButton4, LinearColor);
+	SetColorShiftForButton(ShipSelectButton5, LinearColor);
 }
 
 void UPlayerShipSelectScreen::OnLaunchButtonClicked()

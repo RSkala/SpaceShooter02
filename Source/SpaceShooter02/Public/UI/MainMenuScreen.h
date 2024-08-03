@@ -19,6 +19,9 @@ protected:
 	UFUNCTION() void OnExitButtonClicked();
 	UFUNCTION() void OnCreditsButtonClicked();
 
+	//UFUNCTION() void OnPlayButtonHovered();
+	//UFUNCTION() void OnPlayButtonUnhovered();
+
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UTextBlock> MainMenuTitleText;

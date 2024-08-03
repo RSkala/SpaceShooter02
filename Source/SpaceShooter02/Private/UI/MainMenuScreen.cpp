@@ -18,6 +18,8 @@ void UMainMenuScreen::NativeOnInitialized()
 	if (PlayButton != nullptr)
 	{
 		PlayButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnPlayButtonClicked);
+		//PlayButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnPlayButtonHovered);
+		//PlayButton->OnUnhovered.AddUniqueDynamic(this, &ThisClass::OnPlayButtonUnhovered);
 	}
 
 	if (ExitButton != nullptr)
@@ -45,6 +47,10 @@ void UMainMenuScreen::OnColorShift(FLinearColor LinearColor)
 	{
 		MainMenuTitleText->SetColorAndOpacity(FSlateColor(LinearColor));
 	}
+	
+	SetColorShiftForButton(PlayButton, LinearColor);
+	SetColorShiftForButton(ExitButton, LinearColor);
+	SetColorShiftForButton(CreditsButton, LinearColor);
 }
 
 void UMainMenuScreen::OnPlayButtonClicked()
@@ -64,4 +70,3 @@ void UMainMenuScreen::OnCreditsButtonClicked()
 	UE_LOG(LogMenus, Warning, TEXT("OnCreditsButtonClicked"));
 	USpaceShooterMenuController::OnMainMenuCreditsClicked.Broadcast();
 }
-

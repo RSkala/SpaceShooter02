@@ -13,6 +13,7 @@ class SPACESHOOTER02_API UPlayerShipSelectScreen : public UMenuScreenWidget
 
 protected:
 	virtual void NativeOnInitialized() override;
+	virtual void OnColorShift(FLinearColor LinearColor) override;
 
 	UFUNCTION()
 	void OnLaunchButtonClicked();
