@@ -21,6 +21,7 @@ protected:
 	virtual void OnColorShift(FLinearColor LinearColor);
 
 	void SetColorForImage(class UImage* Image, FLinearColor LinearColor);
+	void DisableHitTestForImage(class UImage* Image);
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))

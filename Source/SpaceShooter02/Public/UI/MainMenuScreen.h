@@ -16,7 +16,6 @@ protected:
 	virtual void OnColorShift(FLinearColor LinearColor) override;
 
 	UFUNCTION() void OnPlayButtonClicked();
-
 	UFUNCTION() void OnExitButtonClicked();
 	UFUNCTION() void OnCreditsButtonClicked();
 

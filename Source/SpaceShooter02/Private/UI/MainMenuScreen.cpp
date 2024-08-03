@@ -62,5 +62,6 @@ void UMainMenuScreen::OnExitButtonClicked()
 void UMainMenuScreen::OnCreditsButtonClicked()
 {
 	UE_LOG(LogMenus, Warning, TEXT("OnCreditsButtonClicked"));
+	USpaceShooterMenuController::OnMainMenuCreditsClicked.Broadcast();
 }
 

@@ -21,6 +21,12 @@ void UMenuScreenWidget::NativeOnInitialized()
 			ColorShiftSubsystem->OnColorShift.AddUniqueDynamic(this, &ThisClass::OnColorShift);
 		}
 	}
+
+	// Disable Hit Test on border images
+	DisableHitTestForImage(Image_Screen_Border_L);
+	DisableHitTestForImage(Image_Screen_Border_R);
+	DisableHitTestForImage(Image_Screen_Border_T);
+	DisableHitTestForImage(Image_Screen_Border_B);
 }
 
 void UMenuScreenWidget::OnColorShift(FLinearColor LinearColor)
@@ -36,5 +42,13 @@ void UMenuScreenWidget::SetColorForImage(UImage* Image, FLinearColor LinearColor
 	if (Image != nullptr)
 	{
 		Image->SetColorAndOpacity(LinearColor);
+	}
+}
+
+void UMenuScreenWidget::DisableHitTestForImage(UImage* Image)
+{
+	if (Image != nullptr)
+	{
+		Image->SetVisibility(ESlateVisibility::HitTestInvisible);
 	}
 }

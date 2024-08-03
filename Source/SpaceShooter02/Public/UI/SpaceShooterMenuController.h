@@ -10,6 +10,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuPlayClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShipSelectedDelegateSignature, class UPaperSprite*, SelectedShipSprite);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverSelectShipClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverPlayAgainClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuCreditsClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCreditsMenuBackClickedDelegateSignature);
 
 UENUM(BlueprintType)
 enum class EMenuState : uint8
@@ -38,23 +40,14 @@ public:
 protected:
 	void OnPlayerShipSelectStart();
 
-	UFUNCTION()
-	void OnGameplayStart();
-
-	UFUNCTION()
-	void OnGameplayEnd();
-
-	UFUNCTION()
-	void MainMenuPlayClicked();
-
-	UFUNCTION()
-	void PlayerShipSelected(class UPaperSprite* SelectedShipSprite);
-
-	UFUNCTION()
-	void GameOverSelectShipClicked();
-
-	UFUNCTION()
-	void GameOverPlayAgainClicked();
+	UFUNCTION() void OnGameplayStart();
+	UFUNCTION() void OnGameplayEnd();
+	UFUNCTION() void MainMenuPlayClicked();
+	UFUNCTION() void PlayerShipSelected(class UPaperSprite* SelectedShipSprite);
+	UFUNCTION() void GameOverSelectShipClicked();
+	UFUNCTION() void GameOverPlayAgainClicked();
+	UFUNCTION() void MainMenuCreditsClicked();
+	UFUNCTION() void CreditsMenuBackClicked();
 
 	UUserWidget* OpenScreen(TSubclassOf<class UUserWidget> ScreenClass);
 	void CloseScreen(UUserWidget* const ScreenToClose);
@@ -64,6 +57,8 @@ public:
 	static FShipSelectedDelegateSignature OnPlayerShipSelected;
 	static FGameOverSelectShipClickedDelegateSignature OnGameOverSelectShipClicked;
 	static FGameOverPlayAgainClickedDelegateSignature OnGameOverPlayAgainClicked;
+	static FMainMenuCreditsClickedDelegateSignature OnMainMenuCreditsClicked;
+	static FCreditsMenuBackClickedDelegateSignature OnCreditsMenuBackClicked;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
@@ -80,6 +75,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TSubclassOf<class UUserWidget> GameOverScreenClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TSubclassOf<class UUserWidget> CreditsScreenClass;
+
 	// --- Menu Screen Instances ---
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
@@ -90,4 +88,7 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UGameOverScreen> GameOverScreen;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UGameCreditsScreen> CreditsScreen;
 };

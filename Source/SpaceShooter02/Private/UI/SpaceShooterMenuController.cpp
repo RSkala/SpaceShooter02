@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "SpaceShooterGameState.h"
+#include "UI/GameCreditsScreen.h"
 #include "UI/GameOverScreen.h"
 #include "UI/MainMenuScreen.h"
 #include "UI/PlayerShipSelectScreen.h"
@@ -16,6 +17,8 @@ FMainMenuPlayClickedDelegateSignature USpaceShooterMenuController::OnMainMenuPla
 FShipSelectedDelegateSignature USpaceShooterMenuController::OnPlayerShipSelected;
 FGameOverSelectShipClickedDelegateSignature USpaceShooterMenuController::OnGameOverSelectShipClicked;
 FGameOverPlayAgainClickedDelegateSignature USpaceShooterMenuController::OnGameOverPlayAgainClicked;
+FMainMenuCreditsClickedDelegateSignature USpaceShooterMenuController::OnMainMenuCreditsClicked;
+FCreditsMenuBackClickedDelegateSignature USpaceShooterMenuController::OnCreditsMenuBackClicked;
 
 USpaceShooterMenuController::USpaceShooterMenuController()
 {
@@ -36,6 +39,8 @@ void USpaceShooterMenuController::PostInitProperties()
 		OnPlayerShipSelected.AddUniqueDynamic(this, &ThisClass::PlayerShipSelected);
 		OnGameOverSelectShipClicked.AddUniqueDynamic(this, &ThisClass::GameOverSelectShipClicked);
 		OnGameOverPlayAgainClicked.AddUniqueDynamic(this, &ThisClass::GameOverPlayAgainClicked);
+		OnMainMenuCreditsClicked.AddUniqueDynamic(this, &ThisClass::MainMenuCreditsClicked);
+		OnCreditsMenuBackClicked.AddUniqueDynamic(this, &ThisClass::CreditsMenuBackClicked);
 	}
 }
 
@@ -142,6 +147,32 @@ void USpaceShooterMenuController::GameOverPlayAgainClicked()
 	// Close the Game Over screen. The GameState will handle starting the game.
 	CloseScreen(GameOverScreen);
 	GameOverScreen = nullptr;
+}
+
+void USpaceShooterMenuController::MainMenuCreditsClicked()
+{
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::GameOverPlayAgainClicked"));
+
+	// Close the Main Menu screen
+	CloseScreen(MainMenuScreen);
+	MainMenuScreen = nullptr;
+
+	// Open the Credits screen
+	CreditsScreen = Cast<UGameCreditsScreen>(OpenScreen(CreditsScreenClass));
+	ensure(CreditsScreen != nullptr);
+}
+
+void USpaceShooterMenuController::CreditsMenuBackClicked()
+{
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::CreditsMenuBackClicked"));
+
+	// Close the Credits screen
+	CloseScreen(CreditsScreen);
+	CreditsScreen = nullptr;
+
+	// Open the Main Menu screen
+	MainMenuScreen = Cast<UMainMenuScreen>(OpenScreen(MainMenuScreenClass));
+	ensure(MainMenuScreen != nullptr);
 }
 
 UUserWidget* USpaceShooterMenuController::OpenScreen(TSubclassOf<class UUserWidget> ScreenClass)
