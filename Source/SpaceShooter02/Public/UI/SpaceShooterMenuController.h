@@ -85,6 +85,8 @@ private:
 	bool HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const;
 	void SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed);
 
+	void PlayButtonClickSound();
+
 public:
 	static FMainMenuPlayClickedDelegateSignature OnMainMenuPlayClicked;
 	static FShipSelectedDelegateSignature OnPlayerShipSelected;
@@ -153,4 +155,7 @@ private:
 	// Currently playing VO sound
 	UPROPERTY(meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UAudioComponent> CurrentVOSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class USoundBase> UIButtonClickSound;
 };

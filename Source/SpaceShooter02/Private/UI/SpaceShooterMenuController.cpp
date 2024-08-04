@@ -105,41 +105,49 @@ void USpaceShooterMenuController::OnGameplayEnd()
 
 void USpaceShooterMenuController::MainMenuPlayClicked()
 {
+	PlayButtonClickSound();
 	CloseMainMenuScreen();
 	OpenPlayerShipSelectScreen();
 }
 
 void USpaceShooterMenuController::PlayerShipSelected(UPaperSprite* SelectedShipSprite)
 {
+	PlayButtonClickSound();
 	ClosePlayerShipSelectScreen();
 }
 
 void USpaceShooterMenuController::GameOverSelectShipClicked()
 {
+	PlayButtonClickSound();
 	CloseGameOverScreen();
 	OpenPlayerShipSelectScreen();
 }
 
 void USpaceShooterMenuController::GameOverPlayAgainClicked()
 {
+	PlayButtonClickSound();
+
 	// Close the Game Over screen. The GameState will handle starting the game.
 	CloseGameOverScreen();
 }
 
 void USpaceShooterMenuController::MainMenuCreditsClicked()
 {
+	PlayButtonClickSound();
 	CloseMainMenuScreen();
 	OpenCreditsScreen();
 }
 
 void USpaceShooterMenuController::CreditsMenuBackClicked()
 {
+	PlayButtonClickSound();
 	CloseCreditsScreen();
 	OpenMainMenuScreen();
 }
 
 void USpaceShooterMenuController::ShipSelectBackClicked()
 {
+	PlayButtonClickSound();
 	ClosePlayerShipSelectScreen();
 	OpenMainMenuScreen();
 }
@@ -284,4 +292,12 @@ bool USpaceShooterMenuController::HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPla
 void USpaceShooterMenuController::SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed)
 {
 	SoundVOPlayedFlags |= (uint8)SoundVOPlayed;
+}
+
+void USpaceShooterMenuController::PlayButtonClickSound()
+{
+	if (UIButtonClickSound != nullptr)
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), UIButtonClickSound);
+	}
 }
