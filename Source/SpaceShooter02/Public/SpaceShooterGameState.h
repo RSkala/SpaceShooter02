@@ -49,7 +49,7 @@ protected:
 	void OnPlayerShipDestroyed();
 
 	UFUNCTION()
-	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect);
+	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect, class USoundBase* EnemyDeathSound);
 
 	UFUNCTION()
 	void OnMainMenuPlayClicked(); // When the player clicks "Play" from the Main Menu

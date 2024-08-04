@@ -56,15 +56,15 @@ void AEnemyBase::Tick(float DeltaTime)
 void AEnemyBase::DestroyEnemy()
 {
 	// Play the death/explosion sound
-	if (EnemyDeathSound != nullptr)
+	/*if (EnemyDeathSound != nullptr)
 	{
 		static const float ExplodeSoundPitchAdjust = 0.1f;
 		float ShootSoundPitch = 1.0f + FMath::FRandRange(-ExplodeSoundPitchAdjust, ExplodeSoundPitchAdjust);
 		UGameplayStatics::PlaySound2D(GetWorld(), EnemyDeathSound, 1.0f, ShootSoundPitch);
-	}
+	}*/
 
 	// Notify subscribers that an enemy died
-	OnEnemyDeath.Broadcast(GetActorLocation(), EnemyExplosionEffect.Get());
+	OnEnemyDeath.Broadcast(GetActorLocation(), EnemyExplosionEffect.Get(), EnemyDeathSound.Get());
 
 	// Destroy this enemy
 	Destroy();

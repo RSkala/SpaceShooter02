@@ -25,7 +25,7 @@ protected:
 	void OnGameStarted();
 
 	UFUNCTION()
-	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect);
+	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect, class USoundBase* EnemyDeathSound);
 
 #if WITH_EDITOR
 	virtual bool CanEditChange(const FProperty* InProperty) const override;
@@ -72,6 +72,9 @@ protected:
 	// TODO:
 	// * DifficultySpikeInterval -- every X enemy defeated, increase difficulty
 	// * get player reference, pass to enemies
+
+	UPROPERTY()
+	TObjectPtr<class UAudioComponent> CurrentEnemyExplosionSound;
 	
 	// Last time an enemy was spawned
 	float TimeSinceLastEnemySpawned = 0.0f;

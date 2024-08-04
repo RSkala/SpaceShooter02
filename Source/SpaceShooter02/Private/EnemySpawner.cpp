@@ -2,6 +2,7 @@
 
 #include "EnemySpawner.h"
 
+#include "Components/AudioComponent.h"
 #include "DrawDebugHelpers.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraSystem.h"
@@ -123,14 +124,16 @@ void AEnemySpawner::OnGameStarted()
 	SetSpawningEnabled(true);
 }
 
-void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect)
+void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, USoundBase* EnemyDeathSound)
 {
 	UE_LOG(LogEnemySpawner, Warning, TEXT("%s - EnemyDeathPosition: %s"), ANSI_TO_TCHAR(__FUNCTION__), *EnemyDeathPosition.ToString());
+
+	UWorld* World = GetWorld();
 
 	// Spawn an explosion at this enemy death position
 	if (EnemyExplosionClasses.Num() > 0)
 	{
-		if (UWorld* World = GetWorld())
+		if (World != nullptr)
 		{
 			// Randomly select an enemy explosion type to spawn
 			TSubclassOf<AExplosionBase> ExplosionClassToSpawn = EnemyExplosionClasses[FMath::RandRange(0, EnemyExplosionClasses.Num() - 1)];
@@ -162,6 +165,18 @@ void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* Ene
 		SpawnParams.bPreCullCheck = true;
 		UNiagaraFunctionLibrary::SpawnSystemAtLocationWithParams(SpawnParams);
 	}
+
+	// Stop the death/explosion sound if playing
+	if (CurrentEnemyExplosionSound != nullptr)
+	{
+		CurrentEnemyExplosionSound->Stop();
+	}
+	CurrentEnemyExplosionSound = nullptr;
+
+	// Adjust a random pitch and play the enemy death sound
+	static const float ExplodeSoundPitchAdjust = 0.1f;
+	float DeathSoundPitch = 1.0f + FMath::FRandRange(-ExplodeSoundPitchAdjust, ExplodeSoundPitchAdjust);
+	CurrentEnemyExplosionSound = UGameplayStatics::SpawnSound2D(World, EnemyDeathSound, DeathSoundPitch);
 }
 
 #if WITH_EDITOR

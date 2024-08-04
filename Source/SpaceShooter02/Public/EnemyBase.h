@@ -7,7 +7,12 @@
 #include "EnemyBase.generated.h"
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnemyDeathDelegateSignature, FVector, EnemyDeathPosition, class UNiagaraSystem*, EnemyDeathEffect);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnemyDeathDelegateSignature, FVector, EnemyDeathPosition, class UNiagaraSystem*, EnemyDeathEffect);
+//DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnemyDeathDelegateSignature, FVector, EnemyDeathPosition, class UNiagaraSystem*, EnemyDeathEffect);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
+	FEnemyDeathDelegateSignature,
+	FVector, EnemyDeathPosition,
+	class UNiagaraSystem*, EnemyDeathEffect,
+	class USoundBase*, EnemyDeathSound);
 
 UCLASS(Abstract)
 class SPACESHOOTER02_API AEnemyBase : public AActor

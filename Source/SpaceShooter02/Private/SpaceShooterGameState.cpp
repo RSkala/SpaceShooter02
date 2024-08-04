@@ -118,7 +118,7 @@ void ASpaceShooterGameState::OnPlayerShipDestroyed()
 	OnGameEnded.Broadcast();
 }
 
-void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect)
+void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, USoundBase* EnemyDeathSound)
 {
 	int32 ScoreToAdd = EnemyScoreValue * CurrentScoreMultiplier;
 	PlayerScore += ScoreToAdd;
