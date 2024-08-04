@@ -46,5 +46,5 @@ protected:
 	//TObjectPtr<class UButton> ShipSelectButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class USoundBase> VOTestSound;
+	TSoftObjectPtr<class USoundBase> VOTestSound;
 };

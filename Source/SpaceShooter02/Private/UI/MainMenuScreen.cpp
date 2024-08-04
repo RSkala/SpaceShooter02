@@ -22,8 +22,8 @@ UMainMenuScreen::UMainMenuScreen()
 	if (!HasAnyFlags(EObjectFlags::RF_ClassDefaultObject))
 	{
 		// Get the Test VO asset
-		ConstructorHelpers::FObjectFinderOptional<USoundBase> VOTestAssetFinder(MainMenuScreen::VOTestAssetPath);
-		VOTestSound = VOTestAssetFinder.Get();
+		//ConstructorHelpers::FObjectFinderOptional<USoundBase> VOTestAssetFinder(MainMenuScreen::VOTestAssetPath);
+		//VOTestSound = VOTestAssetFinder.Get();
 	}
 }
 
@@ -74,7 +74,6 @@ void UMainMenuScreen::OnColorShift(FLinearColor LinearColor)
 
 void UMainMenuScreen::OnPlayButtonClicked()
 {
-	UE_LOG(LogMenus, Log, TEXT("OnPlayButtonClicked"));
 	USpaceShooterMenuController::OnMainMenuPlayClicked.Broadcast();
 }
 
@@ -86,6 +85,5 @@ void UMainMenuScreen::OnExitButtonClicked()
 
 void UMainMenuScreen::OnCreditsButtonClicked()
 {
-	UE_LOG(LogMenus, Warning, TEXT("OnCreditsButtonClicked"));
 	USpaceShooterMenuController::OnMainMenuCreditsClicked.Broadcast();
 }
