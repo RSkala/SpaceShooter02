@@ -5,6 +5,10 @@ Credits:
 Programming and Design:
 Richard Skala
 
+Design Support:
+Benjamin Cholewinski
+https://instagram.com/happi_axxident
+
 Art:
 Gustavo Vituri
 https://gvituri.itch.io/space-shooter
@@ -17,9 +21,11 @@ Pixel Crosshairs:
 Donut Studio
 https://donut-studio.itch.io/pixel-crosshaires
 
+Font:
+Press Start from DaFont.com
+
 Game Engine:
 Unreal Engine 5.4
 https://www.unrealengine.com/
 
 ----------------------------------------------------
-
