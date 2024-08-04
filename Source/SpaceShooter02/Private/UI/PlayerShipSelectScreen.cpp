@@ -3,6 +3,7 @@
 #include "UI/PlayerShipSelectScreen.h"
 
 #include "Components/Button.h"
+#include "Components/TextBlock.h"
 
 #include "PaperSprite.h"
 
@@ -59,6 +60,10 @@ void UPlayerShipSelectScreen::OnColorShift(FLinearColor LinearColor)
 	SetColorShiftForButton(ShipSelectButton4, LinearColor);
 	SetColorShiftForButton(ShipSelectButton5, LinearColor);
 	SetColorShiftForButton(BackButton, LinearColor);
+	if (SelectYourShipTextBlock != nullptr)
+	{
+		SelectYourShipTextBlock->SetColorAndOpacity(FSlateColor(LinearColor));
+	}
 }
 
 void UPlayerShipSelectScreen::OnLaunchButtonClicked()
