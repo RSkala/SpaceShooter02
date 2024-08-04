@@ -149,4 +149,8 @@ private:
 	// --- Flags for limiting VO sound playing ---
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BitMask, BitmaskEnum = "/Script/SpaceShooter02.ESoundVOPlayed", AllowPrivateAccess = true))
 	uint8 SoundVOPlayedFlags;
+
+	// Currently playing VO sound
+	UPROPERTY(meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UAudioComponent> CurrentVOSound;
 };

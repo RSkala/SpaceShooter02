@@ -3,6 +3,7 @@
 #include "UI/SpaceShooterMenuController.h"
 
 #include "Blueprint/WidgetBlueprintLibrary.h"
+#include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 #include "SpaceShooterGameState.h"
@@ -262,9 +263,17 @@ void USpaceShooterMenuController::SelectAndPlayRandomVO(TArray<TSoftObjectPtr<US
 
 	int32 RandomIdx = FMath::RandRange(0, SoundVOArray.Num() - 1);
 	TSoftObjectPtr SoundVOToPlayPtr = SoundVOArray[RandomIdx];
-	USoundBase* SoundVOToPlay = SoundVOToPlayPtr.LoadSynchronous();
 	//USoundBase* SoundVOToPlay = SoundVOToPlayPtr.Get(); // This will not always be valid! Use LoadSynchronous() instead.
-	UGameplayStatics::PlaySound2D(GetWorld(), SoundVOToPlay);
+	USoundBase* SoundVOToPlay = SoundVOToPlayPtr.LoadSynchronous();
+
+	// Stop the current VO sound so they don't overlap
+	if (CurrentVOSound != nullptr)
+	{
+		CurrentVOSound->Stop();
+		CurrentVOSound = nullptr;
+	}
+	CurrentVOSound = UGameplayStatics::SpawnSound2D(GetWorld(), SoundVOToPlay);
+	//UGameplayStatics::PlaySound2D(GetWorld(), SoundVOToPlay);
 }
 
 bool USpaceShooterMenuController::HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const
