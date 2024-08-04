@@ -8,92 +8,99 @@
 #include "PaperSprite.h"
 
 #include "SpaceShooterGameState.h"
+#include "UI/ShipSelectionWidget.h"
 #include "UI/SpaceShooterMenuController.h"
 
 void UPlayerShipSelectScreen::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
-	if (LaunchButton != nullptr)
-	{
-		LaunchButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnLaunchButtonClicked);
-		LaunchButton->SetVisibility(ESlateVisibility::Collapsed); // Hide the launch button
-	}
-
-	if (ShipSelectButton1 != nullptr)
-	{
-		ShipSelectButton1->OnClicked.AddUniqueDynamic(this, &ThisClass::OnShipSelectButton1Clicked);
-	}
-
-	if (ShipSelectButton2 != nullptr)
-	{
-		ShipSelectButton2->OnClicked.AddUniqueDynamic(this, &ThisClass::OnShipSelectButton2Clicked);
-	}
-
-	if (ShipSelectButton3 != nullptr)
-	{
-		ShipSelectButton3->OnClicked.AddUniqueDynamic(this, &ThisClass::OnShipSelectButton3Clicked);
-	}
-
-	if (ShipSelectButton4 != nullptr)
-	{
-		ShipSelectButton4->OnClicked.AddUniqueDynamic(this, &ThisClass::OnShipSelectButton4Clicked);
-	}
-
-	if (ShipSelectButton5 != nullptr)
-	{
-		ShipSelectButton5->OnClicked.AddUniqueDynamic(this, &ThisClass::OnShipSelectButton5Clicked);
-	}
-
 	if (BackButton != nullptr)
 	{
 		BackButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnBackButtonClicked);
+	}
+
+	// -------------------------------------------------
+	if (ShipSelectionWidget1 != nullptr)
+	{
+		ShipSelectionWidget1->InitShipSelectionWidget(
+			TEXT("SHIP 01"),
+			TEXT("WHITE"),
+			FLinearColor::White,
+			ShipSprites.Num() > 0 ? ShipSprites[0] : nullptr);
+	}
+
+	if (ShipSelectionWidget2 != nullptr)
+	{
+		ShipSelectionWidget2->InitShipSelectionWidget(
+			TEXT("SHIP 02"),
+			TEXT("ORANGE"),
+			FLinearColor(1.0f, 0.262251f, 0.0f),
+			ShipSprites.Num() > 1 ? ShipSprites[1] : nullptr);
+	}
+
+	if (ShipSelectionWidget3 != nullptr)
+	{
+		ShipSelectionWidget3->InitShipSelectionWidget(
+			TEXT("SHIP 03"),
+			TEXT("GREEN"),
+			FLinearColor(0.165132f, 0.768151f, 0.287441f),
+			ShipSprites.Num() > 2 ? ShipSprites[2] : nullptr);
+	}
+
+	if (ShipSelectionWidget4 != nullptr)
+	{
+		ShipSelectionWidget4->InitShipSelectionWidget(
+			TEXT("SHIP 04"),
+			TEXT("PURPLE"),
+			FLinearColor(0.361307f, 0.165132f, 1.0f),
+			ShipSprites.Num() > 3 ? ShipSprites[3] : nullptr);
+	}
+
+	if (ShipSelectionWidget5 != nullptr)
+	{
+		ShipSelectionWidget5->InitShipSelectionWidget(
+			TEXT("SHIP 05"),
+			TEXT("RED"),
+			FLinearColor(0.445201f, 0.005182f, 0.029557f),
+			ShipSprites.Num() > 4 ? ShipSprites[4] : nullptr);
 	}
 }
 
 void UPlayerShipSelectScreen::OnColorShift(FLinearColor LinearColor)
 {
 	Super::OnColorShift(LinearColor);
-	SetColorShiftForButton(ShipSelectButton1, LinearColor);
-	SetColorShiftForButton(ShipSelectButton2, LinearColor);
-	SetColorShiftForButton(ShipSelectButton3, LinearColor);
-	SetColorShiftForButton(ShipSelectButton4, LinearColor);
-	SetColorShiftForButton(ShipSelectButton5, LinearColor);
+
 	SetColorShiftForButton(BackButton, LinearColor);
 	if (SelectYourShipTextBlock != nullptr)
 	{
 		SelectYourShipTextBlock->SetColorAndOpacity(FSlateColor(LinearColor));
 	}
-}
 
-void UPlayerShipSelectScreen::OnLaunchButtonClicked()
-{
-	USpaceShooterMenuController::OnPlayerShipSelected.Broadcast(nullptr); // RKS: To be removed
-}
+	if (ShipSelectionWidget1 != nullptr)
+	{
+		SetColorShiftForButton(ShipSelectionWidget1->GetLaunchButton(), LinearColor);
+	}
 
-void UPlayerShipSelectScreen::OnShipSelectButton1Clicked()
-{
-	USpaceShooterMenuController::OnPlayerShipSelected.Broadcast(ShipSprite1);
-}
+	if (ShipSelectionWidget2 != nullptr)
+	{
+		SetColorShiftForButton(ShipSelectionWidget2->GetLaunchButton(), LinearColor);
+	}
 
-void UPlayerShipSelectScreen::OnShipSelectButton2Clicked()
-{
-	USpaceShooterMenuController::OnPlayerShipSelected.Broadcast(ShipSprite2);
-}
+	if (ShipSelectionWidget3 != nullptr)
+	{
+		SetColorShiftForButton(ShipSelectionWidget3->GetLaunchButton(), LinearColor);
+	}
 
-void UPlayerShipSelectScreen::OnShipSelectButton3Clicked()
-{
-	USpaceShooterMenuController::OnPlayerShipSelected.Broadcast(ShipSprite3);
-}
+	if (ShipSelectionWidget4 != nullptr)
+	{
+		SetColorShiftForButton(ShipSelectionWidget4->GetLaunchButton(), LinearColor);
+	}
 
-void UPlayerShipSelectScreen::OnShipSelectButton4Clicked()
-{
-	USpaceShooterMenuController::OnPlayerShipSelected.Broadcast(ShipSprite4);
-}
-
-void UPlayerShipSelectScreen::OnShipSelectButton5Clicked()
-{
-	USpaceShooterMenuController::OnPlayerShipSelected.Broadcast(ShipSprite5);
+	if (ShipSelectionWidget5 != nullptr)
+	{
+		SetColorShiftForButton(ShipSelectionWidget5->GetLaunchButton(), LinearColor);
+	}
 }
 
 void UPlayerShipSelectScreen::OnBackButtonClicked()
