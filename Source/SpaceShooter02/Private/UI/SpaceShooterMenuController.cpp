@@ -57,9 +57,8 @@ void USpaceShooterMenuController::StartMainMenu()
 	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::StartMainMenu"));
 	CurrentMenuState = EMenuState::MainMenu;
 
-	// Create the Main Menu Screen
-	MainMenuScreen = Cast<UMainMenuScreen>(OpenScreen(MainMenuScreenClass));
-	ensure(MainMenuScreen != nullptr);
+	// Create / Open the Main Menu Screen
+	OpenMainMenuScreen();
 
 	// TODO: Set proper "Input Mode"
 	//FInputModeGameAndUI InputMode;
@@ -76,116 +75,62 @@ void USpaceShooterMenuController::OnPlayerShipSelectStart()
 
 void USpaceShooterMenuController::OnGameplayStart()
 {
-	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::OnGameplayStart"));
 	CurrentMenuState = EMenuState::Gameplay;
 
-	// Remove any active menu screens from the viewport
-
-	CloseScreen(MainMenuScreen);
-	MainMenuScreen = nullptr;
-
-	CloseScreen(PlayerShipSelectScreen);
-	PlayerShipSelectScreen = nullptr;
-
-	CloseScreen(GameOverScreen);
-	GameOverScreen = nullptr;
+	// Remove any possible active menu screens from the viewport
+	CloseMainMenuScreen();
+	ClosePlayerShipSelectScreen();
+	CloseGameOverScreen();
+	CloseCreditsScreen();
 }
 
 void USpaceShooterMenuController::OnGameplayEnd()
 {
-	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::OnGameplayEnd"));
 	CurrentMenuState = EMenuState::GameOver;
 
 	// Create the Game Over screen
-	GameOverScreen = Cast<UGameOverScreen>(OpenScreen(GameOverScreenClass));
-	if (ensure(GameOverScreen != nullptr))
-	{
-		// Set game over screen score
-		if (UWorld* World = GetWorld())
-		{
-			if (ASpaceShooterGameState* GameState = World->GetGameState<ASpaceShooterGameState>())
-			{
-				GameOverScreen->InitGameOverScreen(GameState->GetPlayerScore()); // MARKED FOR DEATH. This should be handled by delegates.
-			}
-		}
-	}
+	OpenGameOverScreen();
 }
 
 void USpaceShooterMenuController::MainMenuPlayClicked()
 {
-	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::MainMenuPlayClicked"));
-
-	// Close the Main Menu screen
-	CloseScreen(MainMenuScreen);
-	MainMenuScreen = nullptr;
-
-	// Open the Player Ship Select screen
-	PlayerShipSelectScreen = Cast<UPlayerShipSelectScreen>(OpenScreen(PlayerShipSelectScreenClass));
-	ensure(PlayerShipSelectScreen != nullptr);
+	CloseMainMenuScreen();
+	OpenPlayerShipSelectScreen();
 }
 
 void USpaceShooterMenuController::PlayerShipSelected(UPaperSprite* SelectedShipSprite)
 {
-	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::PlayerShipSelected"));
-	CloseScreen(PlayerShipSelectScreen);
-	PlayerShipSelectScreen = nullptr;
+	ClosePlayerShipSelectScreen();
 }
 
 void USpaceShooterMenuController::GameOverSelectShipClicked()
 {
-	// Close the Game Over screen
-	CloseScreen(GameOverScreen);
-	GameOverScreen = nullptr;
-
-	// Open the Ship Select screen
-	PlayerShipSelectScreen = Cast<UPlayerShipSelectScreen>(OpenScreen(PlayerShipSelectScreenClass));
-	ensure(PlayerShipSelectScreen != nullptr);
+	CloseGameOverScreen();
+	OpenPlayerShipSelectScreen();
 }
 
 void USpaceShooterMenuController::GameOverPlayAgainClicked()
 {
-	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::GameOverPlayAgainClicked"));
-
 	// Close the Game Over screen. The GameState will handle starting the game.
-	CloseScreen(GameOverScreen);
-	GameOverScreen = nullptr;
+	CloseGameOverScreen();
 }
 
 void USpaceShooterMenuController::MainMenuCreditsClicked()
 {
-	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::GameOverPlayAgainClicked"));
-
-	// Close the Main Menu screen
-	CloseScreen(MainMenuScreen);
-	MainMenuScreen = nullptr;
-
-	// Open the Credits screen
-	CreditsScreen = Cast<UGameCreditsScreen>(OpenScreen(CreditsScreenClass));
-	ensure(CreditsScreen != nullptr);
+	CloseMainMenuScreen();
+	OpenCreditsScreen();
 }
 
 void USpaceShooterMenuController::CreditsMenuBackClicked()
 {
-	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::CreditsMenuBackClicked"));
-
-	// Close the Credits screen
-	CloseScreen(CreditsScreen);
-	CreditsScreen = nullptr;
-
-	// Open the Main Menu screen
-	MainMenuScreen = Cast<UMainMenuScreen>(OpenScreen(MainMenuScreenClass));
-	ensure(MainMenuScreen != nullptr);
+	CloseCreditsScreen();
+	OpenMainMenuScreen();
 }
 
 void USpaceShooterMenuController::ShipSelectBackClicked()
 {
-	// Close the Ship Select screen
-	CloseScreen(PlayerShipSelectScreen);
-	PlayerShipSelectScreen = nullptr;
-
-	// Open the Main Menu screen
-	MainMenuScreen = Cast<UMainMenuScreen>(OpenScreen(MainMenuScreenClass));
-	ensure(MainMenuScreen != nullptr);
+	ClosePlayerShipSelectScreen();
+	OpenMainMenuScreen();
 }
 
 UUserWidget* USpaceShooterMenuController::OpenScreen(TSubclassOf<class UUserWidget> ScreenClass)
@@ -211,4 +156,61 @@ void USpaceShooterMenuController::CloseScreen(UUserWidget* const ScreenToClose)
 		//ScreenToClose->RemoveFromViewport(); // deprecated
 		ScreenToClose->RemoveFromParent();
 	}
+}
+
+void USpaceShooterMenuController::OpenMainMenuScreen()
+{
+	MainMenuScreen = Cast<UMainMenuScreen>(OpenScreen(MainMenuScreenClass));
+	ensure(MainMenuScreen != nullptr);
+}
+
+void USpaceShooterMenuController::CloseMainMenuScreen()
+{
+	CloseScreen(MainMenuScreen);
+	MainMenuScreen = nullptr;
+}
+
+void USpaceShooterMenuController::OpenCreditsScreen()
+{
+	CreditsScreen = Cast<UGameCreditsScreen>(OpenScreen(CreditsScreenClass));
+	ensure(CreditsScreen != nullptr);
+}
+
+void USpaceShooterMenuController::CloseCreditsScreen()
+{
+	CloseScreen(CreditsScreen);
+	CreditsScreen = nullptr;
+}
+
+void USpaceShooterMenuController::OpenPlayerShipSelectScreen()
+{
+	PlayerShipSelectScreen = Cast<UPlayerShipSelectScreen>(OpenScreen(PlayerShipSelectScreenClass));
+	ensure(PlayerShipSelectScreen != nullptr);
+}
+
+void USpaceShooterMenuController::ClosePlayerShipSelectScreen()
+{
+	CloseScreen(PlayerShipSelectScreen);
+	PlayerShipSelectScreen = nullptr;
+}
+
+void USpaceShooterMenuController::OpenGameOverScreen()
+{
+	GameOverScreen = Cast<UGameOverScreen>(OpenScreen(GameOverScreenClass));
+	ensure(GameOverScreen != nullptr);
+
+	// Set game over screen score
+	if (UWorld* World = GetWorld())
+	{
+		if (ASpaceShooterGameState* GameState = World->GetGameState<ASpaceShooterGameState>())
+		{
+			GameOverScreen->InitGameOverScreen(GameState->GetPlayerScore()); // MARKED FOR DEATH. This should be handled by delegates.
+		}
+	}
+}
+
+void USpaceShooterMenuController::CloseGameOverScreen()
+{
+	CloseScreen(GameOverScreen);
+	GameOverScreen = nullptr;
 }

@@ -38,7 +38,7 @@ public:
 
 	void StartMainMenu();
 
-protected:
+private:
 	void OnPlayerShipSelectStart();
 
 	UFUNCTION() void OnGameplayStart();
@@ -53,6 +53,18 @@ protected:
 
 	UUserWidget* OpenScreen(TSubclassOf<class UUserWidget> ScreenClass);
 	void CloseScreen(UUserWidget* const ScreenToClose);
+
+	void OpenMainMenuScreen();
+	void CloseMainMenuScreen();
+
+	void OpenCreditsScreen();
+	void CloseCreditsScreen();
+
+	void OpenPlayerShipSelectScreen();
+	void ClosePlayerShipSelectScreen();
+
+	void OpenGameOverScreen();
+	void CloseGameOverScreen();
 
 public:
 	static FMainMenuPlayClickedDelegateSignature OnMainMenuPlayClicked;
