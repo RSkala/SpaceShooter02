@@ -48,13 +48,11 @@ void USpaceShooterMenuController::PostInitProperties()
 
 void USpaceShooterMenuController::PostLoad()
 {
-	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::PostLoad"));
 	Super::PostLoad(); // NOTE: This is never called
 }
 
 void USpaceShooterMenuController::StartMainMenu()
 {
-	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::StartMainMenu"));
 	CurrentMenuState = EMenuState::MainMenu;
 
 	// Create / Open the Main Menu Screen
@@ -82,6 +80,18 @@ void USpaceShooterMenuController::OnGameplayStart()
 	ClosePlayerShipSelectScreen();
 	CloseGameOverScreen();
 	CloseCreditsScreen();
+
+	// Play "good luck" or "welcome back" VO
+	if (!HasSoundVOBeenPlayed(ESoundVOPlayed::GoodLuckVOPlayed))
+	{
+		SelectAndPlayRandomVO(GoodLuckVOSounds);
+		SetSoundVOPlayed(ESoundVOPlayed::GoodLuckVOPlayed);
+	}
+	else if (!HasSoundVOBeenPlayed(ESoundVOPlayed::WelcomeBackVOPlayed))
+	{
+		SelectAndPlayRandomVO(WelcomeBackVOSounds);
+		SetSoundVOPlayed(ESoundVOPlayed::WelcomeBackVOPlayed);
+	}
 }
 
 void USpaceShooterMenuController::OnGameplayEnd()
@@ -162,6 +172,13 @@ void USpaceShooterMenuController::OpenMainMenuScreen()
 {
 	MainMenuScreen = Cast<UMainMenuScreen>(OpenScreen(MainMenuScreenClass));
 	ensure(MainMenuScreen != nullptr);
+
+	// Play title screen VO
+	if (!HasSoundVOBeenPlayed(ESoundVOPlayed::TitleVOPlayed))
+	{
+		SelectAndPlayRandomVO(TitleVOSounds);
+		SetSoundVOPlayed(ESoundVOPlayed::TitleVOPlayed);
+	}
 }
 
 void USpaceShooterMenuController::CloseMainMenuScreen()
@@ -174,6 +191,13 @@ void USpaceShooterMenuController::OpenCreditsScreen()
 {
 	CreditsScreen = Cast<UGameCreditsScreen>(OpenScreen(CreditsScreenClass));
 	ensure(CreditsScreen != nullptr);
+
+	// Play credits screen VO
+	if (!HasSoundVOBeenPlayed(ESoundVOPlayed::CreditsVOPlayed))
+	{
+		SelectAndPlayRandomVO(CreditsVOSounds);
+		SetSoundVOPlayed(ESoundVOPlayed::CreditsVOPlayed);
+	}
 }
 
 void USpaceShooterMenuController::CloseCreditsScreen()
@@ -186,6 +210,13 @@ void USpaceShooterMenuController::OpenPlayerShipSelectScreen()
 {
 	PlayerShipSelectScreen = Cast<UPlayerShipSelectScreen>(OpenScreen(PlayerShipSelectScreenClass));
 	ensure(PlayerShipSelectScreen != nullptr);
+
+	// Play "select your ship" VO
+	if (!HasSoundVOBeenPlayed(ESoundVOPlayed::SelectShipVOPlayed))
+	{
+		SelectAndPlayRandomVO(SelectShipVOSounds);
+		SetSoundVOPlayed(ESoundVOPlayed::SelectShipVOPlayed);
+	}
 }
 
 void USpaceShooterMenuController::ClosePlayerShipSelectScreen()
@@ -207,10 +238,41 @@ void USpaceShooterMenuController::OpenGameOverScreen()
 			GameOverScreen->InitGameOverScreen(GameState->GetPlayerScore()); // MARKED FOR DEATH. This should be handled by delegates.
 		}
 	}
+
+	// Play "game over" VO
+	if (!HasSoundVOBeenPlayed(ESoundVOPlayed::GameOverVOPlayed))
+	{
+		SelectAndPlayRandomVO(GameOverVOSounds);
+		SetSoundVOPlayed(ESoundVOPlayed::GameOverVOPlayed);
+	}
 }
 
 void USpaceShooterMenuController::CloseGameOverScreen()
 {
 	CloseScreen(GameOverScreen);
 	GameOverScreen = nullptr;
+}
+
+void USpaceShooterMenuController::SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray)
+{
+	if (SoundVOArray.Num() <= 0)
+	{
+		return;
+	}
+
+	int32 RandomIdx = FMath::RandRange(0, SoundVOArray.Num() - 1);
+	TSoftObjectPtr SoundVOToPlayPtr = SoundVOArray[RandomIdx];
+	USoundBase* SoundVOToPlay = SoundVOToPlayPtr.LoadSynchronous();
+	//USoundBase* SoundVOToPlay = SoundVOToPlayPtr.Get(); // This will not always be valid! Use LoadSynchronous() instead.
+	UGameplayStatics::PlaySound2D(GetWorld(), SoundVOToPlay);
+}
+
+bool USpaceShooterMenuController::HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const
+{
+	return (SoundVOPlayedFlags & (uint8)SoundVOPlayed) != 0;
+}
+
+void USpaceShooterMenuController::SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed)
+{
+	SoundVOPlayedFlags |= (uint8)SoundVOPlayed;
 }
