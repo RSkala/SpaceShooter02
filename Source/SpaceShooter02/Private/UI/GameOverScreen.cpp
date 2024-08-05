@@ -5,15 +5,21 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/KismetTextLibrary.h"
 
 #include "SpaceShooterGameState.h"
 #include "UI/SpaceShooterMenuController.h"
+
+#define LOCTEXT_NAMESPACE "GameOverScreen"
 
 void UGameOverScreen::InitGameOverScreen(int32 FinalScore)
 {
 	if (FinalScoreText != nullptr)
 	{
-		FText ScoreText = FText::FromString(FString::Printf(TEXT("FINAL SCORE: %d"), (int32)FinalScore));
+		//FText ScoreText = FText::FromString(FString::Printf(TEXT("FINAL SCORE: %d"), (int32)FinalScore));
+		FText FinalScoreTextGrouped = UKismetTextLibrary::Conv_IntToText(FinalScore, false, true);
+		static const FText FinalScoreTextFormat = LOCTEXT("FinalScoreText", "FINAL SCORE: {0}");
+		FText ScoreText = FText::Format(FinalScoreTextFormat, FinalScoreTextGrouped);
 		FinalScoreText->SetText(ScoreText);
 	}
 }
@@ -74,3 +80,5 @@ void UGameOverScreen::OnQuitGameButtonClicked()
 	UE_LOG(LogMenus, Log, TEXT("Quitting game from Game Over Screen..."));
 	UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
 }
+
+#undef LOCTEXT_NAMESPACE

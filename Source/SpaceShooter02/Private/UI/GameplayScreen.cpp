@@ -3,8 +3,11 @@
 #include "UI/GameplayScreen.h"
 
 #include "Components/TextBlock.h"
+#include "Kismet/KismetTextLibrary.h"
 
 #include "SpaceShooterGameState.h"
+
+#define LOCTEXT_NAMESPACE "GameplayScreen"
 
 void UGameplayScreen::NativeOnInitialized()
 {
@@ -22,7 +25,9 @@ void UGameplayScreen::OnPlayerScoreUpdated(int32 PlayerScore)
 
 	if (CurrentScoreText != nullptr)
 	{
-		FText ScoreText = FText::FromString(FString::Printf(TEXT("%d"), PlayerScore));
+		// Convert the score to Text using Grouping (i.e. comma for thousands separators, depending on locale)
+		FText ScoreText = UKismetTextLibrary::Conv_IntToText(PlayerScore, false, true);
+		//FText ScoreText = FText::FromString(FString::Printf(TEXT("%d"), PlayerScore));
 		CurrentScoreText->SetText(ScoreText);
 	}
 }
@@ -33,7 +38,9 @@ void UGameplayScreen::OnPlayerScoreMultiplierUpdated(int32 PlayerScoreMultiplier
 
 	if (CurrentMultiplierText != nullptr)
 	{
-		FText ScoreMultiplierText = FText::FromString(FString::Printf(TEXT("x%d"), PlayerScoreMultiplier));
+		FText MultiplierTextGrouped = UKismetTextLibrary::Conv_IntToText(PlayerScoreMultiplier, false, true);
+		static const FText MultiplierTextFormat = LOCTEXT("MultiplierText", "x{0}");
+		FText ScoreMultiplierText = FText::Format(MultiplierTextFormat, MultiplierTextGrouped);
 		CurrentMultiplierText->SetText(ScoreMultiplierText);
 	}
 }
@@ -44,7 +51,12 @@ void UGameplayScreen::OnPlayerHighScoreUpdated(int32 PlayerHighScore)
 
 	if (HighScoreText != nullptr)
 	{
-		FText ScoreText = FText::FromString(FString::Printf(TEXT("BEST: %d"), PlayerHighScore));
+		//FText ScoreText = FText::FromString(FString::Printf(TEXT("BEST: %d"), PlayerHighScore));
+		FText HighScoreTextGrouped = UKismetTextLibrary::Conv_IntToText(PlayerHighScore, false, true);
+		static const FText HighScoreTextFormat = LOCTEXT("HighScoreText", "BEST: {0}");
+		FText ScoreText = FText::Format(HighScoreTextFormat, HighScoreTextGrouped);
 		HighScoreText->SetText(ScoreText);
 	}
 }
+
+#undef LOCTEXT_NAMESPACE
