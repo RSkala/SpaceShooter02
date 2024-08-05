@@ -7,6 +7,7 @@
 
 #include "EnemyBase.h"
 #include "EnemySpawner.h"
+#include "PickupItemScoreMultiplier.h"
 #include "PlayerShipPawn.h"
 #include "UI/SpaceShooterMenuController.h"
 
@@ -101,6 +102,9 @@ void ASpaceShooterGameState::BeginPlay()
 	// Get notified when an enemy dies
 	AEnemyBase::OnEnemyDeath.AddUniqueDynamic(this, &ThisClass::OnEnemyDeath);
 
+	// Get notified when a score multiplier is picked up
+	APickupItemScoreMultiplier::OnScoreMultiplierPickedUp.AddUniqueDynamic(this, &ThisClass::OnScoreMultiplierPickedUp);
+
 	// Listen to menu delegates
 	USpaceShooterMenuController::OnMainMenuPlayClicked.AddUniqueDynamic(this, &ThisClass::OnMainMenuPlayClicked);
 	USpaceShooterMenuController::OnPlayerShipSelected.AddUniqueDynamic(this, &ThisClass::OnPlayerShipSelected);
@@ -132,6 +136,12 @@ void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSy
 		PlayerHighScore = PlayerScore;
 		OnPlayerHighScoreChanged.Broadcast(PlayerHighScore);
 	}
+}
+
+void ASpaceShooterGameState::OnScoreMultiplierPickedUp(int32 ScoreMultiplierValue)
+{
+	CurrentScoreMultiplier += ScoreMultiplierValue;
+	OnPlayerMultiplierChanged.Broadcast(CurrentScoreMultiplier);
 }
 
 void ASpaceShooterGameState::OnMainMenuPlayClicked()

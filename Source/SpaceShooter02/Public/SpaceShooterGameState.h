@@ -42,26 +42,17 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-	void OnPlayerShipSpawned(class APlayerShipPawn* const InPlayerShipPawn);
+	UFUNCTION() void OnPlayerShipSpawned(class APlayerShipPawn* const InPlayerShipPawn);
+	UFUNCTION() void OnPlayerShipDestroyed();
+	UFUNCTION() void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect, class USoundBase* EnemyDeathSound);
+	UFUNCTION() void OnScoreMultiplierPickedUp(int32 ScoreMultiplierValue);
 
-	UFUNCTION()
-	void OnPlayerShipDestroyed();
+	// --- Menu Delegate Handlers ---
 
-	UFUNCTION()
-	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect, class USoundBase* EnemyDeathSound);
-
-	UFUNCTION()
-	void OnMainMenuPlayClicked(); // When the player clicks "Play" from the Main Menu
-
-	UFUNCTION()
-	void OnPlayerShipSelected(class UPaperSprite* SelectedShipSprite); // When the player selects their ship (from the Ship Select screen)
-
-	UFUNCTION()
-	void OnGameOverSelectShipSelected(); // When the user selects "Select Ship" from the Game Over screen
-
-	UFUNCTION()
-	void OnGameOverPlayAgainSelected(); // When the user selects "Play Again" from the Game Over screen
+	UFUNCTION() void OnMainMenuPlayClicked(); // When the player clicks "Play" from the Main Menu
+	UFUNCTION() void OnPlayerShipSelected(class UPaperSprite* SelectedShipSprite); // When the player selects their ship (from the Ship Select screen)
+	UFUNCTION() void OnGameOverSelectShipSelected(); // When the user selects "Select Ship" from the Game Over screen
+	UFUNCTION() void OnGameOverPlayAgainSelected(); // When the user selects "Play Again" from the Game Over screen
 
 public:
 	static FGameStartedDelegateSignature OnGameStarted; // Delegate called when the player starts a game (either from main menu or game over)
