@@ -3,6 +3,7 @@
 #include "PickupItemBase.h"
 
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "PaperSpriteComponent.h"
 
 #include "PlayerShipPawn.h"
@@ -21,6 +22,7 @@ APickupItemBase::APickupItemBase()
 void APickupItemBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	UpdateTargetAttraction(DeltaTime);
 	UpdateMovement(DeltaTime);
 }
 
@@ -39,11 +41,37 @@ void APickupItemBase::BeginPlay()
 	float zDir = FMath::Sin(FMath::DegreesToRadians(RandomAngle));
 	MovementDirection = FVector(xDir, 0.0f, zDir);
 
-	float Length = MovementDirection.Length();
-	UE_LOG(LogTemp, Warning, TEXT("MovementDirection Length: %f"), Length);
+	// TEMP: Just get the player. TODO: Pass into the pickup item when "spawned" from pickup item spawner.
+	PlayerShipActor = UGameplayStatics::GetActorOfClass(GetWorld(), APlayerShipPawn::StaticClass());
 }
 
 void APickupItemBase::UpdateMovement(float DeltaTime)
+{
+	if (IsAttractingToTarget())
+	{
+		UpdateAttractionMovement(DeltaTime);
+	}
+	else
+	{
+		UpdateNonAttractionMovement(DeltaTime);
+	}
+}
+
+void APickupItemBase::UpdateAttractionMovement(float DeltaTime)
+{
+	if (AttractionTargetActor == nullptr)
+	{
+		return;
+	}
+
+	// Move this pickup item in the direction of its target
+	FVector PickupItemPosition = GetActorLocation();
+	FVector AttractionMovementDirection = (AttractionTargetActor->GetActorLocation() - PickupItemPosition).GetSafeNormal();
+	FVector NewPickupItemPosition = PickupItemPosition + AttractionMovementDirection * AttractionMovementSpeed * DeltaTime;
+	SetActorLocation(NewPickupItemPosition);
+}
+
+void APickupItemBase::UpdateNonAttractionMovement(float DeltaTime)
 {
 	// Get the distance to move this frame using the movement direction
 	FVector MovementAmount = MovementDirection * MovementSpeed * DeltaTime;
@@ -76,6 +104,33 @@ void APickupItemBase::UpdateMovement(float DeltaTime)
 				FVector ReflectionVector = FMath::GetReflectionVector(MovementDirection, ImpactNormal);
 				MovementDirection = ReflectionVector;
 			}
+		}
+	}
+}
+
+void APickupItemBase::UpdateTargetAttraction(float DeltaTime)
+{
+	if (!bUseTargetAttraction)
+	{
+		// Target attraction disabled
+		return;
+	}
+
+	if (IsAttractingToTarget())
+	{
+		// This pickup item already has an attraction target
+		return;
+	}
+
+	// Check distance from this pickup item to the player pawn
+	if(PlayerShipActor.IsValid())
+	{
+		// Get distance from the player ship to this pickup item
+		float Distance = FVector::Distance(GetActorLocation(), PlayerShipActor.Get()->GetActorLocation());
+		if (Distance <= TargetAttractDistance)
+		{
+			// Player ship is within the specified distance. Set the player ship as the attraction target.
+			AttractionTargetActor = PlayerShipActor.Get();
 		}
 	}
 }

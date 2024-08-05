@@ -21,6 +21,12 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void UpdateMovement(float DeltaTime);
+	virtual void UpdateAttractionMovement(float DeltaTime);
+	virtual void UpdateNonAttractionMovement(float DeltaTime);
+	virtual void UpdateTargetAttraction(float DeltaTime);
+
+	virtual bool IsAttractingToTarget() const { return AttractionTargetActor != nullptr; }
+
 	virtual void HandlePlayerPickup() {};
 
 	UFUNCTION()
@@ -56,4 +62,26 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float TimeAlive = 0.0f;
+
+	// --- Target Attraction ---
+
+	// If enabled, will be "pulled" towards the target that is "picking up" this item
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bUseTargetAttraction = true;
+
+	// Target actor to be "pulled" towards
+	UPROPERTY(EditInstanceOnly, BlueprintReadWrite)
+	TObjectPtr<AActor> AttractionTargetActor;
+
+	// If the player is this close to a pickup item, start attraction
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float TargetAttractDistance = 100.0f;
+
+	// How quickly this pickup item moves towards its attraction target (if it has one)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float AttractionMovementSpeed = 500.0f;
+
+	// TEMP
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TSoftObjectPtr<AActor> PlayerShipActor;
 };
