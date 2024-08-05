@@ -54,6 +54,8 @@ protected:
 	UFUNCTION() void OnGameOverSelectShipSelected(); // When the user selects "Select Ship" from the Game Over screen
 	UFUNCTION() void OnGameOverPlayAgainSelected(); // When the user selects "Play Again" from the Game Over screen
 
+	void SpawnScoreMultiplierPickup(FVector SpawnPosition);
+
 public:
 	static FGameStartedDelegateSignature OnGameStarted; // Delegate called when the player starts a game (either from main menu or game over)
 	static FGameEndedDelegateSignature OnGameEnded; // Delegate called when the player is defeated (game over)
@@ -97,4 +99,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 PlayerHighScore = 0;
+
+	// --- Pickups ---
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class APickupItemBase> ScoreMultiplierPickupItemClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "1.0", UIMax = "1.0"))
+	float ScoreMultiplierDropChance = 0.5f;
 };

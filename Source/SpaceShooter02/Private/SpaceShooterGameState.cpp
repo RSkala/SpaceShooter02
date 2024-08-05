@@ -136,6 +136,9 @@ void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSy
 		PlayerHighScore = PlayerScore;
 		OnPlayerHighScoreChanged.Broadcast(PlayerHighScore);
 	}
+
+	// Spawn a score multiplier at enemy death position
+	SpawnScoreMultiplierPickup(EnemyDeathPosition);
 }
 
 void ASpaceShooterGameState::OnScoreMultiplierPickedUp(int32 ScoreMultiplierValue)
@@ -164,5 +167,21 @@ void ASpaceShooterGameState::OnGameOverPlayAgainSelected()
 {
 	ShooterMenuGameState = EShooterMenuGameState::Gameplay;
 	StartGame();
+}
+
+void ASpaceShooterGameState::SpawnScoreMultiplierPickup(FVector SpawnPosition)
+{
+	if (ensure(ScoreMultiplierPickupItemClass != nullptr))
+	{
+		// Use a random chance to determine score multiplier drops
+		float RandomChance = FMath::FRandRange(0.0f, 1.0f);
+		if (RandomChance <= ScoreMultiplierDropChance)
+		{
+			if (UWorld* World = GetWorld())
+			{
+				World->SpawnActor<APickupItemBase>(ScoreMultiplierPickupItemClass, SpawnPosition, FRotator::ZeroRotator);
+			}
+		}
+	}
 }
 
