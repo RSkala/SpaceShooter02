@@ -139,7 +139,7 @@ void AProjectileBase::UpdateMovement(float DeltaTime)
 	// Line trace to check collision with static objects to destroy this projectile
 	if (UWorld* World = GetWorld())
 	{
-		// Use the player ship's position as the line trace start position
+		// Use the projectiles's position as the line trace start position
 		const FVector& TraceStartPos = GetActorLocation();
 
 		// Check agains all static objects (TODO: Use custom collision object type, e.g. Walls)
