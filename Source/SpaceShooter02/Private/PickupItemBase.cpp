@@ -51,6 +51,33 @@ void APickupItemBase::UpdateMovement(float DeltaTime)
 	// Get the new enemy position and set it
 	FVector NewPickupItemPosition = GetActorLocation() + MovementAmount;
 	SetActorLocation(NewPickupItemPosition);
+
+	if (UWorld* World = GetWorld())
+	{
+		// Use the pickup item's position as the line trace start position
+		const FVector& TraceStartPos = GetActorLocation();
+
+		// Check agains all static objects (TODO: Use custom collision object type, e.g. Walls)
+		FCollisionObjectQueryParams ObjectQueryParams(FCollisionObjectQueryParams::InitType::AllStaticObjects);
+
+		// Distance of the LineTrace. Adjust with the movement speed and deltatime
+		static const float CollisionLineTraceOffset = 2.0f;
+		float CollisionDistance = MovementSpeed * DeltaTime * CollisionLineTraceOffset;
+
+		// Check collision against walls in its movement direction
+		TArray<FHitResult> HitResult;
+		const FVector& TraceEndPos = TraceStartPos + FVector(MovementDirection.X, 0.0f, MovementDirection.Z).GetSafeNormal() * CollisionDistance;
+		if (World->LineTraceMultiByObjectType(HitResult, TraceStartPos, TraceEndPos, ObjectQueryParams))
+		{
+			if (HitResult.Num() > 0)
+			{
+				// Reflect against the wall and change movement direction
+				FVector ImpactNormal = HitResult[0].ImpactNormal;
+				FVector ReflectionVector = FMath::GetReflectionVector(MovementDirection, ImpactNormal);
+				MovementDirection = ReflectionVector;
+			}
+		}
+	}
 }
 
 void APickupItemBase::OnCollisionOverlap(
@@ -61,8 +88,6 @@ void APickupItemBase::OnCollisionOverlap(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	// If border wall, reflect against wall
-
 	APlayerShipPawn* PlayerShipPawn = Cast<APlayerShipPawn>(OtherActor);
 	if (PlayerShipPawn != nullptr)
 	{
@@ -70,6 +95,4 @@ void APickupItemBase::OnCollisionOverlap(
 		Destroy();
 	}
 }
-
-
 
