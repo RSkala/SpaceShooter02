@@ -832,6 +832,9 @@ void APlayerShipPawn::KillPlayer()
 		EnemySpawner->SetSpawningEnabled(false);
 	}
 
+	// Disable powerups
+	RemoveSatelliteWeapon();
+
 	OnPlayerShipDestroyed.Broadcast();
 }
 
@@ -963,19 +966,13 @@ void APlayerShipPawn::EnableSatelliteWeapon(UPaperSpriteComponent* const Satelli
 void APlayerShipPawn::AddSatelliteWeapon()
 {
 	EnableSatelliteWeapon(SatelliteWeaponSprite1);
-
 	PowerupActiveTimer = PowerupActiveTime;
-
-	// Start timer
-	//FTimerHandle TimerHandle;
-	//FTimerManager& TimerManager = GetWorldTimerManager();
-	//TimerManager.SetTimer(TimerHandle, this, &ThisClass::PowerupTimerElapsed, PowerupActiveTime, false);
-	//TimerManager.SetTimerForNextTick()
 }
 
 void APlayerShipPawn::RemoveSatelliteWeapon()
 {
 	DisableSatelliteWeapon(SatelliteWeaponSprite1);
+	PowerupActiveTimer = 0.0f;
 }
 
 bool APlayerShipPawn::PlayerHasPowerup() const
