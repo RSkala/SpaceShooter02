@@ -62,6 +62,11 @@ void ASpaceShooterGameState::StartGame()
 	OnPlayerScoreChanged.Broadcast(0);
 	OnPlayerMultiplierChanged.Broadcast(1);
 	OnPlayerHighScoreChanged.Broadcast(PlayerHighScore);
+
+	// Reset collected multipliers
+	TotalMultipliersCollected = 0;
+	NumMultipliersCollectedForPowerup = 0;
+	OnPickupItemPercentChanged.Broadcast(0.0f);
 }
 
 void ASpaceShooterGameState::EndGame()
