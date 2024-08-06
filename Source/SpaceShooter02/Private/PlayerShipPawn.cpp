@@ -925,3 +925,24 @@ void APlayerShipPawn::DisableSatelliteWeapon(UPaperSpriteComponent* const Satell
 	}
 }
 
+void APlayerShipPawn::EnableSatelliteWeapon(UPaperSpriteComponent* const SatelliteWeapon)
+{
+	if (SatelliteWeapon != nullptr)
+	{
+		SatelliteWeapon->SetHiddenInGame(false, false);
+		SatelliteWeapon->SetVisibility(true, true);
+		SatelliteWeapon->SetComponentTickEnabled(true);
+	}
+}
+
+void APlayerShipPawn::AddSatelliteWeapon()
+{
+	EnableSatelliteWeapon(SatelliteWeaponSprite1);
+}
+
+void APlayerShipPawn::RemoveSatelliteWeapon()
+{
+	DisableSatelliteWeapon(SatelliteWeaponSprite1);
+}
+
+

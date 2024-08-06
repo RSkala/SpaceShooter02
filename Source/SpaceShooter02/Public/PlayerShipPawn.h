@@ -104,6 +104,13 @@ protected:
 
 	void DisableSatelliteWeapons();
 	void DisableSatelliteWeapon(class UPaperSpriteComponent* const SatelliteWeapon);
+	void EnableSatelliteWeapon(class UPaperSpriteComponent* const SatelliteWeapon);
+
+	UFUNCTION(Exec)
+	void AddSatelliteWeapon();
+
+	UFUNCTION(Exec)
+	void RemoveSatelliteWeapon();
 
 protected:
 	// --- Components ---
