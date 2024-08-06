@@ -119,6 +119,9 @@ protected:
 	bool PlayerHasPowerup() const;
 	void PowerupTimerElapsed();
 
+	UFUNCTION()
+	void PickupItemPercentChanged(float Percent);
+
 protected:
 	// --- Components ---
 

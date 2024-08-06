@@ -271,6 +271,7 @@ void APlayerShipPawn::BeginPlay()
 
 	// Listen for item pickup
 	ASpaceShooterGameState::OnAddSatelliteWeapon.AddUniqueDynamic(this, &ThisClass::AddSatelliteWeapon);
+	ASpaceShooterGameState::OnPickupItemPercentChanged.AddUniqueDynamic(this, &ThisClass::PickupItemPercentChanged);
 
 	// Start satellite weapons disabled
 	DisableSatelliteWeapons();
@@ -969,6 +970,7 @@ void APlayerShipPawn::AddSatelliteWeapon()
 	//FTimerHandle TimerHandle;
 	//FTimerManager& TimerManager = GetWorldTimerManager();
 	//TimerManager.SetTimer(TimerHandle, this, &ThisClass::PowerupTimerElapsed, PowerupActiveTime, false);
+	//TimerManager.SetTimerForNextTick()
 }
 
 void APlayerShipPawn::RemoveSatelliteWeapon()
@@ -990,6 +992,24 @@ bool APlayerShipPawn::PlayerHasPowerup() const
 void APlayerShipPawn::PowerupTimerElapsed()
 {
 	RemoveSatelliteWeapon();
+}
+
+void APlayerShipPawn::PickupItemPercentChanged(float Percent)
+{
+	// TODO - check 100%
+	if ((int32)Percent == 1)
+	{
+		// Pickup count at 100%. Add a powerup weapon (this will also start the "drain").
+		AddSatelliteWeapon();
+	}
+	else
+	{
+		// Total is not at 100%. Notify listeners pickup percent has changed (only if player does not have powerup)
+		if (!PlayerHasPowerup())
+		{
+			OnPlayerPowerupTimerUpdated.Broadcast(Percent);
+		}
+	}
 }
 
 

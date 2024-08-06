@@ -12,6 +12,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerScoreChangedDelegateSignature
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerMultiplierChangedDelegateSignature, int32, ScoreMultiplier);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHighScoreChangedDelegateSignature, int32, HighScore);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAddSatelliteWeaponDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPickupItemPercentChanged, float, Percent);
 
 
 UENUM(BlueprintType)
@@ -75,6 +76,7 @@ public:
 	static FPlayerMultiplierChangedDelegateSignature OnPlayerMultiplierChanged; // Delegate called when the player's current multiplier is updated
 	static FHighScoreChangedDelegateSignature OnPlayerHighScoreChanged; // Delegate called when the player beats the current high score
 	static FAddSatelliteWeaponDelegateSignature OnAddSatelliteWeapon; // Delegate called when player has picked up a satellite weapon
+	static FPickupItemPercentChanged OnPickupItemPercentChanged; // Called when num pickups changed. Passes percent of total required for powerup.
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -120,4 +122,16 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "1.0", UIMax = "1.0"))
 	float ScoreMultiplierDropChance = 0.5f;
+
+	// Total multipliers collected during game. Currently unused. May use for savegames/leaderboards, etc.
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 TotalMultipliersCollected = 0;
+
+	// Total multipliers collected for powerup
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 NumMultipliersCollectedForPowerup = 0;
+
+	// Number of multiplier pickups needed to be collected to "activate" powerup
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 NumMultipliersNeededForPowerup = 20;
 };

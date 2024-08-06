@@ -23,7 +23,7 @@ void UGameplayScreen::NativeOnInitialized()
 	// Bind to player delegate callbacks
 	APlayerShipPawn::OnPlayerPowerupTimerUpdated.AddUniqueDynamic(this, &ThisClass::OnPowerupTimeUpdated);
 
-	// Force powerup meter empty and hidden
+	// Force powerup meter empty
 	OnPowerupTimeUpdated(0.0f);
 }
 
@@ -73,14 +73,14 @@ void UGameplayScreen::OnPowerupTimeUpdated(float Percent)
 	{
 		PowerupWeaponMeter->SetPercent(Percent);
 
-		if (Percent <= 0.0f)
+		/*if (Percent <= 0.0f)
 		{
 			PowerupWeaponMeter->SetVisibility(ESlateVisibility::Hidden);
 		}
 		else
 		{
 			PowerupWeaponMeter->SetVisibility(ESlateVisibility::HitTestInvisible);
-		}
+		}*/
 	}
 }
 

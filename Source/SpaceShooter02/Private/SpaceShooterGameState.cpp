@@ -21,6 +21,7 @@ FPlayerScoreChangedDelegateSignature ASpaceShooterGameState::OnPlayerScoreChange
 FPlayerMultiplierChangedDelegateSignature ASpaceShooterGameState::OnPlayerMultiplierChanged;
 FHighScoreChangedDelegateSignature ASpaceShooterGameState::OnPlayerHighScoreChanged;
 FAddSatelliteWeaponDelegateSignature ASpaceShooterGameState::OnAddSatelliteWeapon;
+FPickupItemPercentChanged ASpaceShooterGameState::OnPickupItemPercentChanged;
 
 ASpaceShooterGameState::ASpaceShooterGameState()
 {
@@ -150,6 +151,17 @@ void ASpaceShooterGameState::OnScoreMultiplierPickedUp(int32 ScoreMultiplierValu
 {
 	CurrentScoreMultiplier += ScoreMultiplierValue;
 	OnPlayerMultiplierChanged.Broadcast(CurrentScoreMultiplier);
+
+	TotalMultipliersCollected++;
+	NumMultipliersCollectedForPowerup++;
+
+	float Percent = (float)NumMultipliersCollectedForPowerup / (float)NumMultipliersNeededForPowerup;
+	OnPickupItemPercentChanged.Broadcast(Percent);
+
+	if (NumMultipliersCollectedForPowerup >= NumMultipliersNeededForPowerup)
+	{
+		NumMultipliersCollectedForPowerup = 0;
+	}
 }
 
 void ASpaceShooterGameState::OnSatelliteWeaponPickedUp()
