@@ -34,6 +34,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnMovement, Log, All)
 
 FPlayerShipSpawnedDelegateSignature APlayerShipPawn::OnPlayerShipSpawned;
 FPlayerShipDestroyedDelegateSignature APlayerShipPawn::OnPlayerShipDestroyed;
+FPlayerPowerupTimerUpdatedDelegateSignature APlayerShipPawn::OnPlayerPowerupTimerUpdated;
 
 namespace
 {
@@ -162,11 +163,17 @@ void APlayerShipPawn::Tick(float DeltaTime)
 	// Update powerup active
 	if (PlayerHasPowerup())
 	{
-		PowerupActiveTimer += DeltaTime;
-		if (PowerupActiveTimer >= PowerupActiveTime)
+		PowerupActiveTimer -= DeltaTime;
+		if (PowerupActiveTimer <= 0.0f)
 		{
 			PowerupTimerElapsed();
 		}
+
+		// Ensure PowerupActiveTimer doesn't go below zero
+		PowerupActiveTimer = FMath::Max(0.0f, PowerupActiveTimer);
+
+		// Notify that powerup time updated
+		OnPlayerPowerupTimerUpdated.Broadcast(PowerupActiveTimer / PowerupActiveTime);
 	}
 }
 
@@ -955,6 +962,8 @@ void APlayerShipPawn::EnableSatelliteWeapon(UPaperSpriteComponent* const Satelli
 void APlayerShipPawn::AddSatelliteWeapon()
 {
 	EnableSatelliteWeapon(SatelliteWeaponSprite1);
+
+	PowerupActiveTimer = PowerupActiveTime;
 
 	// Start timer
 	//FTimerHandle TimerHandle;

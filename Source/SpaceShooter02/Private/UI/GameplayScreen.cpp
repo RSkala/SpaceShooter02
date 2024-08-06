@@ -2,9 +2,11 @@
 
 #include "UI/GameplayScreen.h"
 
+#include "Components/ProgressBar.h"
 #include "Components/TextBlock.h"
 #include "Kismet/KismetTextLibrary.h"
 
+#include "PlayerShipPawn.h"
 #include "SpaceShooterGameState.h"
 
 #define LOCTEXT_NAMESPACE "GameplayScreen"
@@ -17,6 +19,12 @@ void UGameplayScreen::NativeOnInitialized()
 	ASpaceShooterGameState::OnPlayerScoreChanged.AddUniqueDynamic(this, &ThisClass::OnPlayerScoreUpdated);
 	ASpaceShooterGameState::OnPlayerMultiplierChanged.AddUniqueDynamic(this, &ThisClass::OnPlayerScoreMultiplierUpdated);
 	ASpaceShooterGameState::OnPlayerHighScoreChanged.AddUniqueDynamic(this, &ThisClass::OnPlayerHighScoreUpdated);
+
+	// Bind to player delegate callbacks
+	APlayerShipPawn::OnPlayerPowerupTimerUpdated.AddUniqueDynamic(this, &ThisClass::OnPowerupTimeUpdated);
+
+	// Force powerup meter empty and hidden
+	OnPowerupTimeUpdated(0.0f);
 }
 
 void UGameplayScreen::OnPlayerScoreUpdated(int32 PlayerScore)
@@ -56,6 +64,23 @@ void UGameplayScreen::OnPlayerHighScoreUpdated(int32 PlayerHighScore)
 		static const FText HighScoreTextFormat = LOCTEXT("HighScoreText", "BEST: {0}");
 		FText ScoreText = FText::Format(HighScoreTextFormat, HighScoreTextGrouped);
 		HighScoreText->SetText(ScoreText);
+	}
+}
+
+void UGameplayScreen::OnPowerupTimeUpdated(float Percent)
+{
+	if (PowerupWeaponMeter != nullptr)
+	{
+		PowerupWeaponMeter->SetPercent(Percent);
+
+		if (Percent <= 0.0f)
+		{
+			PowerupWeaponMeter->SetVisibility(ESlateVisibility::Hidden);
+		}
+		else
+		{
+			PowerupWeaponMeter->SetVisibility(ESlateVisibility::HitTestInvisible);
+		}
 	}
 }
 

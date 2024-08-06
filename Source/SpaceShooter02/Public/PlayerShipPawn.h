@@ -12,6 +12,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerShipSpawnedDelegateSignature,
 // Delegate for when the player ship is destroyed (i.e. Game Over)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerShipDestroyedDelegateSignature);
 
+// Delegate for updating the player's powerup weapon meter
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerPowerupTimerUpdatedDelegateSignature, float, Percent);
+
 
 UENUM(BlueprintType)
 enum class ERightStickDebugBehavior : uint8 // In UE 5.4+, enums MUST be uint8
@@ -42,6 +45,7 @@ public:
 
 	static FPlayerShipSpawnedDelegateSignature OnPlayerShipSpawned;
 	static FPlayerShipDestroyedDelegateSignature OnPlayerShipDestroyed;
+	static FPlayerPowerupTimerUpdatedDelegateSignature OnPlayerPowerupTimerUpdated;
 
 protected:
 	// Called when the game starts or when spawned
@@ -287,7 +291,7 @@ protected:
 	bool bPlayerInvincible = false;
 
 	// How long a powerup stays "active" for before being removed
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, meta = (ClampMin = "0.1", UIMin = "0.1"))
 	float PowerupActiveTime = 5.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

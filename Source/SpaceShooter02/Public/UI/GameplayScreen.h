@@ -24,6 +24,9 @@ protected:
 	UFUNCTION()
 	void OnPlayerHighScoreUpdated(int32 PlayerHighScore);
 
+	UFUNCTION()
+	void OnPowerupTimeUpdated(float Percent);
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UTextBlock> CurrentScoreText;
@@ -33,4 +36,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UTextBlock> HighScoreText;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<class UProgressBar> PowerupWeaponMeter;
 };
