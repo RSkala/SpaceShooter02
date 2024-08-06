@@ -14,6 +14,7 @@ class SPACESHOOTER02_API UGameplayScreen : public UMenuScreenWidget
 
 protected:
 	virtual void NativeOnInitialized() override;
+	virtual void OnColorShift(FLinearColor LinearColor) override;
 
 	UFUNCTION()
 	void OnPlayerScoreUpdated(int32 PlayerScore);

@@ -27,6 +27,16 @@ void UGameplayScreen::NativeOnInitialized()
 	OnPowerupTimeUpdated(0.0f);
 }
 
+void UGameplayScreen::OnColorShift(FLinearColor LinearColor)
+{
+	Super::OnColorShift(LinearColor);
+
+	if (PowerupWeaponMeter != nullptr)
+	{
+		PowerupWeaponMeter->SetFillColorAndOpacity(LinearColor);
+	}
+}
+
 void UGameplayScreen::OnPlayerScoreUpdated(int32 PlayerScore)
 {
 	UE_LOG(LogTemp, Warning, TEXT("UGameplayScreen::OnPlayerScoreUpdated"));
