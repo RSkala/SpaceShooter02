@@ -102,6 +102,9 @@ protected:
 		class UPaperSpriteComponent* const SatelliteWeapon,
 		const FActorSpawnParameters& ProjectileSpawnParameters);
 
+	void DisableSatelliteWeapons();
+	void DisableSatelliteWeapon(class UPaperSpriteComponent* const SatelliteWeapon);
+
 protected:
 	// --- Components ---
 

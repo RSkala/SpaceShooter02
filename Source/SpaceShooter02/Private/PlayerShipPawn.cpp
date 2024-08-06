@@ -118,18 +118,22 @@ APlayerShipPawn::APlayerShipPawn()
 	SatelliteWeaponSprite1 = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SatelliteWeaponSprite1"));
 	SatelliteWeaponSprite1->SetupAttachment(SatelliteWeaponRotatorComp);
 	SatelliteWeaponSprite1->SetAbsolute(false, true, false);
+	SatelliteWeaponSprite1->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
 
 	SatelliteWeaponSprite2 = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SatelliteWeaponSprite2"));
 	SatelliteWeaponSprite2->SetupAttachment(SatelliteWeaponRotatorComp);
 	SatelliteWeaponSprite2->SetAbsolute(false, true, false);
+	SatelliteWeaponSprite2->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
 
 	SatelliteWeaponSprite3 = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SatelliteWeaponSprite3"));
 	SatelliteWeaponSprite3->SetupAttachment(SatelliteWeaponRotatorComp);
 	SatelliteWeaponSprite3->SetAbsolute(false, true, false);
+	SatelliteWeaponSprite3->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
 
 	SatelliteWeaponSprite4 = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SatelliteWeaponSprite4"));
 	SatelliteWeaponSprite4->SetupAttachment(SatelliteWeaponRotatorComp);
 	SatelliteWeaponSprite4->SetAbsolute(false, true, false);
+	SatelliteWeaponSprite4->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
 }
 
 // Called every frame
@@ -246,6 +250,9 @@ void APlayerShipPawn::BeginPlay()
 
 	// Listen for Player Ship selection
 	USpaceShooterMenuController::OnPlayerShipSelected.AddUniqueDynamic(this, &ThisClass::OnPlayerShipSelected);
+
+	// Start satellite weapons disabled
+	DisableSatelliteWeapons();
 }
 
 void APlayerShipPawn::UpdateMovement(float DeltaTime)
@@ -879,13 +886,42 @@ void APlayerShipPawn::FireProjectileFromSatelliteWeapon(
 	UPaperSpriteComponent* const SatelliteWeapon,
 	const FActorSpawnParameters& ProjectileSpawnParameters)
 {
-	if (World != nullptr && SatelliteWeapon != nullptr && ProjectileClass != nullptr)
+	if (SatelliteWeapon == nullptr)
+	{
+		return;
+	}
+
+	// Do not fire a projectile if this satellite weapon is disabled
+	if (!SatelliteWeapon->GetVisibleFlag())
+	{
+		return;
+	}
+
+	if (World != nullptr && ProjectileClass != nullptr)
 	{
 		World->SpawnActor<AProjectileBase>(
 			ProjectileClass,
 			SatelliteWeapon->GetComponentLocation(),
 			SatelliteWeapon->GetComponentRotation(),
 			ProjectileSpawnParameters);
+	}
+}
+
+void APlayerShipPawn::DisableSatelliteWeapons()
+{
+	DisableSatelliteWeapon(SatelliteWeaponSprite1);
+	DisableSatelliteWeapon(SatelliteWeaponSprite2);
+	DisableSatelliteWeapon(SatelliteWeaponSprite3);
+	DisableSatelliteWeapon(SatelliteWeaponSprite4);
+}
+
+void APlayerShipPawn::DisableSatelliteWeapon(UPaperSpriteComponent* const SatelliteWeapon)
+{
+	if (SatelliteWeapon != nullptr)
+	{
+		SatelliteWeapon->SetHiddenInGame(true, true);
+		SatelliteWeapon->SetVisibility(false, true);
+		SatelliteWeapon->SetComponentTickEnabled(false);
 	}
 }
 
