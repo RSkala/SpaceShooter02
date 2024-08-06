@@ -20,6 +20,7 @@
 #include "PaperSprite.h"
 #include "PaperSpriteComponent.h"
 #include "Sound/SoundBase.h"
+//#include "TimerManager.h"
 
 #include "EnemyBase.h"
 #include "EnemySpawner.h"
@@ -157,6 +158,16 @@ void APlayerShipPawn::Tick(float DeltaTime)
 
 	// Update the rotation of the satellite weapon "rotator" component
 	UpdateSatelliteWeaponRotation(DeltaTime);
+
+	// Update powerup active
+	if (PlayerHasPowerup())
+	{
+		PowerupActiveTimer += DeltaTime;
+		if (PowerupActiveTimer >= PowerupActiveTime)
+		{
+			PowerupTimerElapsed();
+		}
+	}
 }
 
 // Called to bind functionality to input
@@ -250,6 +261,9 @@ void APlayerShipPawn::BeginPlay()
 
 	// Listen for Player Ship selection
 	USpaceShooterMenuController::OnPlayerShipSelected.AddUniqueDynamic(this, &ThisClass::OnPlayerShipSelected);
+
+	// Listen for item pickup
+	ASpaceShooterGameState::OnAddSatelliteWeapon.AddUniqueDynamic(this, &ThisClass::AddSatelliteWeapon);
 
 	// Start satellite weapons disabled
 	DisableSatelliteWeapons();
@@ -759,13 +773,16 @@ void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 
 void APlayerShipPawn::PlayShootSound()
 {
-	if (ShootSoundEnabled)
+	if (bShootSoundEnabled)
 	{
 		if (ensureMsgf(
 			PlayerShootSound != nullptr, TEXT("%s - PlayerShootSound not set. Set it in the PlayerShip blueprint."), ANSI_TO_TCHAR(__FUNCTION__)))
 		{
-			float ShootSoundPitch = 1.0f + FMath::FRandRange(-ShootSoundPitchAdjust, ShootSoundPitchAdjust);
-			UGameplayStatics::PlaySound2D(GetWorld(), PlayerShootSound, ShootSoundVolume, ShootSoundPitch);
+			if (bPlayShootSoundDuringPowerup && PlayerHasPowerup())
+			{
+				float ShootSoundPitch = 1.0f + FMath::FRandRange(-ShootSoundPitchAdjust, ShootSoundPitchAdjust);
+				UGameplayStatics::PlaySound2D(GetWorld(), PlayerShootSound, ShootSoundVolume, ShootSoundPitch);
+			}
 		}
 	}
 }
@@ -938,11 +955,32 @@ void APlayerShipPawn::EnableSatelliteWeapon(UPaperSpriteComponent* const Satelli
 void APlayerShipPawn::AddSatelliteWeapon()
 {
 	EnableSatelliteWeapon(SatelliteWeaponSprite1);
+
+	// Start timer
+	//FTimerHandle TimerHandle;
+	//FTimerManager& TimerManager = GetWorldTimerManager();
+	//TimerManager.SetTimer(TimerHandle, this, &ThisClass::PowerupTimerElapsed, PowerupActiveTime, false);
 }
 
 void APlayerShipPawn::RemoveSatelliteWeapon()
 {
 	DisableSatelliteWeapon(SatelliteWeaponSprite1);
+}
+
+bool APlayerShipPawn::PlayerHasPowerup() const
+{
+	bool bPlayerHasPowerup = false;
+	if (SatelliteWeaponSprite1 != nullptr)
+	{
+		// If the satellite weapon is visible, then it is active (and therefore the player has a powerup)
+		bPlayerHasPowerup = SatelliteWeaponSprite1->GetVisibleFlag();
+	}
+	return bPlayerHasPowerup;
+}
+
+void APlayerShipPawn::PowerupTimerElapsed()
+{
+	RemoveSatelliteWeapon();
 }
 
 

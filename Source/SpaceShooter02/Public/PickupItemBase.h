@@ -50,7 +50,7 @@ protected:
 	// --- Movement ---
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float MovementSpeed = 1.0f;
+	float MovementSpeed = 200.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FVector MovementDirection;
@@ -75,11 +75,11 @@ protected:
 
 	// If the player is this close to a pickup item, start attraction
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float TargetAttractDistance = 100.0f;
+	float TargetAttractDistance = 200.0f;
 
 	// How quickly this pickup item moves towards its attraction target (if it has one)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float AttractionMovementSpeed = 500.0f;
+	float AttractionMovementSpeed = 1750.0f;
 
 	// TEMP
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

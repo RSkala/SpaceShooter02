@@ -112,6 +112,9 @@ protected:
 	UFUNCTION(Exec)
 	void RemoveSatelliteWeapon();
 
+	bool PlayerHasPowerup() const;
+	void PowerupTimerElapsed();
+
 protected:
 	// --- Components ---
 
@@ -249,7 +252,10 @@ protected:
 	float ShootSoundPitchAdjust = 0.0f; // + and - pitch range to add to the pitch
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool ShootSoundEnabled = true;
+	bool bShootSoundEnabled = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bPlayShootSoundDuringPowerup = true;
 
 	// --- Visual ---
 
@@ -279,4 +285,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bPlayerInvincible = false;
+
+	// How long a powerup stays "active" for before being removed
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float PowerupActiveTime = 5.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	float PowerupActiveTimer = 0.0f;
 };

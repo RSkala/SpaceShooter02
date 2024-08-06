@@ -7,6 +7,7 @@
 
 #include "EnemyBase.h"
 #include "EnemySpawner.h"
+#include "PickupItemSatelliteWeapon.h"
 #include "PickupItemScoreMultiplier.h"
 #include "PlayerShipPawn.h"
 #include "UI/SpaceShooterMenuController.h"
@@ -19,6 +20,7 @@ FGameEndedDelegateSignature ASpaceShooterGameState::OnGameEnded;
 FPlayerScoreChangedDelegateSignature ASpaceShooterGameState::OnPlayerScoreChanged;
 FPlayerMultiplierChangedDelegateSignature ASpaceShooterGameState::OnPlayerMultiplierChanged;
 FHighScoreChangedDelegateSignature ASpaceShooterGameState::OnPlayerHighScoreChanged;
+FAddSatelliteWeaponDelegateSignature ASpaceShooterGameState::OnAddSatelliteWeapon;
 
 ASpaceShooterGameState::ASpaceShooterGameState()
 {
@@ -105,6 +107,9 @@ void ASpaceShooterGameState::BeginPlay()
 	// Get notified when a score multiplier is picked up
 	APickupItemScoreMultiplier::OnScoreMultiplierPickedUp.AddUniqueDynamic(this, &ThisClass::OnScoreMultiplierPickedUp);
 
+	// Get notified when a satellite weapon is picked up. Filter the message through the GameState.
+	APickupItemSatelliteWeapon::OnSatelliteWeaponPickedUp.AddUniqueDynamic(this, &ThisClass::OnSatelliteWeaponPickedUp);
+
 	// Listen to menu delegates
 	USpaceShooterMenuController::OnMainMenuPlayClicked.AddUniqueDynamic(this, &ThisClass::OnMainMenuPlayClicked);
 	USpaceShooterMenuController::OnPlayerShipSelected.AddUniqueDynamic(this, &ThisClass::OnPlayerShipSelected);
@@ -145,6 +150,11 @@ void ASpaceShooterGameState::OnScoreMultiplierPickedUp(int32 ScoreMultiplierValu
 {
 	CurrentScoreMultiplier += ScoreMultiplierValue;
 	OnPlayerMultiplierChanged.Broadcast(CurrentScoreMultiplier);
+}
+
+void ASpaceShooterGameState::OnSatelliteWeaponPickedUp()
+{
+	OnAddSatelliteWeapon.Broadcast();
 }
 
 void ASpaceShooterGameState::OnMainMenuPlayClicked()
