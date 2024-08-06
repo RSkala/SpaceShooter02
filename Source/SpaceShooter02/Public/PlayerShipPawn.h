@@ -92,6 +92,16 @@ protected:
 
 	void SetMouseCursorVisiblityFromInput(APlayerController* const PlayerController, bool bCursorVisible);
 
+	void UpdateSatelliteWeaponRotation(float DeltaTime);
+	void UpdateSatelliteWeaponAimRotation(FRotator AimRotation);
+	void UpdateSatelliteWeaponAimRotation(FRotator AimRotation, class UPaperSpriteComponent* const SatelliteWeapon);
+
+	void FireProjectileFromSatelliteWeapon(UWorld* const World, const FActorSpawnParameters& ProjectileSpawnParameters);
+	void FireProjectileFromSatelliteWeapon(
+		UWorld* const World,
+		class UPaperSpriteComponent* const SatelliteWeapon,
+		const FActorSpawnParameters& ProjectileSpawnParameters);
+
 protected:
 	// --- Components ---
 
@@ -128,6 +138,22 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components|Scene")
 	TObjectPtr<class UPaperFlipbookComponent> ShipExhaustFlipbookComp;
+
+	// Rotates at a certain rate. Used for rotating a satellite weapon around the player ship.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
+	TObjectPtr<class USceneComponent> SatelliteWeaponRotatorComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
+	TObjectPtr<class UPaperSpriteComponent> SatelliteWeaponSprite1;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
+	TObjectPtr<class UPaperSpriteComponent> SatelliteWeaponSprite2;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
+	TObjectPtr<class UPaperSpriteComponent> SatelliteWeaponSprite3;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
+	TObjectPtr<class UPaperSpriteComponent> SatelliteWeaponSprite4;
 
 	// --- Input ---
 	// ==== RKS TODO: First, get general input working, then move all input into a PlayerController subclass
@@ -187,6 +213,14 @@ protected:
 	// Amount of time that has elapsed since the player last fired a projectile
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Weapons & Projectiles", meta = (Units = "Seconds"))
 	float TimeSinceLastShot;
+
+	// How quickly the satellite weapon rotates around the player ship. In degrees per second.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Weapons & Projectiles")
+	float SatelliteWeaponRotationSpeed = 360.0f;
+
+	// Debug value to see the current rotation in the Details panel
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Weapons & Projectiles")
+	float CurrentSatelliteWeaponRotationAngle = 0.0f;
 
 	// --- Audio ---
 

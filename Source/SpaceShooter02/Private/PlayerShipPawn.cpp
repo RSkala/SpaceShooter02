@@ -108,6 +108,28 @@ APlayerShipPawn::APlayerShipPawn()
 
 	ShipExhaustParticleComp = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ShipExhaustParticleComp"));
 	ShipExhaustParticleComp->SetupAttachment(RootComponent);
+
+	// --- Satellite Weapon Components ---
+
+	SatelliteWeaponRotatorComp = CreateDefaultSubobject<USceneComponent>(TEXT("SatelliteWeaponRotatorComp"));
+	SatelliteWeaponRotatorComp->SetupAttachment(RootComponent);
+	SatelliteWeaponRotatorComp->SetAbsolute(false, true, false); // Set the rotation to Absolute, so it is not affected by player rotation
+
+	SatelliteWeaponSprite1 = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SatelliteWeaponSprite1"));
+	SatelliteWeaponSprite1->SetupAttachment(SatelliteWeaponRotatorComp);
+	SatelliteWeaponSprite1->SetAbsolute(false, true, false);
+
+	SatelliteWeaponSprite2 = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SatelliteWeaponSprite2"));
+	SatelliteWeaponSprite2->SetupAttachment(SatelliteWeaponRotatorComp);
+	SatelliteWeaponSprite2->SetAbsolute(false, true, false);
+
+	SatelliteWeaponSprite3 = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SatelliteWeaponSprite3"));
+	SatelliteWeaponSprite3->SetupAttachment(SatelliteWeaponRotatorComp);
+	SatelliteWeaponSprite3->SetAbsolute(false, true, false);
+
+	SatelliteWeaponSprite4 = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("SatelliteWeaponSprite4"));
+	SatelliteWeaponSprite4->SetupAttachment(SatelliteWeaponRotatorComp);
+	SatelliteWeaponSprite4->SetAbsolute(false, true, false);
 }
 
 // Called every frame
@@ -128,6 +150,9 @@ void APlayerShipPawn::Tick(float DeltaTime)
 
 	// Increase the time since last shot
 	TimeSinceLastShot += DeltaTime;
+
+	// Update the rotation of the satellite weapon "rotator" component
+	UpdateSatelliteWeaponRotation(DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -392,6 +417,10 @@ void APlayerShipPawn::UpdateGamepadAimFiring()
 				FRotator AimingRotation = UKismetMathLibrary::MakeRotator(0.0f, AngleDegrees, 0.0f);
 				//UE_LOG(LogTemp, Warning, TEXT("AimingRotation: %s"), *AimingRotation.ToString());
 
+				// Update the SatelliteWeapon aiming
+				UpdateSatelliteWeaponAimRotation(AimingRotation);
+
+				// Fire projectiles
 				FireProjectile(AimingRotation);
 
 				// If the player is using the gamepad right-thumbstick, then hide the mouse cursor
@@ -666,6 +695,9 @@ void APlayerShipPawn::MouseFire(const FInputActionValue& InputActionValue)
 		// Create the rotation from the aiming angle
 		FRotator MouseAimingRotation = UKismetMathLibrary::MakeRotator(0.0f, AngleDegrees, 0.0f);
 
+		// Update the SatelliteWeapon aiming
+		UpdateSatelliteWeaponAimRotation(MouseAimingRotation);
+
 		// Fire the projectile using the aiming rotation
 		FireProjectile(MouseAimingRotation);
 	}
@@ -711,6 +743,9 @@ void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 
 			// Reset time since last shot
 			TimeSinceLastShot = 0.0f;
+
+			// Fire projectiles from Satellite weapons
+			FireProjectileFromSatelliteWeapon(World, ProjectileSpawnParameters);
 		}
 	}
 }
@@ -787,5 +822,70 @@ void APlayerShipPawn::SetMouseCursorVisiblityFromInput(APlayerController* const 
 	// FInputModeGameAndUI InputMode;
 	// InputMode.SetHideCursorDuringCapture(false);
 	// PlayerController->SetInputMode(InputMode);
+}
+
+void APlayerShipPawn::UpdateSatelliteWeaponRotation(float DeltaTime)
+{
+	if (SatelliteWeaponRotatorComp != nullptr)
+	{
+		// Multiply the rotation angle by 1 or -1 depending on direction
+		//float RotationDirMultiple = RotationDirection == RotationDirection.Clockwise ? -1.0f : 1.0f;
+
+		// Increment the rotation angle in the desired rotation direction
+		CurrentSatelliteWeaponRotationAngle += SatelliteWeaponRotationSpeed * DeltaTime /* *RotationDirMultiple */;
+
+		// Ensure the rotation angle stays within (-360, 360)
+		if (CurrentSatelliteWeaponRotationAngle >= 360.0f)
+		{
+			CurrentSatelliteWeaponRotationAngle = 0.0f;
+		}
+		else if (CurrentSatelliteWeaponRotationAngle <= -360.0f)
+		{
+			CurrentSatelliteWeaponRotationAngle = 0.0f;
+		}
+
+		// Set the new satellite weapon world rotation 
+		FRotator NewSatelliteWeaponRotation = UKismetMathLibrary::MakeRotator(0.0f, CurrentSatelliteWeaponRotationAngle, 0.0f);
+		SatelliteWeaponRotatorComp->SetWorldRotation(NewSatelliteWeaponRotation);
+	}
+}
+
+void APlayerShipPawn::UpdateSatelliteWeaponAimRotation(FRotator AimRotation)
+{
+	UpdateSatelliteWeaponAimRotation(AimRotation, SatelliteWeaponSprite1);
+	UpdateSatelliteWeaponAimRotation(AimRotation, SatelliteWeaponSprite2);
+	UpdateSatelliteWeaponAimRotation(AimRotation, SatelliteWeaponSprite3);
+	UpdateSatelliteWeaponAimRotation(AimRotation, SatelliteWeaponSprite4);
+}
+
+void APlayerShipPawn::UpdateSatelliteWeaponAimRotation(FRotator AimRotation, UPaperSpriteComponent* const SatelliteWeapon)
+{
+	if (SatelliteWeapon != nullptr)
+	{
+		SatelliteWeapon->SetWorldRotation(AimRotation);
+	}
+}
+
+void APlayerShipPawn::FireProjectileFromSatelliteWeapon(UWorld* const World, const FActorSpawnParameters& ProjectileSpawnParameters)
+{
+	FireProjectileFromSatelliteWeapon(World, SatelliteWeaponSprite1, ProjectileSpawnParameters);
+	FireProjectileFromSatelliteWeapon(World, SatelliteWeaponSprite2, ProjectileSpawnParameters);
+	FireProjectileFromSatelliteWeapon(World, SatelliteWeaponSprite3, ProjectileSpawnParameters);
+	FireProjectileFromSatelliteWeapon(World, SatelliteWeaponSprite4, ProjectileSpawnParameters);
+}
+
+void APlayerShipPawn::FireProjectileFromSatelliteWeapon(
+	UWorld* const World,
+	UPaperSpriteComponent* const SatelliteWeapon,
+	const FActorSpawnParameters& ProjectileSpawnParameters)
+{
+	if (World != nullptr && SatelliteWeapon != nullptr && ProjectileClass != nullptr)
+	{
+		World->SpawnActor<AProjectileBase>(
+			ProjectileClass,
+			SatelliteWeapon->GetComponentLocation(),
+			SatelliteWeapon->GetComponentRotation(),
+			ProjectileSpawnParameters);
+	}
 }
 
