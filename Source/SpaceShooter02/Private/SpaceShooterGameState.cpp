@@ -4,6 +4,7 @@
 
 #include "Kismet/GameplayStatics.h"
 #include "PaperSprite.h"
+#include "TimerManager.h"
 
 #include "EnemyBase.h"
 #include "EnemySpawner.h"
@@ -66,7 +67,17 @@ void ASpaceShooterGameState::StartGame()
 void ASpaceShooterGameState::EndGame()
 {
 	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::EndGame - %s"), *GetName());
-	OnGameEnded.Broadcast();
+
+	if (UWorld* World = GetWorld())
+	{
+		FTimerHandle TimerHandle;
+		FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &ThisClass::OnGameOverTimerTimeout);
+		World->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, DelayAfterGameOver, false);
+	}
+	else
+	{
+		OnGameEnded.Broadcast();
+	}
 }
 
 void ASpaceShooterGameState::BeginPlay()
@@ -125,7 +136,7 @@ void ASpaceShooterGameState::OnPlayerShipSpawned(APlayerShipPawn* const InPlayer
 
 void ASpaceShooterGameState::OnPlayerShipDestroyed()
 {
-	OnGameEnded.Broadcast();
+	EndGame();
 }
 
 void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, USoundBase* EnemyDeathSound)
@@ -205,5 +216,11 @@ void ASpaceShooterGameState::SpawnScoreMultiplierPickup(FVector SpawnPosition)
 			}
 		}
 	}
+}
+
+void ASpaceShooterGameState::OnGameOverTimerTimeout()
+{
+	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::OnGameOverTimerTimeout"));
+	OnGameEnded.Broadcast();
 }
 

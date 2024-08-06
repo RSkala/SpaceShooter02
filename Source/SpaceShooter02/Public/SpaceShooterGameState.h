@@ -69,6 +69,8 @@ protected:
 
 	void SpawnScoreMultiplierPickup(FVector SpawnPosition);
 
+	void OnGameOverTimerTimeout();
+
 public:
 	static FGameStartedDelegateSignature OnGameStarted; // Delegate called when the player starts a game (either from main menu or game over)
 	static FGameEndedDelegateSignature OnGameEnded; // Delegate called when the player is defeated (game over)
@@ -134,4 +136,8 @@ protected:
 	// Number of multiplier pickups needed to be collected to "activate" powerup
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 NumMultipliersNeededForPowerup = 20;
+
+	// Amount of time to delay after a game over before sending notification (which delays game over screen and such)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float DelayAfterGameOver = 1.5f;
 };
