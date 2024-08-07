@@ -8,6 +8,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "PaperSprite.h"
 #include "PaperSpriteComponent.h"
+#include "TimerManager.h"
 
 #include "EnemySpawner.h"
 #include "PlayerShipPawn.h"
@@ -88,10 +89,27 @@ void AEnemyBase::SetTarget(TSoftObjectPtr<AActor> InTargetActor)
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Delay movement towards target (to allow the spawn anim to show the player where an enemy will spawn)
+	bIsSpawning = true;
+	if (PaperSpriteComp != nullptr)
+	{
+		PaperSpriteComp->SetVisibility(false, true);
+	}
+
+	static const float EnemySpawnDelayTime = 0.3f;
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ThisClass::OnSpawnDelayTimerElapsed, EnemySpawnDelayTime, false);
 }
 
 void AEnemyBase::MoveTowardsTarget(float DeltaTime)
 {
+	if (bIsSpawning)
+	{
+		// Enemy is spawning in. Do not move towards target until spawning finished.
+		return;
+	}
+
 	// Do not move if the player is the target and the player is dead.
 	if (APlayerShipPawn* PlayerShipPawn = Cast<APlayerShipPawn>(TargetActor.Get()))
 	{
@@ -150,5 +168,14 @@ void AEnemyBase::MoveTowardsTarget(float DeltaTime)
 		// Set the new enemy rotation
 		FRotator NewPlayerShipRotation = UKismetMathLibrary::MakeRotator(0.0f, AngleDegrees, 0.0f);
 		SetActorRotation(NewPlayerShipRotation);
+	}
+}
+
+void AEnemyBase::OnSpawnDelayTimerElapsed()
+{
+	bIsSpawning = false;
+	if (PaperSpriteComp != nullptr)
+	{
+		PaperSpriteComp->SetVisibility(true, true);
 	}
 }

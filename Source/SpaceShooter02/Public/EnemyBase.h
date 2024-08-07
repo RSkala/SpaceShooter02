@@ -31,6 +31,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void MoveTowardsTarget(float DeltaTime);
+	virtual void OnSpawnDelayTimerElapsed();
 
 public:
 	//UPROPERTY(BlueprintAssignable)
@@ -71,6 +72,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class UNiagaraSystem> EnemyExplosionEffect;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bIsSpawning = true;
 	
 
 	// TODO:
