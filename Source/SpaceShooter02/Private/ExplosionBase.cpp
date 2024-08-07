@@ -19,6 +19,7 @@ AExplosionBase::AExplosionBase()
 	ExplosionFlipbookComp = CreateDefaultSubobject<UPaperFlipbookComponent>("ExplosionFlipbookComp");
 	ExplosionFlipbookComp->SetupAttachment(RootSceneComp);
 	ExplosionFlipbookComp->SetLooping(false); // Explosions should not loop
+	ExplosionFlipbookComp->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
 }
 
 void AExplosionBase::Tick(float DeltaTime)
