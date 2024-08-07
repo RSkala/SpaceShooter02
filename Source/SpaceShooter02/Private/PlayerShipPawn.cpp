@@ -35,6 +35,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogPlayerShipPawnMovement, Log, All)
 FPlayerShipSpawnedDelegateSignature APlayerShipPawn::OnPlayerShipSpawned;
 FPlayerShipDestroyedDelegateSignature APlayerShipPawn::OnPlayerShipDestroyed;
 FPlayerPowerupTimerUpdatedDelegateSignature APlayerShipPawn::OnPlayerPowerupTimerUpdated;
+FPlayerDashUpdatedDelegateSignature APlayerShipPawn::OnPlayerDashUpdated;
 
 namespace
 {
@@ -110,6 +111,10 @@ APlayerShipPawn::APlayerShipPawn()
 
 	ShipExhaustParticleComp = CreateDefaultSubobject<UNiagaraComponent>(TEXT("ShipExhaustParticleComp"));
 	ShipExhaustParticleComp->SetupAttachment(RootComponent);
+
+	DashShieldSpriteComp = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("DashShieldSpriteComp"));
+	DashShieldSpriteComp->SetupAttachment(RootComponent);
+	DashShieldSpriteComp->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
 
 	// --- Satellite Weapon Components ---
 
@@ -208,6 +213,10 @@ void APlayerShipPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		// Bind Mouse Firing
 		ensureAlways(InputActionMouseFire != nullptr);
 		EnhancedInputComponent->BindAction(InputActionMouseFire, ETriggerEvent::Triggered, this, &ThisClass::MouseFire); // Triggered: When the player HOLDS down the MouseFire button
+
+		// Bind Dash
+		ensureAlways(InputActionDash != nullptr);
+		EnhancedInputComponent->BindAction(InputActionDash, ETriggerEvent::Started, this, &ThisClass::InputDash);
 	}
 }
 
@@ -275,13 +284,50 @@ void APlayerShipPawn::BeginPlay()
 
 	// Start satellite weapons disabled
 	DisableSatelliteWeapons();
+
+	// Hide dash shield sprite
+	HideDashShield();
 }
 
 void APlayerShipPawn::UpdateMovement(float DeltaTime)
 {
 	UE_LOG(LogPlayerShipPawnMovement, Verbose, TEXT("APlayerShipPawn::UpdateMovement: %s"), *MovementDirection.ToString());
 
-	if (MovementDirection.SquaredLength() > 0.0f)
+	// =======================================================================
+	float ModifiedMoveSpeed = MoveSpeed;
+	FVector2D ModifiedMovementDirection = MovementDirection;
+	if (bIsDashing)
+	{
+		static const float DashTime = 0.5f;
+		ModifiedMoveSpeed = MoveSpeed * 2.0f;
+
+		DashTimeElapsed += DeltaTime;
+		if (DashTimeElapsed >= DashTime)
+		{
+			// Finished dashing
+			bIsDashing = false;
+			HideDashShield();
+		}
+		else
+		{
+			// If the user has no input, force movement in its forward direction
+			if (FMath::IsNearlyZero(MovementDirection.SquaredLength()))
+			{
+				FVector PlayerShipForward = GetActorUpVector(); // "Up" is Z-direction
+				ModifiedMovementDirection = FVector2D(PlayerShipForward.X, PlayerShipForward.Z);
+			}
+		}
+	}
+	else
+	{
+		// Player is not dashing. Recharge the dash meter.
+		DashRechargeTimeElapsed += DeltaTime;
+		DashRechargeTimeElapsed = FMath::Min(DashRechargeTimeElapsed, DashRechargeTime);
+		OnPlayerDashUpdated.Broadcast(DashRechargeTimeElapsed / DashRechargeTime);
+	}
+	// =======================================================================
+
+	if (ModifiedMovementDirection.SquaredLength() > 0.0f)
 	{
 		// Valid movement input - update the player ship position and rotation
 		
@@ -293,7 +339,7 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 
 		// Get the distance to move this frame using the movement direction
 		// Movement formula, Distance = Rate * Time
-		FVector2D MovementAmount2D = MovementDirection * MoveSpeed * DeltaTime;
+		FVector2D MovementAmount2D = ModifiedMovementDirection * ModifiedMoveSpeed * DeltaTime;
 
 		// Get the movement amount as a 3D vector, as SetActorLocation() uses FVector
 		//FVector MovementAmount = FVector(MovementAmount2D.X, PlayerShipPosition.Y, MovementAmount2D.Y);
@@ -314,11 +360,12 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 			FCollisionObjectQueryParams ObjectQueryParams(FCollisionObjectQueryParams::InitType::AllStaticObjects);
 
 			// Distance of the LineTrace. Adjust with the movement speed and deltatime
+			//float CollisionDistance = NewMoveSpeed * DeltaTime * CollisionLineTraceOffset;
 			float CollisionDistance = MoveSpeed * DeltaTime * CollisionLineTraceOffset;
 
 			// Check collision against walls in the X movement direction
 			TArray<FHitResult> HitResultsXDir;
-			const FVector& TraceEndPosXDir = TraceStartPos + FVector(MovementDirection.X, 0.0f, 0.0f).GetSafeNormal() * CollisionDistance;
+			const FVector& TraceEndPosXDir = TraceStartPos + FVector(ModifiedMovementDirection.X, 0.0f, 0.0f).GetSafeNormal() * CollisionDistance;
 			if (World->LineTraceMultiByObjectType(HitResultsXDir, TraceStartPos, TraceEndPosXDir, ObjectQueryParams))
 			{
 				// Successful line trace hit in the X direction. Zero out the X movement amount.
@@ -327,7 +374,7 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 			
 			// Check collision against walls in the Y movement direction (Z world direction)
 			TArray<FHitResult> HitResultsYDir;
-			const FVector& TraceEndPosYDir = TraceStartPos + FVector(0.0f, 0.0f, MovementDirection.Y).GetSafeNormal() * CollisionDistance;
+			const FVector& TraceEndPosYDir = TraceStartPos + FVector(0.0f, 0.0f, ModifiedMovementDirection.Y).GetSafeNormal() * CollisionDistance;
 			if (World->LineTraceMultiByObjectType(HitResultsYDir, TraceStartPos, TraceEndPosYDir, ObjectQueryParams))
 			{
 				// Successful line trace hit in the Y direction. Zero out the Y movement amount.
@@ -364,7 +411,7 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 		//AngleDegrees2D *= AngleDirectionMultipler2D;
 
 		// Get the movement direction in 3D
-		FVector MovementDirection3D = FVector(MovementDirection.X, 0.0f, MovementDirection.Y);
+		FVector MovementDirection3D = FVector(ModifiedMovementDirection.X, 0.0f, ModifiedMovementDirection.Y);
 
 		// Get the angle between the world up vector (+Z axis) and the movement input direction
 		float Dot = FVector::UnitZ().Dot(MovementDirection3D);
@@ -519,7 +566,7 @@ void APlayerShipPawn::UpdateExhaust()
 {
 	if (ShipExhaustFlipbookComp != nullptr)
 	{
-		if (MovementDirection.SquaredLength() > 0.0f)
+		if (MovementDirection.SquaredLength() > 0.0f || bIsDashing)
 		{
 			if (ShipExhaustFlipbookComp->bHiddenInGame)
 			{
@@ -567,8 +614,17 @@ void APlayerShipPawn::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponen
 
 	if (AEnemyBase* OverlappedEnemy = Cast<AEnemyBase>(OtherActor))
 	{
-		// Player has collided with an enemy. Kill the player.
-		KillPlayer();
+		// The player has collided with an enemy
+		if (bIsDashing)
+		{
+			// Player is Dashing. Kill the enemy.
+			OverlappedEnemy->DestroyEnemy();
+		}
+		else
+		{
+			// Player is not Dashing. Kill the player.
+			KillPlayer();
+		}
 	}
 }
 
@@ -738,8 +794,38 @@ void APlayerShipPawn::MouseFire(const FInputActionValue& InputActionValue)
 	}
 }
 
+void APlayerShipPawn::InputDash(const FInputActionValue& InputActionValue)
+{
+	// TODO: Make sure player is "active"
+
+	if (bIsDashing)
+	{
+		// Player is already dashing. Ignore this dash input.
+		return;
+	}
+
+	// Do not allow the player to dash while the dash meter is recharging
+	if (DashRechargeTimeElapsed < DashRechargeTime)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("RECHARGING, NO DASHING ALLOWED"));
+		return;
+	}
+
+	bIsDashing = true;
+	DashRechargeTimeElapsed = 0.0f;
+	DashTimeElapsed = 0.0f;
+	ShowDashShield();
+	OnPlayerDashUpdated.Broadcast(0.0f);
+}
+
 void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 {
+	// Do not allow projectile firing while dashing
+	if (bIsDashing)
+	{
+		return;
+	}
+
 	if (ensureMsgf(
 		ProjectileClass != nullptr,
 		TEXT("%s - ProjectileClass not set. Set it in the PlayerShip blueprint."), ANSI_TO_TCHAR(__FUNCTION__)))
@@ -1017,6 +1103,28 @@ void APlayerShipPawn::PickupItemPercentChanged(float Percent)
 		{
 			OnPlayerPowerupTimerUpdated.Broadcast(Percent);
 		}
+	}
+}
+
+void APlayerShipPawn::ShowDashShield()
+{
+	// Show dash shield sprite
+	if (DashShieldSpriteComp != nullptr)
+	{
+		DashShieldSpriteComp->SetHiddenInGame(false, false);
+		DashShieldSpriteComp->SetVisibility(true, true);
+		//DashShieldSpriteComp->SetComponentTickEnabled(true);
+	}
+}
+
+void APlayerShipPawn::HideDashShield()
+{
+	// Hide dash shield sprite
+	if (DashShieldSpriteComp != nullptr)
+	{
+		DashShieldSpriteComp->SetHiddenInGame(true, true);
+		DashShieldSpriteComp->SetVisibility(false, true);
+		//DashShieldSpriteComp->SetComponentTickEnabled(false);
 	}
 }
 

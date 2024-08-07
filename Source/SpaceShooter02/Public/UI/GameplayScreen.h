@@ -28,6 +28,9 @@ protected:
 	UFUNCTION()
 	void OnPowerupTimeUpdated(float Percent);
 
+	UFUNCTION()
+	void OnDashRechargedUpdated(float Percent);
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UTextBlock> CurrentScoreText;

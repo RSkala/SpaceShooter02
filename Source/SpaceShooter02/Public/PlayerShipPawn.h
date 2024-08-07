@@ -15,6 +15,9 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPlayerShipDestroyedDelegateSignature);
 // Delegate for updating the player's powerup weapon meter
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerPowerupTimerUpdatedDelegateSignature, float, Percent);
 
+// Delegate for updating the player's dash meter
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerDashUpdatedDelegateSignature, float, Percent);
+
 
 UENUM(BlueprintType)
 enum class ERightStickDebugBehavior : uint8 // In UE 5.4+, enums MUST be uint8
@@ -46,6 +49,7 @@ public:
 	static FPlayerShipSpawnedDelegateSignature OnPlayerShipSpawned;
 	static FPlayerShipDestroyedDelegateSignature OnPlayerShipDestroyed;
 	static FPlayerPowerupTimerUpdatedDelegateSignature OnPlayerPowerupTimerUpdated;
+	static FPlayerDashUpdatedDelegateSignature OnPlayerDashUpdated;
 
 protected:
 	// Called when the game starts or when spawned
@@ -88,6 +92,8 @@ protected:
 
 	void Fire(const struct FInputActionValue& InputActionValue); // TODO: Split into KeyboardFire and GamepadFire
 	void MouseFire(const struct FInputActionValue& InputActionValue);
+
+	void InputDash(const struct FInputActionValue& InputActionValue);
 	
 	void FireProjectile(FRotator ProjectileRotation);
 	void PlayShootSound();
@@ -122,6 +128,9 @@ protected:
 	UFUNCTION()
 	void PickupItemPercentChanged(float Percent);
 
+	void ShowDashShield();
+	void HideDashShield();
+
 protected:
 	// --- Components ---
 
@@ -133,6 +142,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
 	TObjectPtr<class UNiagaraComponent> ShipExhaustParticleComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
+	TObjectPtr<class UPaperSpriteComponent> DashShieldSpriteComp;
 
 	// --- Camera ---
 	
@@ -215,6 +227,22 @@ protected:
 	// --- Movement ---
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming", meta = (ClampMin = "1"))
 	float MoveSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming", meta = (ClampMin = "1"))
+	float DashSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming", meta = (ClampMin = "1"))
+	float DashTimeElapsed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming")
+	bool bIsDashing = false;
+
+	// How long it takes to recharge Dash ability
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming")
+	float DashRechargeTime = 10.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming")
+	float DashRechargeTimeElapsed = 0.0f;
 
 	// --- Weapons and Projectiles ---
 
