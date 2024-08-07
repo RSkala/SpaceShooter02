@@ -46,6 +46,8 @@ public:
 
 	void EnablePlayer();
 
+	bool IsPlayerDisabled() const { return IsHidden(); }
+
 	static FPlayerShipSpawnedDelegateSignature OnPlayerShipSpawned;
 	static FPlayerShipDestroyedDelegateSignature OnPlayerShipDestroyed;
 	static FPlayerPowerupTimerUpdatedDelegateSignature OnPlayerPowerupTimerUpdated;

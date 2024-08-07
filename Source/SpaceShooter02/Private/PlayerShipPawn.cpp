@@ -708,7 +708,7 @@ void APlayerShipPawn::Fire(const FInputActionValue& InputActionValue)
 void APlayerShipPawn::MouseFire(const FInputActionValue& InputActionValue)
 {
 	// Quick fix: dont let the player fire outside of the game
-	if (IsHidden())
+	if (IsPlayerDisabled())
 	{
 		return;
 	}
@@ -796,7 +796,11 @@ void APlayerShipPawn::MouseFire(const FInputActionValue& InputActionValue)
 
 void APlayerShipPawn::InputDash(const FInputActionValue& InputActionValue)
 {
-	// TODO: Make sure player is "active"
+	// Do not allow dashing if the player is dead or "disabled"
+	if (bPlayerDead || IsPlayerDisabled())
+	{
+		return;
+	}
 
 	if (bIsDashing)
 	{
