@@ -170,12 +170,17 @@ void ASpaceShooterGameState::OnScoreMultiplierPickedUp(int32 ScoreMultiplierValu
 	// Play pickup sound
 	if (ScoreMultiplierPickupSound != nullptr)
 	{
+		// Stop the current pickup item sound, if playing
 		if (CurrentMultiplierPickupSound != nullptr)
 		{
 			CurrentMultiplierPickupSound->Stop();
 		}
 		CurrentMultiplierPickupSound = nullptr;
-		CurrentMultiplierPickupSound = UGameplayStatics::SpawnSound2D(GetWorld(), ScoreMultiplierPickupSound);
+
+		// Adjust a random pitch and play the pickup item sounds
+		static const float PitchAdjust = 0.1f;
+		float SoundPitch = 1.0f + FMath::FRandRange(-PitchAdjust, PitchAdjust);
+		CurrentMultiplierPickupSound = UGameplayStatics::SpawnSound2D(GetWorld(), ScoreMultiplierPickupSound, 0.9f, SoundPitch);
 	}
 
 	// Increment values and notify
