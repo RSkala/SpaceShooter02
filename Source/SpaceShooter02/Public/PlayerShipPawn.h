@@ -348,4 +348,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class USoundBase> PowerupEarnedSound;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<TObjectPtr<class USoundBase>> ShipDashSounds;
 };

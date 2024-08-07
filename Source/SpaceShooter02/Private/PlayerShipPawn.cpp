@@ -832,6 +832,14 @@ void APlayerShipPawn::InputDash(const FInputActionValue& InputActionValue)
 		SphereComp->SetSphereRadius(DashCollisionSphereRadius, true);
 	}
 
+	// Play dash sound
+	if (ShipDashSounds.Num() > 0)
+	{
+		//UPaperSprite* RandomSprite = PlayerShipSprites[FMath::RandRange(0, PlayerShipSprites.Num() - 1)];
+		USoundBase* RandomDashSound = ShipDashSounds[FMath::RandRange(0, ShipDashSounds.Num() - 1)];
+		UGameplayStatics::PlaySound2D(GetWorld(), RandomDashSound);
+	}
+
 	OnPlayerDashUpdated.Broadcast(0.0f);
 }
 
