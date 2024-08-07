@@ -2,6 +2,7 @@
 
 #include "SpaceShooterGameState.h"
 
+#include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "PaperSprite.h"
 #include "TimerManager.h"
@@ -166,6 +167,18 @@ void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSy
 
 void ASpaceShooterGameState::OnScoreMultiplierPickedUp(int32 ScoreMultiplierValue)
 {
+	// Play pickup sound
+	if (ScoreMultiplierPickupSound != nullptr)
+	{
+		if (CurrentMultiplierPickupSound != nullptr)
+		{
+			CurrentMultiplierPickupSound->Stop();
+		}
+		CurrentMultiplierPickupSound = nullptr;
+		CurrentMultiplierPickupSound = UGameplayStatics::SpawnSound2D(GetWorld(), ScoreMultiplierPickupSound);
+	}
+
+	// Increment values and notify
 	CurrentScoreMultiplier += ScoreMultiplierValue;
 	OnPlayerMultiplierChanged.Broadcast(CurrentScoreMultiplier);
 

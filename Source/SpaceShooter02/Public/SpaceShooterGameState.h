@@ -140,4 +140,12 @@ protected:
 	// Amount of time to delay after a game over before sending notification (which delays game over screen and such)
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float DelayAfterGameOver = 1.5f;
+
+	// Sound to play when collecting a pickup item
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<class USoundBase> ScoreMultiplierPickupSound;
+
+	// Currently playing pickup item sound
+	UPROPERTY()
+	TObjectPtr<class UAudioComponent> CurrentMultiplierPickupSound;
 };
