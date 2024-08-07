@@ -69,6 +69,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class UNiagaraSystem> EnemyExplosionEffect;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TArray<TSubclassOf<class ASpawnAnimBase>> EnemySpawnAnimClasses;
+
 	// TODO:
 	// * DifficultySpikeInterval -- every X enemy defeated, increase difficulty
 	// * get player reference, pass to enemies

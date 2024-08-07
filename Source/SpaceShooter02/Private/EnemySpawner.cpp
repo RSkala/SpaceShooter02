@@ -12,6 +12,7 @@
 #include "ExplosionBase.h"
 #include "PlayerShipPawn.h"
 #include "SpaceShooterGameState.h"
+#include "SpawnAnimBase.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogEnemySpawner, Log, All)
 
@@ -98,6 +99,16 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 
 				FActorSpawnParameters EnemySpawnParams;
 				EnemySpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+				// Spawn the Spawn Animation
+				if (EnemySpawnAnimClasses.Num() > 0)
+				{
+					TSubclassOf<ASpawnAnimBase> SpawnAnimClass = EnemySpawnAnimClasses[FMath::RandRange(0, EnemySpawnAnimClasses.Num() - 1)];
+					float RandomRotation = FMath::FRandRange(0.0f, 360.0f);
+					FRotator SpawnAnimRotation(RandomRotation, 0.0f, 0.0f); // Y rotation is Pitch
+					FVector SpawnAnimPos = FVector(EnemyPosition.X, 0.2f, EnemyPosition.Y); // have spawn anim appear in front of enemy
+					ASpawnAnimBase* SpawnedSpawnAnim = World->SpawnActor<ASpawnAnimBase>(SpawnAnimClass, EnemyPosition, SpawnAnimRotation, EnemySpawnParams);
+				}
 
 				// Spawn the enemy
 				AEnemyBase* SpawnedEnemy = World->SpawnActor<AEnemyBase>(EnemyClassToSpawn, EnemyPosition, FRotator(), EnemySpawnParams);
