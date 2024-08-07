@@ -54,6 +54,7 @@ void ASpaceShooterGameState::StartGame()
 	// Reset Score and Multiplier
 	PlayerScore = 0;
 	CurrentScoreMultiplier = 1;
+	NumEnemiesDefeated = 0;
 
 	// Notify all listeners that gameplay has started
 	OnGameStarted.Broadcast();
