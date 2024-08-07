@@ -294,12 +294,12 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 	UE_LOG(LogPlayerShipPawnMovement, Verbose, TEXT("APlayerShipPawn::UpdateMovement: %s"), *MovementDirection.ToString());
 
 	// =======================================================================
+	// Handle Dash
 	float ModifiedMoveSpeed = MoveSpeed;
 	FVector2D ModifiedMovementDirection = MovementDirection;
 	if (bIsDashing)
 	{
-		static const float DashTime = 0.5f;
-		ModifiedMoveSpeed = MoveSpeed * 2.0f;
+		ModifiedMoveSpeed = MoveSpeed * DashMoveSpeedMultiplier;
 
 		DashTimeElapsed += DeltaTime;
 		if (DashTimeElapsed >= DashTime)

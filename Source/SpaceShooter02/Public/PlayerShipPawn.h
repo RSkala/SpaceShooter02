@@ -254,6 +254,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Movement & Aiming")
 	float PreDashCollisionSphereRadius;
 
+	// How long (in seconds) the player stays in "Dash" mode
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Movement & Aiming")
+	float DashTime = 0.5f;
+
+	// Amount to multiply to the move speed while dashing
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Movement & Aiming")
+	float DashMoveSpeedMultiplier = 2.0f;
+
 	// --- Weapons and Projectiles ---
 
 	// Class of Projectile that will be fired
