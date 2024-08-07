@@ -651,6 +651,12 @@ void APlayerShipPawn::Fire(const FInputActionValue& InputActionValue)
 
 void APlayerShipPawn::MouseFire(const FInputActionValue& InputActionValue)
 {
+	// Quick fix: dont let the player fire outside of the game
+	if (IsHidden())
+	{
+		return;
+	}
+
 	bool MouseFireInput = InputActionValue.Get<bool>();
 	UE_LOG(LogPlayerShipPawnInput, Verbose, TEXT("APlayerShipPawn::MouseFire - FireInput: %d"), MouseFireInput);
 
