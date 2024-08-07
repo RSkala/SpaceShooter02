@@ -299,4 +299,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float PowerupActiveTimer = 0.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<class USoundBase> PowerupEarnedSound;
 };

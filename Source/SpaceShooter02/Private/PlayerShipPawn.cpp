@@ -973,6 +973,11 @@ void APlayerShipPawn::AddSatelliteWeapon()
 {
 	EnableSatelliteWeapon(SatelliteWeaponSprite1);
 	PowerupActiveTimer = PowerupActiveTime;
+
+	if (PowerupEarnedSound != nullptr)
+	{
+		UGameplayStatics::PlaySound2D(GetWorld(), PowerupEarnedSound);
+	}
 }
 
 void APlayerShipPawn::RemoveSatelliteWeapon()
