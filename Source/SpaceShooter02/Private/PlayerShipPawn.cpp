@@ -307,6 +307,12 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 			// Finished dashing
 			bIsDashing = false;
 			HideDashShield();
+
+			// Shrink the collision sphere radius back to normal
+			if (SphereComp != nullptr)
+			{
+				SphereComp->SetSphereRadius(PreDashCollisionSphereRadius, true);
+			}
 		}
 		else
 		{
@@ -811,7 +817,6 @@ void APlayerShipPawn::InputDash(const FInputActionValue& InputActionValue)
 	// Do not allow the player to dash while the dash meter is recharging
 	if (DashRechargeTimeElapsed < DashRechargeTime)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RECHARGING, NO DASHING ALLOWED"));
 		return;
 	}
 
@@ -819,6 +824,14 @@ void APlayerShipPawn::InputDash(const FInputActionValue& InputActionValue)
 	DashRechargeTimeElapsed = 0.0f;
 	DashTimeElapsed = 0.0f;
 	ShowDashShield();
+
+	// Enlarge the collision sphere radius
+	if (SphereComp != nullptr)
+	{
+		PreDashCollisionSphereRadius = SphereComp->GetUnscaledSphereRadius();
+		SphereComp->SetSphereRadius(DashCollisionSphereRadius, true);
+	}
+
 	OnPlayerDashUpdated.Broadcast(0.0f);
 }
 

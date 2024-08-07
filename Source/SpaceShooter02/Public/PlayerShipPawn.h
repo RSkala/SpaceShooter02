@@ -246,6 +246,14 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming")
 	float DashRechargeTimeElapsed = 0.0f;
 
+	// Enlarge the collision sphere while dashing so the player can "crash" into more enemies
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Movement & Aiming")
+	float DashCollisionSphereRadius = 100.0f;
+
+	// Save the collision sphere radius before dashing then restore after dashing
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Movement & Aiming")
+	float PreDashCollisionSphereRadius;
+
 	// --- Weapons and Projectiles ---
 
 	// Class of Projectile that will be fired
