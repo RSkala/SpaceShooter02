@@ -40,7 +40,7 @@ void AExplosionBase::BeginPlay()
 
 void AExplosionBase::OnExplosionAnimationFinished()
 {
-	UE_LOG(LogExplosion, Log, TEXT("AExplosionBase::OnExplosionAnimationFinished - %s"), *GetName());
+	//UE_LOG(LogExplosion, Log, TEXT("AExplosionBase::OnExplosionAnimationFinished - %s"), *GetName());
 	
 	// This explosion animation has finished. destroy it.
 	Destroy();
