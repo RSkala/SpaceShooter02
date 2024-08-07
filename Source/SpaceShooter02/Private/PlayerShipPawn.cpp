@@ -1075,6 +1075,7 @@ void APlayerShipPawn::EnableSatelliteWeapon(UPaperSpriteComponent* const Satelli
 void APlayerShipPawn::AddSatelliteWeapon()
 {
 	EnableSatelliteWeapon(SatelliteWeaponSprite1);
+	EnableSatelliteWeapon(SatelliteWeaponSprite2);
 	PowerupActiveTimer = PowerupActiveTime;
 
 	if (PowerupEarnedSound != nullptr)
@@ -1086,6 +1087,7 @@ void APlayerShipPawn::AddSatelliteWeapon()
 void APlayerShipPawn::RemoveSatelliteWeapon()
 {
 	DisableSatelliteWeapon(SatelliteWeaponSprite1);
+	DisableSatelliteWeapon(SatelliteWeaponSprite2);
 	PowerupActiveTimer = 0.0f;
 }
 
