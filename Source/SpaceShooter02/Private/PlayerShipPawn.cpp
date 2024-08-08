@@ -1090,6 +1090,13 @@ void APlayerShipPawn::AddSatelliteWeapon()
 	{
 		UGameplayStatics::PlaySound2D(GetWorld(), PowerupEarnedSound);
 	}
+
+	// Play "Power Up" particle effect
+	// Note: The particle system asset has "Local Space" enabled, which allows the particles to "follow" the emitter.
+	if (PlayerPowerupEffectLarge != nullptr)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAttached(PlayerPowerupEffectLarge, RootComponent, NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
+	}
 }
 
 void APlayerShipPawn::RemoveSatelliteWeapon()

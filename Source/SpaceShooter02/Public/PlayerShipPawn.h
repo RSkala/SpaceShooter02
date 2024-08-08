@@ -351,4 +351,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TObjectPtr<class USoundBase>> ShipDashSounds;
+
+	// Played when adding time to current powerup
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<class UNiagaraSystem> PlayerPowerupEffectSmall;
+
+	// Played when activating powerup
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<class UNiagaraSystem> PlayerPowerupEffectLarge;
 };
