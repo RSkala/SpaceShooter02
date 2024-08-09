@@ -1144,8 +1144,6 @@ void APlayerShipPawn::PowerupTimerElapsed()
 
 void APlayerShipPawn::OnScoreMultiplierPickedUp(int32 ScoreMultiplierValue)
 {
-	UE_LOG(LogTemp, Warning, TEXT("APlayerShipPawn::PowerupTimerElapsed"));
-
 	// TODO: Handle this stuff: PickupItemPercentChanged
 
 	// Get game state

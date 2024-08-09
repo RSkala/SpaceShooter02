@@ -40,8 +40,6 @@ void UGameplayScreen::OnColorShift(FLinearColor LinearColor)
 
 void UGameplayScreen::OnPlayerScoreUpdated(int32 PlayerScore)
 {
-	UE_LOG(LogTemp, Warning, TEXT("UGameplayScreen::OnPlayerScoreUpdated"));
-
 	if (CurrentScoreText != nullptr)
 	{
 		// Convert the score to Text using Grouping (i.e. comma for thousands separators, depending on locale)
@@ -53,8 +51,6 @@ void UGameplayScreen::OnPlayerScoreUpdated(int32 PlayerScore)
 
 void UGameplayScreen::OnPlayerScoreMultiplierUpdated(int32 PlayerScoreMultiplier)
 {
-	UE_LOG(LogTemp, Warning, TEXT("UGameplayScreen::OnPlayerScoreMultiplierUpdated"));
-
 	if (CurrentMultiplierText != nullptr)
 	{
 		FText MultiplierTextGrouped = UKismetTextLibrary::Conv_IntToText(PlayerScoreMultiplier, false, true);
@@ -66,8 +62,6 @@ void UGameplayScreen::OnPlayerScoreMultiplierUpdated(int32 PlayerScoreMultiplier
 
 void UGameplayScreen::OnPlayerHighScoreUpdated(int32 PlayerHighScore)
 {
-	UE_LOG(LogTemp, Warning, TEXT("UGameplayScreen::OnPlayerHighScoreUpdated"));
-
 	if (HighScoreText != nullptr)
 	{
 		//FText ScoreText = FText::FromString(FString::Printf(TEXT("BEST: %d"), PlayerHighScore));
