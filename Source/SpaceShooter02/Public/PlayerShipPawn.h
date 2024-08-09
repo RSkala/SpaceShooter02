@@ -192,6 +192,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
 	TObjectPtr<class UPaperSpriteComponent> SatelliteWeaponSprite4;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
+	TObjectPtr<class USceneComponent> PowerupEffectAttachPoint;
+
 	// --- Input ---
 	// ==== RKS TODO: First, get general input working, then move all input into a PlayerController subclass
 

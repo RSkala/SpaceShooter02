@@ -143,6 +143,11 @@ APlayerShipPawn::APlayerShipPawn()
 	SatelliteWeaponSprite4->SetupAttachment(SatelliteWeaponRotatorComp);
 	SatelliteWeaponSprite4->SetAbsolute(false, true, false);
 	SatelliteWeaponSprite4->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
+
+	// Effect attach point
+	PowerupEffectAttachPoint = CreateDefaultSubobject<USceneComponent>("PowerupEffectAttachPoint");
+	PowerupEffectAttachPoint->SetupAttachment(RootComponent);
+	PowerupEffectAttachPoint->SetAbsolute(false, true, false); // Set rotation to absolute so the effects do not "spin" around when the player ship rotates
 }
 
 // Called every frame
@@ -1115,7 +1120,8 @@ void APlayerShipPawn::AddSatelliteWeapon()
 	// TODO: Attach to a component with absolute rotation so the particles dont rotate with the player ship
 	if (PlayerPowerupEffectLarge != nullptr)
 	{
-		UNiagaraFunctionLibrary::SpawnSystemAttached(PlayerPowerupEffectLarge, RootComponent, NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
+		//UNiagaraFunctionLibrary::SpawnSystemAttached(PlayerPowerupEffectLarge, RootComponent, NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
+		UNiagaraFunctionLibrary::SpawnSystemAttached(PlayerPowerupEffectLarge, PowerupEffectAttachPoint, NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
 	}
 }
 
