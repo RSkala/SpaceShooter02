@@ -615,6 +615,17 @@ void APlayerShipPawn::EnablePlayer()
 
 	// Stops the Actor from ticking
 	SetActorTickEnabled(true);
+
+	// Reset powerup time
+	TotalMultipliersCollected = 0;
+	NumMultipliersCollectedForPowerup = 0;
+	OnPlayerPowerupTimerUpdated.Broadcast(0.0f);
+
+	// Reset the Dash values
+	bIsDashing = false;
+	//DashRechargeTimeElapsed = 0.0f;
+	DashRechargeTimeElapsed = DashRechargeTime; // Start player with full dash ability
+	DashTimeElapsed = 0.0f;
 }
 
 void APlayerShipPawn::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

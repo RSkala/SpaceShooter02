@@ -68,7 +68,7 @@ void ASpaceShooterGameState::StartGame()
 	// Reset collected multipliers
 	//TotalMultipliersCollected = 0;
 	//NumMultipliersCollectedForPowerup = 0;
-	OnPickupItemPercentChanged.Broadcast(0.0f);
+	//OnPickupItemPercentChanged.Broadcast(0.0f);
 }
 
 void ASpaceShooterGameState::EndGame()
