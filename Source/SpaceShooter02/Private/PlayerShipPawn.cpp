@@ -657,7 +657,11 @@ void APlayerShipPawn::OnGameStarted()
 
 void APlayerShipPawn::OnGameEnded()
 {
-	UE_LOG(LogPlayerShipPawnInput, Warning, TEXT("APlayerShipPawn::OnGameEnded -- Need implementation"));
+	// The game has ended. Force show the mouse cursor, as it likely was hidden from right-stick aiming
+	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+	{
+		SetMouseCursorVisiblityFromInput(PlayerController, true);
+	}
 }
 
 void APlayerShipPawn::OnPlayerShipSelected(UPaperSprite* SelectedShipSprite)
