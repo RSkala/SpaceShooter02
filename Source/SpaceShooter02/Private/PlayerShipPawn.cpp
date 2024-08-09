@@ -3,6 +3,7 @@
 #include "PlayerShipPawn.h"
 
 #include "Camera/CameraComponent.h"
+#include "Components/AudioComponent.h"
 #include "Components/InputComponent.h"
 #include "Components/SceneComponent.h"
 #include "Components/SphereComponent.h"
@@ -24,6 +25,7 @@
 
 #include "EnemyBase.h"
 #include "EnemySpawner.h"
+#include "PickupItemScoreMultiplier.h"
 #include "ProjectileBase.h"
 #include "SpaceShooterGameState.h"
 #include "UI/SpaceShooterMenuController.h"
@@ -279,8 +281,10 @@ void APlayerShipPawn::BeginPlay()
 	USpaceShooterMenuController::OnPlayerShipSelected.AddUniqueDynamic(this, &ThisClass::OnPlayerShipSelected);
 
 	// Listen for item pickup
+
 	ASpaceShooterGameState::OnAddSatelliteWeapon.AddUniqueDynamic(this, &ThisClass::AddSatelliteWeapon);
-	ASpaceShooterGameState::OnPickupItemPercentChanged.AddUniqueDynamic(this, &ThisClass::PickupItemPercentChanged);
+	//ASpaceShooterGameState::OnPickupItemPercentChanged.AddUniqueDynamic(this, &ThisClass::PickupItemPercentChanged);
+	APickupItemScoreMultiplier::OnScoreMultiplierPickedUp.AddUniqueDynamic(this, &ThisClass::OnScoreMultiplierPickedUp);
 
 	// Start satellite weapons disabled
 	DisableSatelliteWeapons();
@@ -1093,6 +1097,7 @@ void APlayerShipPawn::AddSatelliteWeapon()
 
 	// Play "Power Up" particle effect
 	// Note: The particle system asset has "Local Space" enabled, which allows the particles to "follow" the emitter.
+	// TODO: Attach to a component with absolute rotation so the particles dont rotate with the player ship
 	if (PlayerPowerupEffectLarge != nullptr)
 	{
 		UNiagaraFunctionLibrary::SpawnSystemAttached(PlayerPowerupEffectLarge, RootComponent, NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
@@ -1122,9 +1127,42 @@ void APlayerShipPawn::PowerupTimerElapsed()
 	RemoveSatelliteWeapon();
 }
 
+void APlayerShipPawn::OnScoreMultiplierPickedUp(int32 ScoreMultiplierValue)
+{
+	UE_LOG(LogTemp, Warning, TEXT("APlayerShipPawn::PowerupTimerElapsed"));
+
+	// TODO: Handle this stuff: PickupItemPercentChanged
+
+	// Get game state
+	if (UWorld* World = GetWorld())
+	{
+		if (ASpaceShooterGameState* GameState = Cast<ASpaceShooterGameState>(World->GetGameState()))
+		{
+			GameState->AddCurrentScoreMultiplier(ScoreMultiplierValue);
+		}
+	}
+
+	// Increment values and notify
+	//CurrentScoreMultiplier += ScoreMultiplierValue;
+	//OnPlayerMultiplierChanged.Broadcast(CurrentScoreMultiplier);
+
+	TotalMultipliersCollected++;
+	NumMultipliersCollectedForPowerup++;
+
+	float Percent = (float)NumMultipliersCollectedForPowerup / (float)NumMultipliersNeededForPowerup;
+	//OnPickupItemPercentChanged.Broadcast(Percent);
+	ASpaceShooterGameState::OnPickupItemPercentChanged.Broadcast(Percent);
+	PickupItemPercentChanged(Percent);
+
+	if (NumMultipliersCollectedForPowerup >= NumMultipliersNeededForPowerup)
+	{
+		NumMultipliersCollectedForPowerup = 0;
+	}
+}
+
 void APlayerShipPawn::PickupItemPercentChanged(float Percent)
 {
-	// TODO - check 100%
+	// Check the pickup item percent
 	if ((int32)Percent == 1)
 	{
 		// Pickup count at 100%. Add a powerup weapon (this will also start the "drain").
@@ -1136,6 +1174,22 @@ void APlayerShipPawn::PickupItemPercentChanged(float Percent)
 		if (!PlayerHasPowerup())
 		{
 			OnPlayerPowerupTimerUpdated.Broadcast(Percent);
+		}
+		else
+		{
+			// Player has an active powerup, so the meter is drainging. Add extra time to the meter.
+			PowerupActiveTimer += PowerupPickupAddTime;
+
+			// Play powerup time add sound
+			if (PowerupTimeAddSound != nullptr)
+			{
+				if (CurrentPowerupTimeAddSound != nullptr)
+				{
+					CurrentPowerupTimeAddSound->Stop();
+				}
+				CurrentPowerupTimeAddSound = nullptr;
+				CurrentPowerupTimeAddSound = UGameplayStatics::SpawnSound2D(GetWorld(), PowerupTimeAddSound);
+			}
 		}
 	}
 }

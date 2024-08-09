@@ -66,8 +66,8 @@ void ASpaceShooterGameState::StartGame()
 	OnPlayerHighScoreChanged.Broadcast(PlayerHighScore);
 
 	// Reset collected multipliers
-	TotalMultipliersCollected = 0;
-	NumMultipliersCollectedForPowerup = 0;
+	//TotalMultipliersCollected = 0;
+	//NumMultipliersCollectedForPowerup = 0;
 	OnPickupItemPercentChanged.Broadcast(0.0f);
 }
 
@@ -85,6 +85,14 @@ void ASpaceShooterGameState::EndGame()
 	{
 		OnGameEnded.Broadcast();
 	}
+}
+
+void ASpaceShooterGameState::AddCurrentScoreMultiplier(int32 AmountToAdd)
+{
+	CurrentScoreMultiplier += AmountToAdd;
+
+	// TODO: Broadcast score multiplier changed
+	//OnPlayerMultiplierChanged.Broadcast(CurrentScoreMultiplier);
 }
 
 void ASpaceShooterGameState::BeginPlay()
@@ -183,20 +191,20 @@ void ASpaceShooterGameState::OnScoreMultiplierPickedUp(int32 ScoreMultiplierValu
 		CurrentMultiplierPickupSound = UGameplayStatics::SpawnSound2D(GetWorld(), ScoreMultiplierPickupSound, 0.9f, SoundPitch);
 	}
 
-	// Increment values and notify
-	CurrentScoreMultiplier += ScoreMultiplierValue;
-	OnPlayerMultiplierChanged.Broadcast(CurrentScoreMultiplier);
+	//// Increment values and notify
+	//CurrentScoreMultiplier += ScoreMultiplierValue;
+	//OnPlayerMultiplierChanged.Broadcast(CurrentScoreMultiplier);
 
-	TotalMultipliersCollected++;
-	NumMultipliersCollectedForPowerup++;
+	//TotalMultipliersCollected++;
+	//NumMultipliersCollectedForPowerup++;
 
-	float Percent = (float)NumMultipliersCollectedForPowerup / (float)NumMultipliersNeededForPowerup;
-	OnPickupItemPercentChanged.Broadcast(Percent);
+	//float Percent = (float)NumMultipliersCollectedForPowerup / (float)NumMultipliersNeededForPowerup;
+	//OnPickupItemPercentChanged.Broadcast(Percent);
 
-	if (NumMultipliersCollectedForPowerup >= NumMultipliersNeededForPowerup)
-	{
-		NumMultipliersCollectedForPowerup = 0;
-	}
+	//if (NumMultipliersCollectedForPowerup >= NumMultipliersNeededForPowerup)
+	//{
+	//	NumMultipliersCollectedForPowerup = 0;
+	//}
 }
 
 void ASpaceShooterGameState::OnSatelliteWeaponPickedUp()

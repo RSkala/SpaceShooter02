@@ -41,6 +41,8 @@ public:
 
 	int32 GetPlayerScore() const { return PlayerScore; }
 
+	void AddCurrentScoreMultiplier(int32 AmountToAdd);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -125,17 +127,17 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "1.0", UIMax = "1.0"))
 	float ScoreMultiplierDropChance = 0.5f;
 
-	// Total multipliers collected during game. Currently unused. May use for savegames/leaderboards, etc.
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 TotalMultipliersCollected = 0;
+	//// Total multipliers collected during game. Currently unused. May use for savegames/leaderboards, etc.
+	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	//int32 TotalMultipliersCollected = 0;
 
-	// Total multipliers collected for powerup
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 NumMultipliersCollectedForPowerup = 0;
+	//// Total multipliers collected for powerup
+	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	//int32 NumMultipliersCollectedForPowerup = 0;
 
-	// Number of multiplier pickups needed to be collected to "activate" powerup
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	int32 NumMultipliersNeededForPowerup = 20;
+	//// Number of multiplier pickups needed to be collected to "activate" powerup
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	//int32 NumMultipliersNeededForPowerup = 20;
 
 	// Amount of time to delay after a game over before sending notification (which delays game over screen and such)
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

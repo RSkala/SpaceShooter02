@@ -128,6 +128,9 @@ protected:
 	void PowerupTimerElapsed();
 
 	UFUNCTION()
+	void OnScoreMultiplierPickedUp(int32 ScoreMultiplierValue);
+
+	UFUNCTION()
 	void PickupItemPercentChanged(float Percent);
 
 	void ShowDashShield();
@@ -359,4 +362,37 @@ protected:
 	// Played when activating powerup
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class UNiagaraSystem> PlayerPowerupEffectLarge;
+
+	// When "powerup" is active, number of seconds to add to the active powerup timer
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float SecondsToAddForActivePowerup = 0.5f;
+
+	// -------------------------------------------------------------------------------------
+	// Below stuff copied from SpaceShooterGameState. Probably should really be in a PlayerState.
+
+	// Total multipliers collected during game. Currently unused. May use for savegames/leaderboards, etc.
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 TotalMultipliersCollected = 0;
+
+	// Total multipliers collected for powerup
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 NumMultipliersCollectedForPowerup = 0;
+
+	// Number of multiplier pickups needed to be collected to "activate" powerup
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int32 NumMultipliersNeededForPowerup = 20;
+
+	// Number of seconds to add to the powerup timer when picking up a powerup while its active
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	float PowerupPickupAddTime = 0.5f;
+
+	// Sound to play when adding powerup time
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TObjectPtr<class USoundBase> PowerupTimeAddSound;
+
+	// Currently playing powerup time add sound
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<class UAudioComponent> CurrentPowerupTimeAddSound;
+
+	// -------------------------------------------------------------------------------------
 };
