@@ -42,9 +42,6 @@ void UMainMenuScreen::NativeOnInitialized()
 
 		// When user presses left, highlight the Credits Button
 		PlayButton->SetNavigationRuleExplicit(EUINavigation::Left, CreditsButton);
-
-		// Set Play button as default keyboard focus
-		PlayButton->SetKeyboardFocus();
 	}
 
 	if (ExitButton != nullptr)
@@ -80,6 +77,7 @@ void UMainMenuScreen::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	// Set Play button as default keyboard focus for this screen
 	if (PlayButton != nullptr)
 	{
 		PlayButton->SetKeyboardFocus();
