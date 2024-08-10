@@ -14,10 +14,32 @@ class SPACESHOOTER02_API UPlayerShipSelectScreen : public UMenuScreenWidget
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
 
 	virtual void OnColorShift(FLinearColor LinearColor) override;
 
-	UFUNCTION() void OnBackButtonClicked();
+	UFUNCTION()
+	void OnBackButtonClicked();
+
+	UFUNCTION()
+	void OnBackButtonHovered();
+
+	UFUNCTION()
+	void OnShipSelectionLaunchButton1Hovered();
+
+	UFUNCTION()
+	void OnShipSelectionLaunchButton2Hovered();
+
+	UFUNCTION()
+	void OnShipSelectionLaunchButton3Hovered();
+
+	UFUNCTION()
+	void OnShipSelectionLaunchButton4Hovered();
+
+	UFUNCTION()
+	void OnShipSelectionLaunchButton5Hovered();
+
+	void SetKeyboardFocusForWidgetLaunchButton(class UShipSelectionWidget* const ShipSelectionWidget);
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))

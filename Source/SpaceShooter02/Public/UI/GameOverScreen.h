@@ -17,6 +17,7 @@ public:
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
 
 	virtual void OnColorShift(FLinearColor LinearColor) override;
 
@@ -28,6 +29,15 @@ protected:
 
 	UFUNCTION()
 	void OnQuitGameButtonClicked();
+
+	UFUNCTION()
+	void OnPlayAgainButtonHovered();
+
+	UFUNCTION()
+	void OnSelectNewShipButtonHovered();
+
+	UFUNCTION()
+	void OnQuitGameButtonHovered();
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))

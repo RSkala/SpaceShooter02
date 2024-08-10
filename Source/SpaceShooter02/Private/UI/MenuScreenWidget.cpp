@@ -30,6 +30,17 @@ void UMenuScreenWidget::NativeOnInitialized()
 	DisableHitTestForImage(Image_Screen_Border_B);
 }
 
+FNavigationReply UMenuScreenWidget::NativeOnNavigation(const FGeometry& MyGeometry, const FNavigationEvent& InNavigationEvent, const FNavigationReply& InDefaultReply)
+{
+	//return Super::NativeOnNavigation(MyGeometry, InNavigationEvent, InDefaultReply);
+	return FNavigationReply::Stop();
+}
+
+FNavigationReply UMenuScreenWidget::NativeOnNavigation(const FGeometry& InGeometry, const FNavigationEvent& NavigationEvent)
+{
+	return FNavigationReply::Stop();
+}
+
 void UMenuScreenWidget::OnColorShift(FLinearColor LinearColor)
 {
 	SetColorForImage(Image_Screen_Border_L, LinearColor);

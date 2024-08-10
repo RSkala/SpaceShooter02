@@ -14,6 +14,10 @@ class SPACESHOOTER02_API UGameplayScreen : public UMenuScreenWidget
 
 protected:
 	virtual void NativeOnInitialized() override;
+	virtual bool NativeSupportsCustomNavigation() const override { return false; }
+	virtual FNavigationReply NativeOnNavigation(const FGeometry& MyGeometry, const FNavigationEvent& InNavigationEvent, const FNavigationReply& InDefaultReply) override;
+	virtual FNavigationReply NativeOnNavigation(const FGeometry& InGeometry, const FNavigationEvent& NavigationEvent) override;
+
 	virtual void OnColorShift(FLinearColor LinearColor) override;
 
 	UFUNCTION()

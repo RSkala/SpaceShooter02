@@ -19,15 +19,23 @@ protected:
 	virtual void NativeConstruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
 
-
-	virtual FNavigationReply NativeOnNavigation(const FGeometry& MyGeometry, const FNavigationEvent& InNavigationEvent, const FNavigationReply& InDefaultReply);
-	virtual FNavigationReply NativeOnNavigation(const FGeometry& InGeometry, const FNavigationEvent& NavigationEvent) override;
+	virtual void NativeOnFocusLost(const FFocusEvent& InFocusEvent) override;
+	virtual void NativeOnFocusChanging(const FWeakWidgetPath& PreviousFocusPath, const FWidgetPath& NewWidgetPath, const FFocusEvent& InFocusEvent) override;
 
 	virtual void OnColorShift(FLinearColor LinearColor) override;
 
 	UFUNCTION() void OnPlayButtonClicked();
 	UFUNCTION() void OnExitButtonClicked();
 	UFUNCTION() void OnCreditsButtonClicked();
+
+	UFUNCTION()
+	void OnPlayButtonHovered();
+
+	UFUNCTION()
+	void OnExitButtonHovered();
+
+	UFUNCTION()
+	void OnCreditsButtonHovered();
 
 	//UFUNCTION() void OnPlayButtonHovered();
 	//UFUNCTION() void OnPlayButtonUnhovered();

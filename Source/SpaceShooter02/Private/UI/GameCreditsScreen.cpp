@@ -44,6 +44,7 @@ void UGameCreditsScreen::NativeOnInitialized()
 	if (BackButton != nullptr)
 	{
 		BackButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnBackButtonClicked);
+		BackButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnBackButtonHovered);
 	}
 }
 
@@ -54,6 +55,20 @@ void UGameCreditsScreen::NativeConstruct()
 	if (BackButton != nullptr)
 	{
 		BackButton->SetKeyboardFocus();
+	}
+}
+
+void UGameCreditsScreen::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
+{
+	Super::NativeTick(MyGeometry, DeltaTime);
+
+	if (BackButton != nullptr)
+	{
+		if (!BackButton->HasKeyboardFocus())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UGameCreditsScreen::NativeTick - No buttons have keyboard focus. Forcing to BackButton"));
+			BackButton->SetKeyboardFocus();
+		}
 	}
 }
 
@@ -71,4 +86,12 @@ void UGameCreditsScreen::OnColorShift(FLinearColor LinearColor)
 void UGameCreditsScreen::OnBackButtonClicked()
 {
 	USpaceShooterMenuController::OnCreditsMenuBackClicked.Broadcast();
+}
+
+void UGameCreditsScreen::OnBackButtonHovered()
+{
+	if (BackButton != nullptr)
+	{
+		BackButton->SetKeyboardFocus();
+	}
 }

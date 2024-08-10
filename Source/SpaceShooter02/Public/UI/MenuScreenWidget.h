@@ -16,6 +16,9 @@ public:
 
 protected:
 	virtual void NativeOnInitialized() override;
+	virtual bool NativeSupportsCustomNavigation() const override { return true; }
+	virtual FNavigationReply NativeOnNavigation(const FGeometry& MyGeometry, const FNavigationEvent& InNavigationEvent, const FNavigationReply& InDefaultReply) override;
+	virtual FNavigationReply NativeOnNavigation(const FGeometry& InGeometry, const FNavigationEvent& NavigationEvent) override;
 	
 	UFUNCTION()
 	virtual void OnColorShift(FLinearColor LinearColor);

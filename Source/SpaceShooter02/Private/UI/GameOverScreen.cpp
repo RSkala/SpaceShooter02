@@ -31,6 +31,7 @@ void UGameOverScreen::NativeOnInitialized()
 	if (PlayAgainButton != nullptr)
 	{
 		PlayAgainButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnPlayAgainButtonClicked);
+		PlayAgainButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnPlayAgainButtonHovered);
 		PlayAgainButton->SetNavigationRuleExplicit(EUINavigation::Right, QuitGameButton);
 		PlayAgainButton->SetNavigationRuleExplicit(EUINavigation::Left, SelectNewShipButton);
 	}
@@ -38,12 +39,14 @@ void UGameOverScreen::NativeOnInitialized()
 	if (SelectNewShipButton != nullptr)
 	{
 		SelectNewShipButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnSelectNewShipButtonClicked);
+		SelectNewShipButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnSelectNewShipButtonHovered);
 		SelectNewShipButton->SetNavigationRuleExplicit(EUINavigation::Right, PlayAgainButton);
 	}
 
 	if (QuitGameButton != nullptr)
 	{
 		QuitGameButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnQuitGameButtonClicked);
+		QuitGameButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnQuitGameButtonHovered);
 		QuitGameButton->SetNavigationRuleExplicit(EUINavigation::Left, PlayAgainButton);
 	}
 }
@@ -55,6 +58,24 @@ void UGameOverScreen::NativeConstruct()
 	if (PlayAgainButton != nullptr)
 	{
 		PlayAgainButton->SetKeyboardFocus();
+	}
+}
+
+void UGameOverScreen::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
+{
+	Super::NativeTick(MyGeometry, DeltaTime);
+
+	// HACK workaround to force keyboard focus if all buttons lose focus.
+	// This will occur if the user clicks the mouse outside of any button.
+	if (PlayAgainButton != nullptr && SelectNewShipButton != nullptr && QuitGameButton != nullptr)
+	{
+		if (!PlayAgainButton->HasKeyboardFocus()
+			&& !SelectNewShipButton->HasKeyboardFocus()
+			&& !QuitGameButton->HasKeyboardFocus())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UGameOverScreen::NativeTick - No buttons have keyboard focus. Forcing to PlayAgainButton"));
+			PlayAgainButton->SetKeyboardFocus();
+		}
 	}
 }
 
@@ -93,6 +114,30 @@ void UGameOverScreen::OnQuitGameButtonClicked()
 {
 	UE_LOG(LogMenus, Log, TEXT("Quitting game from Game Over Screen..."));
 	UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
+}
+
+void UGameOverScreen::OnPlayAgainButtonHovered()
+{
+	if (PlayAgainButton != nullptr)
+	{
+		PlayAgainButton->SetKeyboardFocus();
+	}
+}
+
+void UGameOverScreen::OnSelectNewShipButtonHovered()
+{
+	if (SelectNewShipButton != nullptr)
+	{
+		SelectNewShipButton->SetKeyboardFocus();
+	}
+}
+
+void UGameOverScreen::OnQuitGameButtonHovered()
+{
+	if (QuitGameButton != nullptr)
+	{
+		QuitGameButton->SetKeyboardFocus();
+	}
 }
 
 #undef LOCTEXT_NAMESPACE

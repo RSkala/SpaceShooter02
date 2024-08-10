@@ -2,8 +2,10 @@
 
 #include "UI/MainMenuScreen.h"
 
+//#include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
+#include "GameFramework/PlayerController.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -34,7 +36,7 @@ void UMainMenuScreen::NativeOnInitialized()
 	if (PlayButton != nullptr)
 	{
 		PlayButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnPlayButtonClicked);
-		//PlayButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnPlayButtonHovered);
+		PlayButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnPlayButtonHovered);
 		//PlayButton->OnUnhovered.AddUniqueDynamic(this, &ThisClass::OnPlayButtonUnhovered);
 
 		// When user presses down, highlight the Exit Button
@@ -47,6 +49,7 @@ void UMainMenuScreen::NativeOnInitialized()
 	if (ExitButton != nullptr)
 	{
 		ExitButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnExitButtonClicked);
+		ExitButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnExitButtonHovered);
 
 		// When user presses up, highlight the Play Button
 		ExitButton->SetNavigationRuleExplicit(EUINavigation::Up, PlayButton);
@@ -58,6 +61,7 @@ void UMainMenuScreen::NativeOnInitialized()
 	if (CreditsButton != nullptr)
 	{
 		CreditsButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnCreditsButtonClicked);
+		CreditsButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnCreditsButtonHovered);
 
 		// When user presses right, highlight the Play button
 		CreditsButton->SetNavigationRuleExplicit(EUINavigation::Right, PlayButton);
@@ -87,16 +91,29 @@ void UMainMenuScreen::NativeConstruct()
 void UMainMenuScreen::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
 {
 	Super::NativeTick(MyGeometry, DeltaTime);
+
+	// HACK workaround to force keyboard focus if all buttons lose focus.
+	// This will occur if the user clicks the mouse outside of any button.
+	if (PlayButton != nullptr && ExitButton != nullptr && CreditsButton != nullptr)
+	{
+		if (!PlayButton->HasKeyboardFocus()
+			&& !ExitButton->HasKeyboardFocus()
+			&& !CreditsButton->HasKeyboardFocus())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UMainMenuScreen::NativeTick - No buttons have keyboard focus. Forcing to PlayButton"));
+			PlayButton->SetKeyboardFocus();
+		}
+	}
 }
 
-FNavigationReply UMainMenuScreen::NativeOnNavigation(const FGeometry& MyGeometry, const FNavigationEvent& InNavigationEvent, const FNavigationReply& InDefaultReply)
+void UMainMenuScreen::NativeOnFocusLost(const FFocusEvent& InFocusEvent)
 {
-	return Super::NativeOnNavigation(MyGeometry, InNavigationEvent, InDefaultReply);
+	Super::NativeOnFocusLost(InFocusEvent);
 }
 
-FNavigationReply UMainMenuScreen::NativeOnNavigation(const FGeometry& InGeometry, const FNavigationEvent& NavigationEvent)
+void UMainMenuScreen::NativeOnFocusChanging(const FWeakWidgetPath& PreviousFocusPath, const FWidgetPath& NewWidgetPath, const FFocusEvent& InFocusEvent)
 {
-	return Super::NativeOnNavigation(InGeometry, NavigationEvent);
+	Super::NativeOnFocusChanging(PreviousFocusPath, NewWidgetPath, InFocusEvent);
 }
 
 void UMainMenuScreen::OnColorShift(FLinearColor LinearColor)
@@ -127,4 +144,28 @@ void UMainMenuScreen::OnExitButtonClicked()
 void UMainMenuScreen::OnCreditsButtonClicked()
 {
 	USpaceShooterMenuController::OnMainMenuCreditsClicked.Broadcast();
+}
+
+void UMainMenuScreen::OnPlayButtonHovered()
+{
+	if (PlayButton != nullptr)
+	{
+		PlayButton->SetKeyboardFocus();
+	}
+}
+
+void UMainMenuScreen::OnExitButtonHovered()
+{
+	if (ExitButton != nullptr)
+	{
+		ExitButton->SetKeyboardFocus();
+	}
+}
+
+void UMainMenuScreen::OnCreditsButtonHovered()
+{
+	if (CreditsButton != nullptr)
+	{
+		CreditsButton->SetKeyboardFocus();
+	}
 }

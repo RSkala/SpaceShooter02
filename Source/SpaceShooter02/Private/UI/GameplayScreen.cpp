@@ -28,6 +28,18 @@ void UGameplayScreen::NativeOnInitialized()
 	OnPowerupTimeUpdated(0.0f);
 }
 
+FNavigationReply UGameplayScreen::NativeOnNavigation(const FGeometry& MyGeometry, const FNavigationEvent& InNavigationEvent, const FNavigationReply& InDefaultReply)
+{
+	//return FNavigationReply::Stop();
+	return UUserWidget::NativeOnNavigation(MyGeometry, InNavigationEvent, InDefaultReply);
+}
+
+FNavigationReply UGameplayScreen::NativeOnNavigation(const FGeometry& InGeometry, const FNavigationEvent& NavigationEvent)
+{
+	//return FNavigationReply::Stop();
+	return UUserWidget::NativeOnNavigation(InGeometry, NavigationEvent);
+}
+
 void UGameplayScreen::OnColorShift(FLinearColor LinearColor)
 {
 	Super::OnColorShift(LinearColor);

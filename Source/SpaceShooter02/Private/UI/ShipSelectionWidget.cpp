@@ -61,6 +61,18 @@ void UShipSelectionWidget::NativeOnInitialized()
 	}
 }
 
+FNavigationReply UShipSelectionWidget::NativeOnNavigation(const FGeometry& MyGeometry, const FNavigationEvent& InNavigationEvent, const FNavigationReply& InDefaultReply)
+{
+	//return Super::NativeOnNavigation(MyGeometry, InNavigationEvent, InDefaultReply);
+	return FNavigationReply::Stop();
+}
+
+FNavigationReply UShipSelectionWidget::NativeOnNavigation(const FGeometry& InGeometry, const FNavigationEvent& InNavigationEvent)
+{
+	//return Super::NativeOnNavigation(InGeometry, InNavigationEvent);
+	return FNavigationReply::Stop();
+}
+
 void UShipSelectionWidget::OnLaunchButtonClicked()
 {
 	UE_LOG(LogTemp, Warning, TEXT("UShipSelectionWidget::OnLaunchButtonClicked - %s"), *GetName());

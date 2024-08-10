@@ -18,6 +18,7 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 	if (BackButton != nullptr)
 	{
 		BackButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnBackButtonClicked);
+		BackButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnBackButtonHovered);
 	}
 
 	// -------------------------------------------------
@@ -28,6 +29,11 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 			TEXT("WHITE"),
 			FLinearColor::White,
 			ShipSprites.Num() > 0 ? ShipSprites[0] : nullptr);
+
+		if (UButton* LaunchButton = ShipSelectionWidget1->GetLaunchButton())
+		{
+			LaunchButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnShipSelectionLaunchButton1Hovered);
+		}
 	}
 
 	if (ShipSelectionWidget2 != nullptr)
@@ -37,6 +43,11 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 			TEXT("ORANGE"),
 			FLinearColor(1.0f, 0.262251f, 0.0f),
 			ShipSprites.Num() > 1 ? ShipSprites[1] : nullptr);
+
+		if (UButton* LaunchButton = ShipSelectionWidget2->GetLaunchButton())
+		{
+			LaunchButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnShipSelectionLaunchButton2Hovered);
+		}
 	}
 
 	if (ShipSelectionWidget3 != nullptr)
@@ -46,6 +57,11 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 			TEXT("GREEN"),
 			FLinearColor(0.165132f, 0.768151f, 0.287441f),
 			ShipSprites.Num() > 2 ? ShipSprites[2] : nullptr);
+
+		if (UButton* LaunchButton = ShipSelectionWidget3->GetLaunchButton())
+		{
+			LaunchButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnShipSelectionLaunchButton3Hovered);
+		}
 	}
 
 	if (ShipSelectionWidget4 != nullptr)
@@ -55,6 +71,11 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 			TEXT("PURPLE"),
 			FLinearColor(0.361307f, 0.165132f, 1.0f),
 			ShipSprites.Num() > 3 ? ShipSprites[3] : nullptr);
+
+		if (UButton* LaunchButton = ShipSelectionWidget4->GetLaunchButton())
+		{
+			LaunchButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnShipSelectionLaunchButton4Hovered);
+		}
 	}
 
 	if (ShipSelectionWidget5 != nullptr)
@@ -64,6 +85,11 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 			TEXT("RED"),
 			FLinearColor(0.445201f, 0.005182f, 0.029557f),
 			ShipSprites.Num() > 4 ? ShipSprites[4] : nullptr);
+
+		if (UButton* LaunchButton = ShipSelectionWidget5->GetLaunchButton())
+		{
+			LaunchButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnShipSelectionLaunchButton5Hovered);
+		}
 	}
 }
 
@@ -71,40 +97,80 @@ void UPlayerShipSelectScreen::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	
-	BackButton->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget5->GetLaunchButton());
-	BackButton->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget1->GetLaunchButton());
-
 	if (ShipSelectionWidget1 != nullptr &&
 		ShipSelectionWidget2 != nullptr &&
 		ShipSelectionWidget3 != nullptr &&
 		ShipSelectionWidget4 != nullptr &&
 		ShipSelectionWidget5 != nullptr)
 	{
-		ShipSelectionWidget1->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Left, BackButton);
-		ShipSelectionWidget1->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget2->GetLaunchButton());
-		ShipSelectionWidget1->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+		if (UButton* LaunchButton = ShipSelectionWidget1->GetLaunchButton())
+		{
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Left, BackButton);
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget2->GetLaunchButton());
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+		}
 
-		ShipSelectionWidget2->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget1->GetLaunchButton());
-		ShipSelectionWidget2->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget3->GetLaunchButton());
-		ShipSelectionWidget2->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+		if (UButton* LaunchButton = ShipSelectionWidget2->GetLaunchButton())
+		{
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget1->GetLaunchButton());
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget3->GetLaunchButton());
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+		}
 
-		ShipSelectionWidget3->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget2->GetLaunchButton());
-		ShipSelectionWidget3->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget4->GetLaunchButton());
-		ShipSelectionWidget3->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+		if (UButton* LaunchButton = ShipSelectionWidget3->GetLaunchButton())
+		{
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget2->GetLaunchButton());
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget4->GetLaunchButton());
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+		}
 
-		ShipSelectionWidget4->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget3->GetLaunchButton());
-		ShipSelectionWidget4->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget5->GetLaunchButton());
-		ShipSelectionWidget4->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+		if (UButton* LaunchButton = ShipSelectionWidget4->GetLaunchButton())
+		{
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget3->GetLaunchButton());
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget5->GetLaunchButton());
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+		}
 
-		ShipSelectionWidget5->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget4->GetLaunchButton());
-		ShipSelectionWidget5->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Right, BackButton);
-		ShipSelectionWidget5->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+		if (UButton* LaunchButton = ShipSelectionWidget5->GetLaunchButton())
+		{
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget4->GetLaunchButton());
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Right, BackButton);
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+		}
 	}
 	
 	if (BackButton != nullptr)
 	{
+		BackButton->SetNavigationRuleExplicit(EUINavigation::Up, ShipSelectionWidget1->GetLaunchButton());
+		BackButton->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget5->GetLaunchButton());
+		BackButton->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget1->GetLaunchButton());
 		BackButton->SetKeyboardFocus();
+	}
+}
+
+void UPlayerShipSelectScreen::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
+{
+	Super::NativeTick(MyGeometry, DeltaTime);
+
+	// HACK workaround to force keyboard focus if all buttons lose focus.
+	// This will occur if the user clicks the mouse outside of any button.
+	if (BackButton != nullptr
+		&& ShipSelectionWidget1 != nullptr && ShipSelectionWidget1->GetLaunchButton() != nullptr
+		&& ShipSelectionWidget2 != nullptr && ShipSelectionWidget2->GetLaunchButton() != nullptr
+		&& ShipSelectionWidget3 != nullptr && ShipSelectionWidget3->GetLaunchButton() != nullptr
+		&& ShipSelectionWidget4 != nullptr && ShipSelectionWidget4->GetLaunchButton() != nullptr
+		&& ShipSelectionWidget5 != nullptr && ShipSelectionWidget5->GetLaunchButton() != nullptr)
+	{
+		if (!BackButton->HasKeyboardFocus()
+			&& !ShipSelectionWidget1->GetLaunchButton()->HasKeyboardFocus()
+			&& !ShipSelectionWidget2->GetLaunchButton()->HasKeyboardFocus()
+			&& !ShipSelectionWidget3->GetLaunchButton()->HasKeyboardFocus()
+			&& !ShipSelectionWidget4->GetLaunchButton()->HasKeyboardFocus()
+			&& !ShipSelectionWidget5->GetLaunchButton()->HasKeyboardFocus())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("UPlayerShipSelectScreen::NativeTick - No buttons have keyboard focus. Forcing to BackButton"));
+			BackButton->SetKeyboardFocus();
+		}
 	}
 }
 
@@ -147,4 +213,48 @@ void UPlayerShipSelectScreen::OnColorShift(FLinearColor LinearColor)
 void UPlayerShipSelectScreen::OnBackButtonClicked()
 {
 	USpaceShooterMenuController::OnShipSelectBackClicked.Broadcast();
+}
+
+void UPlayerShipSelectScreen::OnBackButtonHovered()
+{
+	if (BackButton != nullptr)
+	{
+		BackButton->SetKeyboardFocus();
+	}
+}
+
+void UPlayerShipSelectScreen::OnShipSelectionLaunchButton1Hovered()
+{
+	SetKeyboardFocusForWidgetLaunchButton(ShipSelectionWidget1);
+}
+
+void UPlayerShipSelectScreen::OnShipSelectionLaunchButton2Hovered()
+{
+	SetKeyboardFocusForWidgetLaunchButton(ShipSelectionWidget2);
+}
+
+void UPlayerShipSelectScreen::OnShipSelectionLaunchButton3Hovered()
+{
+	SetKeyboardFocusForWidgetLaunchButton(ShipSelectionWidget3);
+}
+
+void UPlayerShipSelectScreen::OnShipSelectionLaunchButton4Hovered()
+{
+	SetKeyboardFocusForWidgetLaunchButton(ShipSelectionWidget4);
+}
+
+void UPlayerShipSelectScreen::OnShipSelectionLaunchButton5Hovered()
+{
+	SetKeyboardFocusForWidgetLaunchButton(ShipSelectionWidget5);
+}
+
+void UPlayerShipSelectScreen::SetKeyboardFocusForWidgetLaunchButton(UShipSelectionWidget* const ShipSelectionWidget)
+{
+	if (ShipSelectionWidget != nullptr)
+	{
+		if (UButton* LaunchButton = ShipSelectionWidget->GetLaunchButton())
+		{
+			LaunchButton->SetKeyboardFocus();
+		}
+	}
 }
