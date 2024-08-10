@@ -1196,7 +1196,7 @@ void APlayerShipPawn::PickupItemPercentChanged(float Percent)
 		}
 		else
 		{
-			// Player has an active powerup, so the meter is drainging. Add extra time to the meter.
+			// Player has an active powerup, so the meter is draining. Add extra time to the meter.
 			PowerupActiveTimer += PowerupPickupAddTime;
 
 			// Play powerup time add sound
@@ -1208,6 +1208,12 @@ void APlayerShipPawn::PickupItemPercentChanged(float Percent)
 				}
 				CurrentPowerupTimeAddSound = nullptr;
 				CurrentPowerupTimeAddSound = UGameplayStatics::SpawnSound2D(GetWorld(), PowerupTimeAddSound);
+			}
+
+			// Play powerup time added effect
+			if (PlayerPowerupEffectSmall != nullptr)
+			{
+				UNiagaraFunctionLibrary::SpawnSystemAttached(PlayerPowerupEffectSmall, PowerupEffectAttachPoint, NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
 			}
 		}
 	}
