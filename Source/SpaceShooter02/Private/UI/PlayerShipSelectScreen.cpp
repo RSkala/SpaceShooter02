@@ -67,6 +67,47 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 	}
 }
 
+void UPlayerShipSelectScreen::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	
+	BackButton->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget5->GetLaunchButton());
+	BackButton->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget1->GetLaunchButton());
+
+	if (ShipSelectionWidget1 != nullptr &&
+		ShipSelectionWidget2 != nullptr &&
+		ShipSelectionWidget3 != nullptr &&
+		ShipSelectionWidget4 != nullptr &&
+		ShipSelectionWidget5 != nullptr)
+	{
+		ShipSelectionWidget1->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Left, BackButton);
+		ShipSelectionWidget1->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget2->GetLaunchButton());
+		ShipSelectionWidget1->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+
+		ShipSelectionWidget2->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget1->GetLaunchButton());
+		ShipSelectionWidget2->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget3->GetLaunchButton());
+		ShipSelectionWidget2->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+
+		ShipSelectionWidget3->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget2->GetLaunchButton());
+		ShipSelectionWidget3->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget4->GetLaunchButton());
+		ShipSelectionWidget3->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+
+		ShipSelectionWidget4->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget3->GetLaunchButton());
+		ShipSelectionWidget4->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget5->GetLaunchButton());
+		ShipSelectionWidget4->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+
+		ShipSelectionWidget5->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget4->GetLaunchButton());
+		ShipSelectionWidget5->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Right, BackButton);
+		ShipSelectionWidget5->GetLaunchButton()->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+	}
+	
+	if (BackButton != nullptr)
+	{
+		BackButton->SetKeyboardFocus();
+	}
+}
+
 void UPlayerShipSelectScreen::OnColorShift(FLinearColor LinearColor)
 {
 	Super::OnColorShift(LinearColor);

@@ -47,6 +47,16 @@ void UGameCreditsScreen::NativeOnInitialized()
 	}
 }
 
+void UGameCreditsScreen::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	if (BackButton != nullptr)
+	{
+		BackButton->SetKeyboardFocus();
+	}
+}
+
 void UGameCreditsScreen::OnColorShift(FLinearColor LinearColor)
 {
 	Super::OnColorShift(LinearColor);

@@ -36,16 +36,34 @@ void UMainMenuScreen::NativeOnInitialized()
 		PlayButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnPlayButtonClicked);
 		//PlayButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnPlayButtonHovered);
 		//PlayButton->OnUnhovered.AddUniqueDynamic(this, &ThisClass::OnPlayButtonUnhovered);
+
+		// When user presses down, highlight the Exit Button
+		PlayButton->SetNavigationRuleExplicit(EUINavigation::Down, ExitButton);
+
+		// When user presses left, highlight the Credits Button
+		PlayButton->SetNavigationRuleExplicit(EUINavigation::Left, CreditsButton);
+
+		// Set Play button as default keyboard focus
+		PlayButton->SetKeyboardFocus();
 	}
 
 	if (ExitButton != nullptr)
 	{
 		ExitButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnExitButtonClicked);
+
+		// When user presses up, highlight the Play Button
+		ExitButton->SetNavigationRuleExplicit(EUINavigation::Up, PlayButton);
+
+		// When user presses left, highlight the Credits Button
+		ExitButton->SetNavigationRuleExplicit(EUINavigation::Left, CreditsButton);
 	}
 
 	if (CreditsButton != nullptr)
 	{
 		CreditsButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnCreditsButtonClicked);
+
+		// When user presses right, highlight the Play button
+		CreditsButton->SetNavigationRuleExplicit(EUINavigation::Right, PlayButton);
 	}
 
 	if (VersionText != nullptr)
@@ -56,6 +74,31 @@ void UMainMenuScreen::NativeOnInitialized()
 
 	// Play the VO test sound
 	//UGameplayStatics::PlaySound2D(GetWorld(), VOTestSound, 1.0f, 1.0f);
+}
+
+void UMainMenuScreen::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	if (PlayButton != nullptr)
+	{
+		PlayButton->SetKeyboardFocus();
+	}
+}
+
+void UMainMenuScreen::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
+{
+	Super::NativeTick(MyGeometry, DeltaTime);
+}
+
+FNavigationReply UMainMenuScreen::NativeOnNavigation(const FGeometry& MyGeometry, const FNavigationEvent& InNavigationEvent, const FNavigationReply& InDefaultReply)
+{
+	return Super::NativeOnNavigation(MyGeometry, InNavigationEvent, InDefaultReply);
+}
+
+FNavigationReply UMainMenuScreen::NativeOnNavigation(const FGeometry& InGeometry, const FNavigationEvent& NavigationEvent)
+{
+	return Super::NativeOnNavigation(InGeometry, NavigationEvent);
 }
 
 void UMainMenuScreen::OnColorShift(FLinearColor LinearColor)

@@ -58,7 +58,7 @@ void UMenuScreenWidget::SetColorShiftForButton(UButton* Button, FLinearColor Shi
 {
 	if (Button != nullptr)
 	{
-		FLinearColor LinearColor = Button->IsHovered() ? ShiftColor : FLinearColor::White;
+		FLinearColor LinearColor = Button->IsHovered() || Button->HasKeyboardFocus() ? ShiftColor : FLinearColor::White;
 		//Button->SetColorAndOpacity(LinearColor); // This sets the text color
 		Button->SetBackgroundColor(LinearColor);
 	}

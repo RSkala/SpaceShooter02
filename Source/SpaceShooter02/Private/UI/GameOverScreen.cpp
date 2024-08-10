@@ -31,16 +31,30 @@ void UGameOverScreen::NativeOnInitialized()
 	if (PlayAgainButton != nullptr)
 	{
 		PlayAgainButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnPlayAgainButtonClicked);
+		PlayAgainButton->SetNavigationRuleExplicit(EUINavigation::Right, QuitGameButton);
+		PlayAgainButton->SetNavigationRuleExplicit(EUINavigation::Left, SelectNewShipButton);
 	}
 
 	if (SelectNewShipButton != nullptr)
 	{
 		SelectNewShipButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnSelectNewShipButtonClicked);
+		SelectNewShipButton->SetNavigationRuleExplicit(EUINavigation::Right, PlayAgainButton);
 	}
 
 	if (QuitGameButton != nullptr)
 	{
 		QuitGameButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnQuitGameButtonClicked);
+		QuitGameButton->SetNavigationRuleExplicit(EUINavigation::Left, PlayAgainButton);
+	}
+}
+
+void UGameOverScreen::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	if (PlayAgainButton != nullptr)
+	{
+		PlayAgainButton->SetKeyboardFocus();
 	}
 }
 
