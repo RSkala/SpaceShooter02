@@ -153,8 +153,8 @@ void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* Ene
 			FRotator RandomExplosionRotation = FRotator(FMath::FRandRange(0.0f, 360.0f), 0.0f, 0.0f);
 
 			// Create the explosion
-			World->SpawnActor<AExplosionBase>(ExplosionClassToSpawn, EnemyDeathPosition, FRotator());
-			//World->SpawnActor<AExplosionBase>(EnemyExplosionClass, EnemyDeathPosition, RandomExplosionRotation);
+			//World->SpawnActor<AExplosionBase>(ExplosionClassToSpawn, EnemyDeathPosition, FRotator());
+			World->SpawnActor<AExplosionBase>(ExplosionClassToSpawn, EnemyDeathPosition, RandomExplosionRotation);
 		}
 	}
 
