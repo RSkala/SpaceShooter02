@@ -91,8 +91,8 @@ void ASpaceShooterGameState::AddCurrentScoreMultiplier(int32 AmountToAdd)
 {
 	CurrentScoreMultiplier += AmountToAdd;
 
-	// TODO: Broadcast score multiplier changed
-	//OnPlayerMultiplierChanged.Broadcast(CurrentScoreMultiplier);
+	// Broadcast score multiplier changed
+	OnPlayerMultiplierChanged.Broadcast(CurrentScoreMultiplier);
 }
 
 void ASpaceShooterGameState::BeginPlay()
