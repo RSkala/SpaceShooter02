@@ -118,6 +118,9 @@ APlayerShipPawn::APlayerShipPawn()
 	DashShieldSpriteComp->SetupAttachment(RootComponent);
 	DashShieldSpriteComp->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
 
+	DashExhaustParticleComp = CreateDefaultSubobject<UNiagaraComponent>(TEXT("DashExhaustParticleComp"));
+	DashExhaustParticleComp->SetupAttachment(RootComponent);
+
 	// --- Satellite Weapon Components ---
 
 	SatelliteWeaponRotatorComp = CreateDefaultSubobject<USceneComponent>(TEXT("SatelliteWeaponRotatorComp"));
@@ -275,6 +278,11 @@ void APlayerShipPawn::BeginPlay()
 		ShipExhaustParticleComp->Deactivate();
 	}
 
+	if (DashExhaustParticleComp != nullptr)
+	{
+		DashExhaustParticleComp->Deactivate();
+	}
+
 	// Start the player disabled
 	DisablePlayer();
 
@@ -321,6 +329,12 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 			if (SphereComp != nullptr)
 			{
 				SphereComp->SetSphereRadius(PreDashCollisionSphereRadius, true);
+			}
+
+			// Disable dash exhaust particle
+			if (DashExhaustParticleComp != nullptr)
+			{
+				DashExhaustParticleComp->Deactivate();
 			}
 		}
 		else
@@ -862,6 +876,12 @@ void APlayerShipPawn::InputDash(const FInputActionValue& InputActionValue)
 		//UPaperSprite* RandomSprite = PlayerShipSprites[FMath::RandRange(0, PlayerShipSprites.Num() - 1)];
 		USoundBase* RandomDashSound = ShipDashSounds[FMath::RandRange(0, ShipDashSounds.Num() - 1)];
 		UGameplayStatics::PlaySound2D(GetWorld(), RandomDashSound);
+	}
+
+	// Enable dash exhaust particle
+	if (DashExhaustParticleComp != nullptr)
+	{
+		DashExhaustParticleComp->Activate();
 	}
 
 	OnPlayerDashUpdated.Broadcast(0.0f);
