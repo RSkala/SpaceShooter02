@@ -1166,7 +1166,12 @@ void APlayerShipPawn::OnScoreMultiplierPickedUp(int32 ScoreMultiplierValue)
 	//OnPlayerMultiplierChanged.Broadcast(CurrentScoreMultiplier);
 
 	TotalMultipliersCollected++;
-	NumMultipliersCollectedForPowerup++;
+
+	// Do not increment the num powerups collected if the player has a powerup
+	if (!PlayerHasPowerup())
+	{
+		NumMultipliersCollectedForPowerup++;
+	}
 
 	float Percent = (float)NumMultipliersCollectedForPowerup / (float)NumMultipliersNeededForPowerup;
 	//OnPickupItemPercentChanged.Broadcast(Percent);
