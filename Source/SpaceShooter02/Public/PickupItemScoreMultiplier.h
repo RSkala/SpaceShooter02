@@ -14,6 +14,7 @@ class SPACESHOOTER02_API APickupItemScoreMultiplier : public APickupItemBase
 	GENERATED_BODY()
 
 protected:
+	virtual void UpdateLifetime(float DeltaTime) override;
 	virtual void HandlePlayerPickup() override;
 
 public:

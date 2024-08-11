@@ -24,6 +24,7 @@ void APickupItemBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	UpdateTargetAttraction(DeltaTime);
 	UpdateMovement(DeltaTime);
+	UpdateLifetime(DeltaTime);
 }
 
 void APickupItemBase::BeginPlay()
@@ -135,6 +136,21 @@ void APickupItemBase::UpdateTargetAttraction(float DeltaTime)
 	}
 }
 
+void APickupItemBase::UpdateLifetime(float DeltaTime)
+{
+	// Do not update lifetime if attracting to target so it doesn't disappear while being pulled in
+	if (IsAttractingToTarget())
+	{
+		return;
+	}
+
+	TimeAlive += DeltaTime;
+	if (TimeAlive >= LifeTimeSeconds)
+	{
+		Destroy();
+	}
+}
+
 void APickupItemBase::OnCollisionOverlap(
 	UPrimitiveComponent* OverlappedComponent,
 	AActor* OtherActor,
@@ -146,6 +162,10 @@ void APickupItemBase::OnCollisionOverlap(
 	APlayerShipPawn* PlayerShipPawn = Cast<APlayerShipPawn>(OtherActor);
 	if (PlayerShipPawn != nullptr)
 	{
+		if (IsActorBeingDestroyed())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Pickup item getting picked up while being destroyed - %s"), *GetName());
+		}
 		HandlePlayerPickup();
 		Destroy();
 	}

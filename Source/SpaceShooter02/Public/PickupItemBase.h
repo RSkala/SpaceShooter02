@@ -24,6 +24,7 @@ protected:
 	virtual void UpdateAttractionMovement(float DeltaTime);
 	virtual void UpdateNonAttractionMovement(float DeltaTime);
 	virtual void UpdateTargetAttraction(float DeltaTime);
+	virtual void UpdateLifetime(float DeltaTime);
 
 	virtual bool IsAttractingToTarget() const { return AttractionTargetActor != nullptr; }
 
@@ -58,7 +59,7 @@ protected:
 	// --- Lifetime ---
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float LifeTimeSeconds = 3.0f;
+	float LifeTimeSeconds = 10.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float TimeAlive = 0.0f;
