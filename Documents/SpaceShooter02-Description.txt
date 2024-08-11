@@ -1,0 +1,12 @@
+
+Generic Space Shooter 02 - Game Description WIP
+
+Features:
+* Derivative Gameplay!
+* Brain dead "AI"!
+* Programmer Art!
+* Default Unreal Engine particle effects!
+* Default Unreal Engine UI!
+* No replayability!
+
+
