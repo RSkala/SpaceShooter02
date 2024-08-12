@@ -56,7 +56,7 @@ private:
 	void OnPlayerShipSelectStart();
 
 	UFUNCTION() void OnGameplayStart();
-	UFUNCTION() void OnGameplayEnd();
+	UFUNCTION() void OnGameplayEnd(int32 FinalScore);
 	UFUNCTION() void MainMenuPlayClicked();
 	UFUNCTION() void PlayerShipSelected(class UPaperSprite* SelectedShipSprite);
 	UFUNCTION() void GameOverSelectShipClicked();
@@ -77,7 +77,7 @@ private:
 	void OpenPlayerShipSelectScreen();
 	void ClosePlayerShipSelectScreen();
 
-	void OpenGameOverScreen();
+	void OpenGameOverScreen(int32 FinalScore);
 	void CloseGameOverScreen();
 
 	void SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray);

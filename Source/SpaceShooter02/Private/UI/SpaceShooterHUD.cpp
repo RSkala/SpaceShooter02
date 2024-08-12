@@ -34,7 +34,7 @@ void ASpaceShooterHUD::OnGameStarted()
 	}
 }
 
-void ASpaceShooterHUD::OnGameEnded()
+void ASpaceShooterHUD::OnGameEnded(int32 FinalScore)
 {
 	if (ensure(GameplayScreen != nullptr))
 	{

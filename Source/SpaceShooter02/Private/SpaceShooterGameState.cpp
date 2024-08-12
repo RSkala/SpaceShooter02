@@ -71,19 +71,20 @@ void ASpaceShooterGameState::StartGame()
 	//OnPickupItemPercentChanged.Broadcast(0.0f);
 }
 
-void ASpaceShooterGameState::EndGame()
+void ASpaceShooterGameState::EndGame(int32 FinalScore)
 {
 	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::EndGame - %s"), *GetName());
 
 	if (UWorld* World = GetWorld())
 	{
 		FTimerHandle TimerHandle;
-		FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &ThisClass::OnGameOverTimerTimeout);
+		//FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &ThisClass::OnGameOverTimerTimeout);
+		FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &ThisClass::OnGameOverTimerTimeout, FinalScore);
 		World->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, DelayAfterGameOver, false);
 	}
 	else
 	{
-		OnGameEnded.Broadcast();
+		OnGameEnded.Broadcast(FinalScore);
 	}
 }
 
@@ -151,7 +152,7 @@ void ASpaceShooterGameState::OnPlayerShipSpawned(APlayerShipPawn* const InPlayer
 
 void ASpaceShooterGameState::OnPlayerShipDestroyed()
 {
-	EndGame();
+	EndGame(PlayerScore);
 }
 
 void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, USoundBase* EnemyDeathSound)
@@ -250,9 +251,9 @@ void ASpaceShooterGameState::SpawnScoreMultiplierPickup(FVector SpawnPosition)
 	}
 }
 
-void ASpaceShooterGameState::OnGameOverTimerTimeout()
+void ASpaceShooterGameState::OnGameOverTimerTimeout(int32 FinalScore)
 {
 	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::OnGameOverTimerTimeout"));
-	OnGameEnded.Broadcast();
+	OnGameEnded.Broadcast(FinalScore);
 }
 

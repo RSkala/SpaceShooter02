@@ -674,7 +674,7 @@ void APlayerShipPawn::OnGameStarted()
 	bPlayerDead = false;
 }
 
-void APlayerShipPawn::OnGameEnded()
+void APlayerShipPawn::OnGameEnded(int32 FinalScore)
 {
 	// The game has ended. Force show the mouse cursor, as it likely was hidden from right-stick aiming
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))

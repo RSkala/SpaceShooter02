@@ -77,7 +77,7 @@ protected:
 	void OnGameStarted();
 
 	UFUNCTION()
-	void OnGameEnded();
+	void OnGameEnded(int32 FinalScore);
 
 	UFUNCTION()
 	void OnPlayerShipSelected(class UPaperSprite* SelectedShipSprite);

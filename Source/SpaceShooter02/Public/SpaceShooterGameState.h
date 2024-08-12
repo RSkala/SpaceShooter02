@@ -7,7 +7,7 @@
 #include "SpaceShooterGameState.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameStartedDelegateSignature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameEndedDelegateSignature); // TODO int32, FinalScore
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FGameEndedDelegateSignature, int32, FinalScore);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerScoreChangedDelegateSignature, int32, PlayerScore);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerMultiplierChangedDelegateSignature, int32, ScoreMultiplier);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHighScoreChangedDelegateSignature, int32, HighScore);
@@ -37,7 +37,7 @@ public:
 	void IncrementNumEnemiesDefeated() { NumEnemiesDefeated++; }
 
 	void StartGame();
-	void EndGame();
+	void EndGame(int32 FinalScore);
 
 	int32 GetPlayerScore() const { return PlayerScore; }
 
@@ -71,7 +71,7 @@ protected:
 
 	void SpawnScoreMultiplierPickup(FVector SpawnPosition);
 
-	void OnGameOverTimerTimeout();
+	void OnGameOverTimerTimeout(int32 FinalScore);
 
 public:
 	static FGameStartedDelegateSignature OnGameStarted; // Delegate called when the player starts a game (either from main menu or game over)

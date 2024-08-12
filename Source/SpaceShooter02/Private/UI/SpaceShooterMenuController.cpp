@@ -95,12 +95,12 @@ void USpaceShooterMenuController::OnGameplayStart()
 	}
 }
 
-void USpaceShooterMenuController::OnGameplayEnd()
+void USpaceShooterMenuController::OnGameplayEnd(int32 FinalScore)
 {
 	CurrentMenuState = EMenuState::GameOver;
 
 	// Create the Game Over screen
-	OpenGameOverScreen();
+	OpenGameOverScreen(FinalScore);
 }
 
 void USpaceShooterMenuController::MainMenuPlayClicked()
@@ -234,18 +234,13 @@ void USpaceShooterMenuController::ClosePlayerShipSelectScreen()
 	PlayerShipSelectScreen = nullptr;
 }
 
-void USpaceShooterMenuController::OpenGameOverScreen()
+void USpaceShooterMenuController::OpenGameOverScreen(int32 FinalScore)
 {
+	// Open the Game Over screen and set the Game Over screen score
 	GameOverScreen = Cast<UGameOverScreen>(OpenScreen(GameOverScreenClass));
-	ensure(GameOverScreen != nullptr);
-
-	// Set game over screen score
-	if (UWorld* World = GetWorld())
+	if (ensure(GameOverScreen != nullptr))
 	{
-		if (ASpaceShooterGameState* GameState = World->GetGameState<ASpaceShooterGameState>())
-		{
-			GameOverScreen->InitGameOverScreen(GameState->GetPlayerScore()); // MARKED FOR DEATH. This should be handled by delegates.
-		}
+		GameOverScreen->InitGameOverScreen(FinalScore);
 	}
 
 	// Play "game over" VO
@@ -287,6 +282,7 @@ void USpaceShooterMenuController::SelectAndPlayRandomVO(TArray<TSoftObjectPtr<US
 bool USpaceShooterMenuController::HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const
 {
 	return (SoundVOPlayedFlags & (uint8)SoundVOPlayed) != 0;
+	//return true; // disable VO temp
 }
 
 void USpaceShooterMenuController::SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed)
