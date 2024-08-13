@@ -13,6 +13,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverPlayAgainClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuCreditsClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCreditsMenuBackClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FShipSelectBackButtonClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuHighScoreClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHighScoreBackButtonClickedDelegateSignature);
 
 // Enum for tracking whether or not a sound VO was played
 UENUM(BlueprintType, meta = (BitFlags, UseEnumValuesAsMaskValuesInEditor = "true"))
@@ -64,6 +66,8 @@ private:
 	UFUNCTION() void MainMenuCreditsClicked();
 	UFUNCTION() void CreditsMenuBackClicked();
 	UFUNCTION() void ShipSelectBackClicked();
+	UFUNCTION() void MainMenuHighScoreClicked();
+	UFUNCTION() void HighScoreBackClicked();
 
 	UUserWidget* OpenScreen(TSubclassOf<class UUserWidget> ScreenClass);
 	void CloseScreen(UUserWidget* const ScreenToClose);
@@ -80,6 +84,9 @@ private:
 	void OpenGameOverScreen(int32 FinalScore);
 	void CloseGameOverScreen();
 
+	void OpenHighScoreScreen();
+	void CloseHighScoreScreen();
+
 	void SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray);
 
 	bool HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const;
@@ -95,6 +102,8 @@ public:
 	static FMainMenuCreditsClickedDelegateSignature OnMainMenuCreditsClicked;
 	static FCreditsMenuBackClickedDelegateSignature OnCreditsMenuBackClicked;
 	static FShipSelectBackButtonClickedDelegateSignature OnShipSelectBackClicked;
+	static FMainMenuHighScoreClickedDelegateSignature OnMainMenuHighScoreClicked;
+	static FHighScoreBackButtonClickedDelegateSignature OnHighScoreBackClicked;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
@@ -114,6 +123,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TSubclassOf<class UUserWidget> CreditsScreenClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TSubclassOf<class UUserWidget> HighScoreScreenClass;
+
 	// --- Menu Screen Instances ---
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
@@ -127,6 +139,9 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UGameCreditsScreen> CreditsScreen;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UHighScoreScreen> HighScoreScreen;
 
 	// --- Menu VO ---
 

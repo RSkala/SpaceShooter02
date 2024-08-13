@@ -44,6 +44,8 @@ void UMainMenuScreen::NativeOnInitialized()
 
 		// When user presses left, highlight the Credits Button
 		PlayButton->SetNavigationRuleExplicit(EUINavigation::Left, CreditsButton);
+
+		PlayButton->SetNavigationRuleExplicit(EUINavigation::Right, HighScoresButton);
 	}
 
 	if (ExitButton != nullptr)
@@ -51,11 +53,9 @@ void UMainMenuScreen::NativeOnInitialized()
 		ExitButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnExitButtonClicked);
 		ExitButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnExitButtonHovered);
 
-		// When user presses up, highlight the Play Button
 		ExitButton->SetNavigationRuleExplicit(EUINavigation::Up, PlayButton);
-
-		// When user presses left, highlight the Credits Button
 		ExitButton->SetNavigationRuleExplicit(EUINavigation::Left, CreditsButton);
+		ExitButton->SetNavigationRuleExplicit(EUINavigation::Right, HighScoresButton);
 	}
 
 	if (CreditsButton != nullptr)
@@ -65,6 +65,14 @@ void UMainMenuScreen::NativeOnInitialized()
 
 		// When user presses right, highlight the Play button
 		CreditsButton->SetNavigationRuleExplicit(EUINavigation::Right, PlayButton);
+	}
+
+	if (HighScoresButton != nullptr)
+	{
+		HighScoresButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnHighScoresButtonClicked);
+		HighScoresButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnHighScoreButtonHovered);
+		
+		HighScoresButton->SetNavigationRuleExplicit(EUINavigation::Left, PlayButton);
 	}
 
 	if (VersionText != nullptr)
@@ -94,11 +102,12 @@ void UMainMenuScreen::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
 
 	// HACK workaround to force keyboard focus if all buttons lose focus.
 	// This will occur if the user clicks the mouse outside of any button.
-	if (PlayButton != nullptr && ExitButton != nullptr && CreditsButton != nullptr)
+	if (PlayButton != nullptr && ExitButton != nullptr && CreditsButton != nullptr && HighScoresButton != nullptr)
 	{
 		if (!PlayButton->HasKeyboardFocus()
 			&& !ExitButton->HasKeyboardFocus()
-			&& !CreditsButton->HasKeyboardFocus())
+			&& !CreditsButton->HasKeyboardFocus()
+			&& !HighScoresButton->HasKeyboardFocus())
 		{
 			UE_LOG(LogTemp, Warning, TEXT("UMainMenuScreen::NativeTick - No buttons have keyboard focus. Forcing to PlayButton"));
 			PlayButton->SetKeyboardFocus();
@@ -128,6 +137,7 @@ void UMainMenuScreen::OnColorShift(FLinearColor LinearColor)
 	SetColorShiftForButton(PlayButton, LinearColor);
 	SetColorShiftForButton(ExitButton, LinearColor);
 	SetColorShiftForButton(CreditsButton, LinearColor);
+	SetColorShiftForButton(HighScoresButton, LinearColor);
 }
 
 void UMainMenuScreen::OnPlayButtonClicked()
@@ -144,6 +154,11 @@ void UMainMenuScreen::OnExitButtonClicked()
 void UMainMenuScreen::OnCreditsButtonClicked()
 {
 	USpaceShooterMenuController::OnMainMenuCreditsClicked.Broadcast();
+}
+
+void UMainMenuScreen::OnHighScoresButtonClicked()
+{
+	USpaceShooterMenuController::OnMainMenuHighScoreClicked.Broadcast();
 }
 
 void UMainMenuScreen::OnPlayButtonHovered()
@@ -167,5 +182,13 @@ void UMainMenuScreen::OnCreditsButtonHovered()
 	if (CreditsButton != nullptr)
 	{
 		CreditsButton->SetKeyboardFocus();
+	}
+}
+
+void UMainMenuScreen::OnHighScoreButtonHovered()
+{
+	if (HighScoresButton != nullptr)
+	{
+		HighScoresButton->SetKeyboardFocus();
 	}
 }

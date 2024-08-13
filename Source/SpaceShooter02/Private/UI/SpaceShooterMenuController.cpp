@@ -9,6 +9,7 @@
 #include "SpaceShooterGameState.h"
 #include "UI/GameCreditsScreen.h"
 #include "UI/GameOverScreen.h"
+#include "UI/HighScoreScreen.h"
 #include "UI/MainMenuScreen.h"
 #include "UI/PlayerShipSelectScreen.h"
 
@@ -21,6 +22,8 @@ FGameOverPlayAgainClickedDelegateSignature USpaceShooterMenuController::OnGameOv
 FMainMenuCreditsClickedDelegateSignature USpaceShooterMenuController::OnMainMenuCreditsClicked;
 FCreditsMenuBackClickedDelegateSignature USpaceShooterMenuController::OnCreditsMenuBackClicked;
 FShipSelectBackButtonClickedDelegateSignature USpaceShooterMenuController::OnShipSelectBackClicked;
+FMainMenuHighScoreClickedDelegateSignature USpaceShooterMenuController::OnMainMenuHighScoreClicked;
+FHighScoreBackButtonClickedDelegateSignature USpaceShooterMenuController::OnHighScoreBackClicked;
 
 USpaceShooterMenuController::USpaceShooterMenuController()
 {
@@ -44,6 +47,8 @@ void USpaceShooterMenuController::PostInitProperties()
 		OnMainMenuCreditsClicked.AddUniqueDynamic(this, &ThisClass::MainMenuCreditsClicked);
 		OnCreditsMenuBackClicked.AddUniqueDynamic(this, &ThisClass::CreditsMenuBackClicked);
 		OnShipSelectBackClicked.AddUniqueDynamic(this, &ThisClass::ShipSelectBackClicked);
+		OnMainMenuHighScoreClicked.AddUniqueDynamic(this, &ThisClass::MainMenuHighScoreClicked);
+		OnHighScoreBackClicked.AddUniqueDynamic(this, &ThisClass::HighScoreBackClicked);
 	}
 }
 
@@ -152,6 +157,20 @@ void USpaceShooterMenuController::ShipSelectBackClicked()
 	OpenMainMenuScreen();
 }
 
+void USpaceShooterMenuController::MainMenuHighScoreClicked()
+{
+	PlayButtonClickSound();
+	CloseMainMenuScreen();
+	OpenHighScoreScreen();
+}
+
+void USpaceShooterMenuController::HighScoreBackClicked()
+{
+	PlayButtonClickSound();
+	CloseHighScoreScreen();
+	OpenMainMenuScreen();
+}
+
 UUserWidget* USpaceShooterMenuController::OpenScreen(TSubclassOf<class UUserWidget> ScreenClass)
 {
 	UUserWidget* NewScreen = nullptr;
@@ -255,6 +274,25 @@ void USpaceShooterMenuController::CloseGameOverScreen()
 {
 	CloseScreen(GameOverScreen);
 	GameOverScreen = nullptr;
+}
+
+void USpaceShooterMenuController::OpenHighScoreScreen()
+{
+	HighScoreScreen = Cast<UHighScoreScreen>(OpenScreen(HighScoreScreenClass));
+	ensure(HighScoreScreen != nullptr);
+	
+	// TODO: Get and play "High Scores" VO
+	/*if (!HasSoundVOBeenPlayed(ESoundVOPlayed::HighScoreVOPlayed))
+	{
+		SelectAndPlayRandomVO(HighScoreVOSounds);
+		SetSoundVOPlayed(ESoundVOPlayed::HighScoreVOPlayed);
+	}*/
+}
+
+void USpaceShooterMenuController::CloseHighScoreScreen()
+{
+	CloseScreen(HighScoreScreen);
+	HighScoreScreen = nullptr;
 }
 
 void USpaceShooterMenuController::SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray)
