@@ -31,7 +31,7 @@ class SPACESHOOTER02_API USpaceShooterSaveGame : public USaveGame
 
 public:
 	USpaceShooterSaveGame();
-	TArray<FHighScoreData> GetHighScoreDataList() const { return HighScoreDataList; }
+	const TArray<FHighScoreData>& GetHighScoreDataList() const { return HighScoreDataList; }
 	void SetHighScoreDataList(TArray<FHighScoreData> InHighScoreDataList) { HighScoreDataList = InHighScoreDataList; }
 
 private:

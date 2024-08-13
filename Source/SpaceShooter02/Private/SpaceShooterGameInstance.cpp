@@ -9,6 +9,7 @@
 #include "SpaceShooterSaveGame.h"
 
 FString USpaceShooterGameInstance::GameVersion = "0.0.1";
+TArray<FHighScoreData> USpaceShooterGameInstance::DummyHighScoreData;
 
 DEFINE_LOG_CATEGORY_STATIC(LogSpaceShooterGameInstance, Log, All)
 
@@ -59,7 +60,7 @@ void USpaceShooterGameInstance::RecordHighScore(int32 Score)
 		FHighScoreData NewHighScoreData
 		{
 			.HighScore = Score,
-			.DateEarned = FDateTime::Today().ToString(),
+			.DateEarned = GetTodaysDateFormatted(),
 			.ShipSpriteIndex = -1 // Not yet used
 		};
 
@@ -96,6 +97,31 @@ void USpaceShooterGameInstance::RecordHighScore(int32 Score)
 	else
 	{
 		UE_LOG(LogSpaceShooterGameInstance, Log, TEXT("High score not updated"));
+	}
+}
+
+const TArray<struct FHighScoreData>& USpaceShooterGameInstance::GetHighScoreDataList() const
+{
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		return SpaceShooterSaveGame->GetHighScoreDataList();
+	}
+	else
+	{
+		return DummyHighScoreData;
+	}
+}
+
+UPaperSprite* USpaceShooterGameInstance::GetShipSpriteForIndex(int32 ShipSpriteIndex) const
+{
+	if (ShipSpriteIndex < 0 || ShipSpriteIndex >= ShipSprites.Num())
+	{
+		ensure(InvalidShipSprite != nullptr);
+		return InvalidShipSprite;
+	}
+	else
+	{
+		return ShipSprites[ShipSpriteIndex];
 	}
 }
 
@@ -145,7 +171,7 @@ void USpaceShooterGameInstance::InitializeHighScoreData()
 		FHighScoreData EmptyHighScoreData
 		{
 			.HighScore = 0,
-			.DateEarned = FDateTime::MinValue().ToString(),
+			.DateEarned = GetTodaysDateFormatted(),
 			.ShipSpriteIndex = -1 // Not yet used
 		};
 
@@ -157,4 +183,19 @@ void USpaceShooterGameInstance::InitializeHighScoreData()
 
 		SpaceShooterSaveGame->SetHighScoreDataList(HighScoreDataList);
 	}
+}
+
+FString USpaceShooterGameInstance::GetTodaysDateFormatted() const
+{
+	// Get today's date (only year, month, day)
+	int32 Year, Month, Day;
+	FDateTime::Today().GetDate(Year, Month, Day);
+
+	// Create a date string formatted as: YYYY.MM.DD
+	FString YearString = FString::Printf(TEXT("%d"), Year);
+	FString MonthString = Month < 10 ? FString::Printf(TEXT("0%d"), Month) : FString::Printf(TEXT("%d"), Month);
+	FString DayString = Day < 10 ? FString::Printf(TEXT("0%d"), Day) : FString::Printf(TEXT("%d"), Day);
+
+	// Return the formatted date string
+	return FString::Printf(TEXT("%s.%s.%s"), *YearString, *MonthString, *DayString);
 }

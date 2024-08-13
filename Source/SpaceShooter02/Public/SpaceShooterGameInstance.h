@@ -13,6 +13,8 @@ class SPACESHOOTER02_API USpaceShooterGameInstance : public UGameInstance
 
 public:
 	void RecordHighScore(int32 Score);
+	const TArray<struct FHighScoreData>& GetHighScoreDataList() const;
+	class UPaperSprite* GetShipSpriteForIndex(int32 ShipSpriteIndex) const;
 
 	static FString GetGameVersionString() { return GameVersion; }
 
@@ -27,6 +29,8 @@ private:
 	// Initialize the high score data list with empty data
 	void InitializeHighScoreData();
 
+	FString GetTodaysDateFormatted() const;
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	FString DefaultSaveSlotName = "SaveSlot1";
@@ -37,6 +41,15 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class USpaceShooterSaveGame> SpaceShooterSaveGame;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TArray<TObjectPtr<class UPaperSprite>> ShipSprites;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UPaperSprite> InvalidShipSprite;
+
 	static FString GameVersion;
-	static constexpr int32 MaxNumSaveGameHighScores = 10;
+	static constexpr int32 MaxNumSaveGameHighScores = 15;
+
+	// Failsafe in case SpaceShooterSaveGame is invalid
+	static TArray<struct FHighScoreData> DummyHighScoreData;
 };

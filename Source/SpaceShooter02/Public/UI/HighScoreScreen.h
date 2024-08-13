@@ -14,6 +14,7 @@ class SPACESHOOTER02_API UHighScoreScreen : public UMenuScreenWidget
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
 
 	virtual void OnColorShift(FLinearColor LinearColor) override;
@@ -31,5 +32,12 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UButton> BackButton;
 
-	// TODO: Add High Score View Widget
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UVerticalBox> HighScoreListVerticalBox;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TSubclassOf<class UUserWidget> ScoreDisplayWidgetClass;
+
+	UPROPERTY(meta = (AllowPrivateAccess = true))
+	TArray<class UScoreDisplayWidget*> ScoreDisplayWidgets;
 };
