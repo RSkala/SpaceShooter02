@@ -31,6 +31,9 @@ private:
 
 	FString GetTodaysDateFormatted() const;
 
+public:
+	static constexpr int32 INVALID_SHIP_INDEX = -1;
+
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	FString DefaultSaveSlotName = "SaveSlot1";

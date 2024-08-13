@@ -41,23 +41,31 @@ void UScoreDisplayWidget::SetScoreInfoFromScoreData(const FHighScoreData& HighSc
 	// Set the ship image sprite
 	if (ShipImage != nullptr)
 	{
-		if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+		if (HighScoreData.ShipSpriteIndex != USpaceShooterGameInstance::INVALID_SHIP_INDEX)
 		{
-			UPaperSprite* ShipSprite = GameInstance->GetShipSpriteForIndex(HighScoreData.ShipSpriteIndex);
-			if (ShipSprite != nullptr)
+			if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 			{
-				const FSlateAtlasData SpriteAtlasData = ShipSprite->GetSlateAtlasData();
-				const FVector2D SpriteSize = SpriteAtlasData.GetSourceDimensions();
+				UPaperSprite* ShipSprite = GameInstance->GetShipSpriteForIndex(HighScoreData.ShipSpriteIndex);
+				if (ShipSprite != nullptr)
+				{
+					const FSlateAtlasData SpriteAtlasData = ShipSprite->GetSlateAtlasData();
+					const FVector2D SpriteSize = SpriteAtlasData.GetSourceDimensions();
 
-				FSlateBrush ShipSpriteBrush;
-				ShipSpriteBrush.SetResourceObject(ShipSprite);
-				ShipSpriteBrush.ImageSize = FVector2D(SpriteSize.X, SpriteSize.Y);
-				FVector2D DesiredSize = ShipImage->GetDesiredSize();
-				ShipImage->SetBrush(ShipSpriteBrush);
+					FSlateBrush ShipSpriteBrush;
+					ShipSpriteBrush.SetResourceObject(ShipSprite);
+					ShipSpriteBrush.ImageSize = FVector2D(SpriteSize.X, SpriteSize.Y);
+					FVector2D DesiredSize = ShipImage->GetDesiredSize();
+					ShipImage->SetBrush(ShipSpriteBrush);
 
-				// Note: This causes linker errors, so you can't use it:
-				// FSlateBrush ShipSpriteBrush = UPaperSpriteBlueprintLibrary::MakeBrushFromSprite(ShipSprite, 64, 64);
+					// Note: This causes linker errors, so you can't use it:
+					// FSlateBrush ShipSpriteBrush = UPaperSpriteBlueprintLibrary::MakeBrushFromSprite(ShipSprite, 64, 64);
+				}
 			}
+		}
+		else
+		{
+			// Selected ship index is invalid. This high score is most likely the default initialized score. Hide the sprite image.
+			ShipImage->SetVisibility(ESlateVisibility::Hidden);
 		}
 	}
 }

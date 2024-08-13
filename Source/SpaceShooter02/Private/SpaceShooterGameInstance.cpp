@@ -172,7 +172,7 @@ void USpaceShooterGameInstance::InitializeHighScoreData()
 		{
 			.HighScore = 0,
 			.DateEarned = GetTodaysDateFormatted(),
-			.ShipSpriteIndex = -1 // Not yet used
+			.ShipSpriteIndex = INVALID_SHIP_INDEX
 		};
 
 		TArray<FHighScoreData> HighScoreDataList;
