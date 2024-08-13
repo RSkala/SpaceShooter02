@@ -7,6 +7,7 @@ Features:
 * Programmer Art!
 * Default Unreal Engine particle effects!
 * Default Unreal Engine UI!
-* No replayability!
+* Limited replayability!
+* Free!
 
 
