@@ -27,6 +27,7 @@
 #include "EnemySpawner.h"
 #include "PickupItemScoreMultiplier.h"
 #include "ProjectileBase.h"
+#include "SpaceShooterGameInstance.h"
 #include "SpaceShooterGameState.h"
 #include "UI/SpaceShooterMenuController.h"
 
@@ -674,7 +675,7 @@ void APlayerShipPawn::OnGameStarted()
 	bPlayerDead = false;
 }
 
-void APlayerShipPawn::OnGameEnded(int32 FinalScore)
+void APlayerShipPawn::OnGameEnded(int32 FinalScore, int32 SelectedShipSpriteIndex)
 {
 	// The game has ended. Force show the mouse cursor, as it likely was hidden from right-stick aiming
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
@@ -683,11 +684,17 @@ void APlayerShipPawn::OnGameEnded(int32 FinalScore)
 	}
 }
 
-void APlayerShipPawn::OnPlayerShipSelected(UPaperSprite* SelectedShipSprite)
+void APlayerShipPawn::OnPlayerShipSelected(int32 ShipSpriteIndex)
 {
-	if (PaperSpriteComp != nullptr && SelectedShipSprite != nullptr)
+	if (PaperSpriteComp != nullptr)
 	{
-		PaperSpriteComp->SetSprite(SelectedShipSprite);
+		if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+		{
+			if (UPaperSprite* SelectedShipSprite = GameInstance->GetShipSpriteForIndex(ShipSpriteIndex))
+			{
+				PaperSpriteComp->SetSprite(SelectedShipSprite);
+			}
+		}
 	}
 }
 

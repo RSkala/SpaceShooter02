@@ -13,7 +13,7 @@ TArray<FHighScoreData> USpaceShooterGameInstance::DummyHighScoreData;
 
 DEFINE_LOG_CATEGORY_STATIC(LogSpaceShooterGameInstance, Log, All)
 
-void USpaceShooterGameInstance::RecordHighScore(int32 Score)
+void USpaceShooterGameInstance::RecordHighScore(int32 Score, int32 SelectedShipSpriteIndex)
 {
 	if (SpaceShooterSaveGame == nullptr)
 	{
@@ -61,7 +61,7 @@ void USpaceShooterGameInstance::RecordHighScore(int32 Score)
 		{
 			.HighScore = Score,
 			.DateEarned = GetTodaysDateFormatted(),
-			.ShipSpriteIndex = -1 // Not yet used
+			.ShipSpriteIndex = SelectedShipSpriteIndex
 		};
 
 		// Insert the new high score into the slot
@@ -159,9 +159,9 @@ void USpaceShooterGameInstance::OnStart()
 	Super::OnStart();
 }
 
-void USpaceShooterGameInstance::OnGameEnded(int32 FinalScore)
+void USpaceShooterGameInstance::OnGameEnded(int32 FinalScore, int32 SelectedShipSpriteIndex)
 {
-	RecordHighScore(FinalScore);
+	RecordHighScore(FinalScore, SelectedShipSpriteIndex);
 }
 
 void USpaceShooterGameInstance::InitializeHighScoreData()

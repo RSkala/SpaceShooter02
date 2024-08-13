@@ -77,10 +77,10 @@ protected:
 	void OnGameStarted();
 
 	UFUNCTION()
-	void OnGameEnded(int32 FinalScore);
+	void OnGameEnded(int32 FinalScore, int32 SelectedShipSpriteIndex);
 
 	UFUNCTION()
-	void OnPlayerShipSelected(class UPaperSprite* SelectedShipSprite);
+	void OnPlayerShipSelected(int32 ShipSpriteIndex);
 
 protected:
 	void KeyboardMoveTriggered(const struct FInputActionValue& InputActionValue);

@@ -34,7 +34,7 @@ void ASpaceShooterHUD::OnGameStarted()
 	}
 }
 
-void ASpaceShooterHUD::OnGameEnded(int32 FinalScore)
+void ASpaceShooterHUD::OnGameEnded(int32 FinalScore, int32 SelectedShipSpriteIndex)
 {
 	if (ensure(GameplayScreen != nullptr))
 	{

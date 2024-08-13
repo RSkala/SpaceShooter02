@@ -100,7 +100,7 @@ void USpaceShooterMenuController::OnGameplayStart()
 	}
 }
 
-void USpaceShooterMenuController::OnGameplayEnd(int32 FinalScore)
+void USpaceShooterMenuController::OnGameplayEnd(int32 FinalScore, int32 SelectedShipSpriteIndex)
 {
 	CurrentMenuState = EMenuState::GameOver;
 
@@ -115,7 +115,7 @@ void USpaceShooterMenuController::MainMenuPlayClicked()
 	OpenPlayerShipSelectScreen();
 }
 
-void USpaceShooterMenuController::PlayerShipSelected(UPaperSprite* SelectedShipSprite)
+void USpaceShooterMenuController::PlayerShipSelected(int32 ShipSpriteIndex)
 {
 	PlayButtonClickSound();
 	ClosePlayerShipSelectScreen();

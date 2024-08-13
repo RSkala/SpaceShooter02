@@ -5,14 +5,20 @@
 #include "Components/Button.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "Kismet/GameplayStatics.h"
 #include "PaperSprite.h"
 #include "PaperSpriteBlueprintLibrary.h"
 
+#include "SpaceShooterGameInstance.h"
 #include "UI/SpaceShooterMenuController.h"
 
-void UShipSelectionWidget::InitShipSelectionWidget(FString ShipNameString, FString ShipAbilityString, FLinearColor ShipAbilityColor, UPaperSprite* InShipSprite)
+void UShipSelectionWidget::InitShipSelectionWidget(
+	FString ShipNameString,
+	FString ShipAbilityString,
+	FLinearColor ShipAbilityColor,
+	int32 InShipSpriteIndex)
 {
-	ShipSprite = InShipSprite;
+	ShipSpriteIndex = InShipSpriteIndex;
 
 	if (ShipNameTextBlock != nullptr)
 	{
@@ -24,6 +30,12 @@ void UShipSelectionWidget::InitShipSelectionWidget(FString ShipNameString, FStri
 	{
 		ShipAbilityTextBlock->SetText(FText::FromString(ShipAbilityString));
 		ShipAbilityTextBlock->SetColorAndOpacity(ShipAbilityColor);
+	}
+
+	UPaperSprite* ShipSprite = nullptr;
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		ShipSprite = GameInstance->GetShipSpriteForIndex(ShipSpriteIndex);
 	}
 
 	if (ShipImage != nullptr && ShipSprite != nullptr)
@@ -82,5 +94,5 @@ void UShipSelectionWidget::OnLaunchButtonClicked()
 void UShipSelectionWidget::ShipSelected()
 {
 	UE_LOG(LogTemp, Warning, TEXT("UShipSelectionWidget::OnLaunchButtonClicked - %s"), *GetName());
-	USpaceShooterMenuController::OnPlayerShipSelected.Broadcast(ShipSprite);
+	USpaceShooterMenuController::OnPlayerShipSelected.Broadcast(ShipSpriteIndex);
 }

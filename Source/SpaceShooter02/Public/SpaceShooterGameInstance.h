@@ -12,7 +12,7 @@ class SPACESHOOTER02_API USpaceShooterGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
-	void RecordHighScore(int32 Score);
+	void RecordHighScore(int32 Score, int32 SelectedShipSpriteIndex);
 	const TArray<struct FHighScoreData>& GetHighScoreDataList() const;
 	class UPaperSprite* GetShipSpriteForIndex(int32 ShipSpriteIndex) const;
 
@@ -24,7 +24,7 @@ protected:
 
 private:
 	UFUNCTION()
-	void OnGameEnded(int32 FinalScore);
+	void OnGameEnded(int32 FinalScore, int32 SelectedShipSpriteIndex);
 
 	// Initialize the high score data list with empty data
 	void InitializeHighScoreData();

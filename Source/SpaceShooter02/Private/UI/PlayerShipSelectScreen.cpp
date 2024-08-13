@@ -28,7 +28,7 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 			TEXT("SHIP 01"),
 			TEXT("WHITE"),
 			FLinearColor::White,
-			ShipSprites.Num() > 0 ? ShipSprites[0] : nullptr);
+			0);
 
 		if (UButton* LaunchButton = ShipSelectionWidget1->GetLaunchButton())
 		{
@@ -42,7 +42,7 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 			TEXT("SHIP 02"),
 			TEXT("ORANGE"),
 			FLinearColor(1.0f, 0.262251f, 0.0f),
-			ShipSprites.Num() > 1 ? ShipSprites[1] : nullptr);
+			1);
 
 		if (UButton* LaunchButton = ShipSelectionWidget2->GetLaunchButton())
 		{
@@ -56,7 +56,7 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 			TEXT("SHIP 03"),
 			TEXT("GREEN"),
 			FLinearColor(0.165132f, 0.768151f, 0.287441f),
-			ShipSprites.Num() > 2 ? ShipSprites[2] : nullptr);
+			2);
 
 		if (UButton* LaunchButton = ShipSelectionWidget3->GetLaunchButton())
 		{
@@ -70,7 +70,7 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 			TEXT("SHIP 04"),
 			TEXT("PURPLE"),
 			FLinearColor(0.361307f, 0.165132f, 1.0f),
-			ShipSprites.Num() > 3 ? ShipSprites[3] : nullptr);
+			3);
 
 		if (UButton* LaunchButton = ShipSelectionWidget4->GetLaunchButton())
 		{
@@ -84,7 +84,7 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 			TEXT("SHIP 05"),
 			TEXT("RED"),
 			FLinearColor(0.445201f, 0.005182f, 0.029557f),
-			ShipSprites.Num() > 4 ? ShipSprites[4] : nullptr);
+			4);
 
 		if (UButton* LaunchButton = ShipSelectionWidget5->GetLaunchButton())
 		{

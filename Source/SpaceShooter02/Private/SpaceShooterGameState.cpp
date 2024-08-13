@@ -84,7 +84,7 @@ void ASpaceShooterGameState::EndGame(int32 FinalScore)
 	}
 	else
 	{
-		OnGameEnded.Broadcast(FinalScore);
+		OnGameEnded.Broadcast(FinalScore, SelectedShipSpriteIndex);
 	}
 }
 
@@ -218,9 +218,10 @@ void ASpaceShooterGameState::OnMainMenuPlayClicked()
 	ShooterMenuGameState = EShooterMenuGameState::ShipSelect;
 }
 
-void ASpaceShooterGameState::OnPlayerShipSelected(UPaperSprite* SelectedShipSprite)
+void ASpaceShooterGameState::OnPlayerShipSelected(int32 InSelectedShipSpriteIndex)
 {
 	ShooterMenuGameState = EShooterMenuGameState::Gameplay;
+	SelectedShipSpriteIndex = InSelectedShipSpriteIndex;
 	StartGame();
 }
 
@@ -254,6 +255,6 @@ void ASpaceShooterGameState::SpawnScoreMultiplierPickup(FVector SpawnPosition)
 void ASpaceShooterGameState::OnGameOverTimerTimeout(int32 FinalScore)
 {
 	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::OnGameOverTimerTimeout"));
-	OnGameEnded.Broadcast(FinalScore);
+	OnGameEnded.Broadcast(FinalScore, SelectedShipSpriteIndex);
 }
 

@@ -7,7 +7,7 @@
 #include "SpaceShooterGameState.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameStartedDelegateSignature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FGameEndedDelegateSignature, int32, FinalScore);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FGameEndedDelegateSignature, int32, FinalScore, int32, SelectedShipSpriteIndex);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerScoreChangedDelegateSignature, int32, PlayerScore);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerMultiplierChangedDelegateSignature, int32, ScoreMultiplier);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHighScoreChangedDelegateSignature, int32, HighScore);
@@ -63,7 +63,7 @@ protected:
 	UFUNCTION()
 	void OnMainMenuPlayClicked(); // When the player clicks "Play" from the Main Menu
 	UFUNCTION()
-	void OnPlayerShipSelected(class UPaperSprite* SelectedShipSprite); // When the player selects their ship (from the Ship Select screen)
+	void OnPlayerShipSelected(int32 InSelectedShipSpriteIndex); // When the player selects their ship (from the Ship Select screen)
 	UFUNCTION()
 	void OnGameOverSelectShipSelected(); // When the user selects "Select Ship" from the Game Over screen
 	UFUNCTION()
@@ -150,4 +150,6 @@ protected:
 	// Currently playing pickup item sound
 	UPROPERTY()
 	TObjectPtr<class UAudioComponent> CurrentMultiplierPickupSound;
+
+	int32 SelectedShipSpriteIndex = -1;
 };

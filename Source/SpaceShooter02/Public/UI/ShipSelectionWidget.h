@@ -16,7 +16,7 @@ public:
 		FString ShipNameString,
 		FString ShipAbilityString,
 		FLinearColor ShipAbilityColor,
-		class UPaperSprite* InShipSprite
+		int32 InShipSpriteIndex
 	);
 
 	class UButton* GetLaunchButton() const { return LaunchButton; }
@@ -45,10 +45,7 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UButton> LaunchButton;
 
-	// ---------------------------------------------------------
-
+	// Index into the Ship Sprite list in the game instance
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
-	TObjectPtr<class UPaperSprite> ShipSprite;
-
-	// ---------------------------------------------------------
+	int32 ShipSpriteIndex = -1;
 };

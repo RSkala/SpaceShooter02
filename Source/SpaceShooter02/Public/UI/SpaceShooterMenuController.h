@@ -7,7 +7,7 @@
 #include "SpaceShooterMenuController.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuPlayClickedDelegateSignature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShipSelectedDelegateSignature, class UPaperSprite*, SelectedShipSprite);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShipSelectedDelegateSignature, int32, ShipSpriteIndex);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverSelectShipClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverPlayAgainClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuCreditsClickedDelegateSignature);
@@ -58,9 +58,9 @@ private:
 	void OnPlayerShipSelectStart();
 
 	UFUNCTION() void OnGameplayStart();
-	UFUNCTION() void OnGameplayEnd(int32 FinalScore);
+	UFUNCTION() void OnGameplayEnd(int32 FinalScore, int32 SelectedShipSpriteIndex);
 	UFUNCTION() void MainMenuPlayClicked();
-	UFUNCTION() void PlayerShipSelected(class UPaperSprite* SelectedShipSprite);
+	UFUNCTION() void PlayerShipSelected(int32 ShipSpriteIndex);
 	UFUNCTION() void GameOverSelectShipClicked();
 	UFUNCTION() void GameOverPlayAgainClicked();
 	UFUNCTION() void MainMenuCreditsClicked();

@@ -4,7 +4,7 @@
 
 FString FHighScoreData::ToString() const
 {
-	return FString::Printf(TEXT("High Score: %d, DateEarned: %s"), HighScore, *DateEarned);
+	return FString::Printf(TEXT("High Score: %d, DateEarned: %s, ShipSpriteIndex: %d"), HighScore, *DateEarned, ShipSpriteIndex);
 }
 
 USpaceShooterSaveGame::USpaceShooterSaveGame()
