@@ -17,24 +17,25 @@ void UScoreDisplayWidget::SetScoreInfoFromScoreData(const FHighScoreData& HighSc
 {
 	// Display the string in the format "Rank. Score ...... Date", e.g.
 	// 1. 34,245,856 ...... 2024.08.12
-	if (ScoreInfoTextBlock != nullptr)
+	if (RankTextBlock != nullptr && ScoreTextBlock != nullptr && DateTextBlock != nullptr)
 	{
 		// Rank
 		FString RankTextString = Rank < 10 ? FString::Printf(TEXT(" %d."), Rank) : FString::Printf(TEXT("%d."), Rank);
 		FText RankText = FText::FromString(FString::Printf(TEXT("%s"), *RankTextString));
+		RankTextBlock->SetText(RankText);
 
 		// Score
 		FText ScoreDisplayTextGrouped = UKismetTextLibrary::Conv_IntToText(HighScoreData.HighScore, false, true);
+		ScoreTextBlock->SetText(ScoreDisplayTextGrouped);
 
 		// Date
 		FText DateText = FText::FromString(HighScoreData.DateEarned); // This string was already formatted when saved
+		DateTextBlock->SetText(DateText);
 
-		// Format the text
-		static const FText ScoreTextFormat = LOCTEXT("ScoreDisplayText", "{0}{1} ...... {2}");
-		FText ScoreDisplayText = FText::Format(ScoreTextFormat, RankText, ScoreDisplayTextGrouped, DateText);
-
-		// Set the formatted text
-		ScoreInfoTextBlock->SetText(ScoreDisplayText);
+		// Old formatting:
+		//static const FText ScoreTextFormat = LOCTEXT("ScoreDisplayText", "{0}{1} ...... {2}");
+		//FText ScoreDisplayText = FText::Format(ScoreTextFormat, RankText, ScoreDisplayTextGrouped, DateText);
+		//ScoreInfoTextBlock->SetText(ScoreDisplayText);
 	}
 
 	// Set the ship image sprite
@@ -63,9 +64,25 @@ void UScoreDisplayWidget::SetScoreInfoFromScoreData(const FHighScoreData& HighSc
 
 void UScoreDisplayWidget::SetColorShift(FLinearColor ShiftColor)
 {
-	if (ScoreInfoTextBlock != nullptr)
+	FSlateColor SlateShiftColor(ShiftColor);
+	if (RankTextBlock != nullptr)
 	{
-		ScoreInfoTextBlock->SetColorAndOpacity(FSlateColor(ShiftColor));
+		RankTextBlock->SetColorAndOpacity(SlateShiftColor);
+	}
+
+	if (ScoreTextBlock != nullptr)
+	{
+		ScoreTextBlock->SetColorAndOpacity(SlateShiftColor);
+	}
+
+	if (DateTextBlock != nullptr)
+	{
+		DateTextBlock->SetColorAndOpacity(SlateShiftColor);
+	}
+
+	if (SeparatorTextBlock != nullptr)
+	{
+		SeparatorTextBlock->SetColorAndOpacity(SlateShiftColor);
 	}
 }
 

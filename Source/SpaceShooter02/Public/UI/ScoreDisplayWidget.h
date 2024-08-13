@@ -19,9 +19,17 @@ protected:
 	virtual void NativeDestruct() override;
 
 private:
-	// Displays Rank, Score, and Date Earned
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
-	TObjectPtr<class UTextBlock> ScoreInfoTextBlock;
+	TObjectPtr<class UTextBlock> RankTextBlock;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UTextBlock> ScoreTextBlock;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UTextBlock> DateTextBlock;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UTextBlock> SeparatorTextBlock;
 
 	// Displays a small picture of the ship used to earn this score
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))

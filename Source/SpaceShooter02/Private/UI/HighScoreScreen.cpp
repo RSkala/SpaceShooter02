@@ -25,6 +25,9 @@ void UHighScoreScreen::NativeOnInitialized()
 
 	if (HighScoreListVerticalBox != nullptr)
 	{
+		// Clear out the test/alignment objects set up during design time
+		HighScoreListVerticalBox->ClearChildren();
+
 		// Get the High Score data from the GameInstance
 		if (USpaceShooterGameInstance* SpaceShooterGameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 		{
