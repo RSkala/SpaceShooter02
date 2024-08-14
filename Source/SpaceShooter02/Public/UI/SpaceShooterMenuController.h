@@ -26,7 +26,8 @@ enum class ESoundVOPlayed : uint8
 	GoodLuckVOPlayed = 1 << 3,
 	SelectShipVOPlayed = 1 << 4,
 	TitleVOPlayed = 1 << 5,
-	WelcomeBackVOPlayed = 1 << 6
+	WelcomeBackVOPlayed = 1 << 6,
+	HighScoresVOPlayed = 1 << 7
 };
 ENUM_CLASS_FLAGS(ESoundVOPlayed);
 
@@ -179,6 +180,9 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
 	TArray<TSoftObjectPtr<class USoundBase>> WelcomeBackVOSounds;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
+	TArray<TSoftObjectPtr<class USoundBase>> HighScoreVOSounds;
 
 	// --- Flags for limiting VO sound playing ---
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BitMask, BitmaskEnum = "/Script/SpaceShooter02.ESoundVOPlayed", AllowPrivateAccess = true))

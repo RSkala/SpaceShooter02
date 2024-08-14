@@ -295,12 +295,12 @@ void USpaceShooterMenuController::OpenHighScoreScreen()
 	HighScoreScreen = Cast<UHighScoreScreen>(OpenScreen(HighScoreScreenClass));
 	ensure(HighScoreScreen != nullptr);
 	
-	// TODO: Get and play "High Scores" VO
-	/*if (!HasSoundVOBeenPlayed(ESoundVOPlayed::HighScoreVOPlayed))
+	// Play "High Scores" VO
+	if (!HasSoundVOBeenPlayed(ESoundVOPlayed::HighScoresVOPlayed))
 	{
 		SelectAndPlayRandomVO(HighScoreVOSounds);
-		SetSoundVOPlayed(ESoundVOPlayed::HighScoreVOPlayed);
-	}*/
+		SetSoundVOPlayed(ESoundVOPlayed::HighScoresVOPlayed);
+	}
 }
 
 void USpaceShooterMenuController::CloseHighScoreScreen()
