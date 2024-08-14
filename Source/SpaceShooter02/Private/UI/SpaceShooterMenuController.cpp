@@ -75,6 +75,11 @@ void USpaceShooterMenuController::StartMainMenu()
 	//PlayerController->SetShowMouseCursor(true);
 }
 
+void USpaceShooterMenuController::ForceClosePauseScreen()
+{
+	ClosePauseScreen();
+}
+
 void USpaceShooterMenuController::OnPlayerShipSelectStart()
 {
 	CurrentMenuState = EMenuState::ShipSelect;
@@ -313,6 +318,7 @@ void USpaceShooterMenuController::OpenPauseScreen()
 void USpaceShooterMenuController::ClosePauseScreen()
 {
 	CloseScreen(PauseScreen);
+	PauseScreen = nullptr;
 }
 
 void USpaceShooterMenuController::SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray)

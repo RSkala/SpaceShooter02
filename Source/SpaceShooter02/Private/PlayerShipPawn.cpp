@@ -652,6 +652,11 @@ void APlayerShipPawn::EnablePlayer()
 	DashTimeElapsed = 0.0f;
 }
 
+void APlayerShipPawn::KillPlayerFromSelfDestruct()
+{
+	KillPlayer();
+}
+
 void APlayerShipPawn::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	FString OtherActorName = OtherActor != nullptr ? OtherActor->GetName() : "(invalid)";

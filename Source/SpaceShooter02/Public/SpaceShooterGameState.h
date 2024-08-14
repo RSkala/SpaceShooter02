@@ -17,7 +17,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPickupItemPercentChanged, float, Pe
 // Delegates for pausing / unpausing the game
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRequestPauseGameDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRequestUnpauseGameDelegateSignature);
-
+DECLARE_DELEGATE(FRequestSelfDestructDelegateSignature);
 
 UENUM(BlueprintType)
 enum class EShooterMenuGameState : uint8
@@ -83,6 +83,9 @@ protected:
 	UFUNCTION()
 	void HandleRequestUnpauseGame();
 
+	UFUNCTION()
+	void HandleRequestSelfDestruct();
+
 public:
 	static FGameStartedDelegateSignature OnGameStarted; // Delegate called when the player starts a game (either from main menu or game over)
 	static FGameEndedDelegateSignature OnGameEnded; // Delegate called when the player is defeated (game over)
@@ -94,6 +97,7 @@ public:
 
 	static FRequestPauseGameDelegateSignature OnRequestPauseGame;
 	static FRequestUnpauseGameDelegateSignature OnRequestUnpauseGame;
+	static FRequestSelfDestructDelegateSignature OnRequestSelfDestruct;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

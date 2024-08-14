@@ -26,6 +26,7 @@ FAddSatelliteWeaponDelegateSignature ASpaceShooterGameState::OnAddSatelliteWeapo
 FPickupItemPercentChanged ASpaceShooterGameState::OnPickupItemPercentChanged;
 FRequestPauseGameDelegateSignature ASpaceShooterGameState::OnRequestPauseGame;
 FRequestUnpauseGameDelegateSignature ASpaceShooterGameState::OnRequestUnpauseGame;
+FRequestSelfDestructDelegateSignature ASpaceShooterGameState::OnRequestSelfDestruct;
 
 ASpaceShooterGameState::ASpaceShooterGameState()
 {
@@ -109,6 +110,7 @@ void ASpaceShooterGameState::BeginPlay()
 	// Handle Pause / Unpause
 	OnRequestPauseGame.AddUniqueDynamic(this, &ThisClass::HandleRequestPauseGame);
 	OnRequestUnpauseGame.AddUniqueDynamic(this, &ThisClass::HandleRequestUnpauseGame);
+	OnRequestSelfDestruct.BindUObject(this, &ThisClass::HandleRequestSelfDestruct);
 
 	// Start game in Main Menu
 	ShooterMenuGameState = EShooterMenuGameState::MainMenu;
@@ -274,5 +276,25 @@ void ASpaceShooterGameState::HandleRequestUnpauseGame()
 {
 	// Unpause the game
 	UGameplayStatics::SetGamePaused(GetWorld(), false);
+}
+
+void ASpaceShooterGameState::HandleRequestSelfDestruct()
+{
+	// Handling this sequence through the game state only to ensure the following is executed in order:
+	// * Close the pause screen
+	// * Unpause the game
+	// * Kill the player
+
+	if (ensure(MenuController != nullptr))
+	{
+		MenuController->ForceClosePauseScreen();
+	}
+
+	HandleRequestUnpauseGame();
+
+	if (ensure(PlayerShipPawn != nullptr))
+	{
+		PlayerShipPawn->KillPlayerFromSelfDestruct();
+	}
 }
 

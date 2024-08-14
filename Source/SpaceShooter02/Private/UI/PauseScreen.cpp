@@ -65,7 +65,6 @@ void UPauseScreen::OnColorShift(FLinearColor ShiftColor)
 
 void UPauseScreen::OnResumeButtonClicked()
 {
-	UE_LOG(LogTemp, Warning, TEXT("UPauseScreen::OnResumeButtonClicked"));
 	ASpaceShooterGameState::OnRequestUnpauseGame.Broadcast();
 }
 
@@ -79,6 +78,7 @@ void UPauseScreen::OnResumeButtonHovered()
 
 void UPauseScreen::OnQuitButtonClicked()
 {
+	ASpaceShooterGameState::OnRequestSelfDestruct.ExecuteIfBound();
 }
 
 void UPauseScreen::OnQuitButtonHovered()

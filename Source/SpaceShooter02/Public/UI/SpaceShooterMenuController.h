@@ -53,6 +53,7 @@ public:
 	virtual void PostLoad() override;
 
 	void StartMainMenu();
+	void ForceClosePauseScreen();
 
 private:
 	void OnPlayerShipSelectStart();

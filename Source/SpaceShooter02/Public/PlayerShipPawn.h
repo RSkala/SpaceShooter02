@@ -48,6 +48,8 @@ public:
 
 	bool IsPlayerDisabled() const { return IsHidden(); }
 
+	void KillPlayerFromSelfDestruct();
+
 	static FPlayerShipSpawnedDelegateSignature OnPlayerShipSpawned;
 	static FPlayerShipDestroyedDelegateSignature OnPlayerShipDestroyed;
 	static FPlayerPowerupTimerUpdatedDelegateSignature OnPlayerPowerupTimerUpdated;
