@@ -96,6 +96,8 @@ protected:
 	void MouseFire(const struct FInputActionValue& InputActionValue);
 
 	void InputDash(const struct FInputActionValue& InputActionValue);
+
+	void InputPause(const struct FInputActionValue& InputActionValue);
 	
 	void FireProjectile(FRotator ProjectileRotation);
 	void PlayShootSound();
@@ -227,6 +229,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
 	TObjectPtr<class UInputAction> InputActionMouseFire;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
+	TObjectPtr<class UInputAction> InputActionPause;
 
 	// --- Movement and Aiming ---
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming")

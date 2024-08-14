@@ -24,6 +24,8 @@ FPlayerMultiplierChangedDelegateSignature ASpaceShooterGameState::OnPlayerMultip
 FHighScoreChangedDelegateSignature ASpaceShooterGameState::OnPlayerHighScoreChanged;
 FAddSatelliteWeaponDelegateSignature ASpaceShooterGameState::OnAddSatelliteWeapon;
 FPickupItemPercentChanged ASpaceShooterGameState::OnPickupItemPercentChanged;
+FRequestPauseGameDelegateSignature ASpaceShooterGameState::OnRequestPauseGame;
+FRequestUnpauseGameDelegateSignature ASpaceShooterGameState::OnRequestUnpauseGame;
 
 ASpaceShooterGameState::ASpaceShooterGameState()
 {
@@ -103,6 +105,10 @@ void ASpaceShooterGameState::BeginPlay()
 	// Get notified when the player's ship spawns and is destroyed
 	APlayerShipPawn::OnPlayerShipSpawned.AddUniqueDynamic(this, &ThisClass::OnPlayerShipSpawned);
 	APlayerShipPawn::OnPlayerShipDestroyed.AddUniqueDynamic(this, &ThisClass::OnPlayerShipDestroyed);
+
+	// Handle Pause / Unpause
+	OnRequestPauseGame.AddUniqueDynamic(this, &ThisClass::HandleRequestPauseGame);
+	OnRequestUnpauseGame.AddUniqueDynamic(this, &ThisClass::HandleRequestUnpauseGame);
 
 	// Start game in Main Menu
 	ShooterMenuGameState = EShooterMenuGameState::MainMenu;
@@ -256,5 +262,17 @@ void ASpaceShooterGameState::OnGameOverTimerTimeout(int32 FinalScore)
 {
 	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::OnGameOverTimerTimeout"));
 	OnGameEnded.Broadcast(FinalScore, SelectedShipSpriteIndex);
+}
+
+void ASpaceShooterGameState::HandleRequestPauseGame()
+{
+	// Pause the game
+	UGameplayStatics::SetGamePaused(GetWorld(), true);
+}
+
+void ASpaceShooterGameState::HandleRequestUnpauseGame()
+{
+	// Unpause the game
+	UGameplayStatics::SetGamePaused(GetWorld(), false);
 }
 

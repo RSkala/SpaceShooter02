@@ -14,6 +14,10 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHighScoreChangedDelegateSignature, 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FAddSatelliteWeaponDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPickupItemPercentChanged, float, Percent);
 
+// Delegates for pausing / unpausing the game
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRequestPauseGameDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRequestUnpauseGameDelegateSignature);
+
 
 UENUM(BlueprintType)
 enum class EShooterMenuGameState : uint8
@@ -73,6 +77,12 @@ protected:
 
 	void OnGameOverTimerTimeout(int32 FinalScore);
 
+	UFUNCTION()
+	void HandleRequestPauseGame();
+
+	UFUNCTION()
+	void HandleRequestUnpauseGame();
+
 public:
 	static FGameStartedDelegateSignature OnGameStarted; // Delegate called when the player starts a game (either from main menu or game over)
 	static FGameEndedDelegateSignature OnGameEnded; // Delegate called when the player is defeated (game over)
@@ -81,6 +91,9 @@ public:
 	static FHighScoreChangedDelegateSignature OnPlayerHighScoreChanged; // Delegate called when the player beats the current high score
 	static FAddSatelliteWeaponDelegateSignature OnAddSatelliteWeapon; // Delegate called when player has picked up a satellite weapon
 	static FPickupItemPercentChanged OnPickupItemPercentChanged; // Called when num pickups changed. Passes percent of total required for powerup.
+
+	static FRequestPauseGameDelegateSignature OnRequestPauseGame;
+	static FRequestUnpauseGameDelegateSignature OnRequestUnpauseGame;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

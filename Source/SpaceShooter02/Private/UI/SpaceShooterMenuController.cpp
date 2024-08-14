@@ -11,6 +11,7 @@
 #include "UI/GameOverScreen.h"
 #include "UI/HighScoreScreen.h"
 #include "UI/MainMenuScreen.h"
+#include "UI/PauseScreen.h"
 #include "UI/PlayerShipSelectScreen.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogMenuController, Warning, All)
@@ -38,6 +39,8 @@ void USpaceShooterMenuController::PostInitProperties()
 		// Subscribe to the GameState delegates
 		ASpaceShooterGameState::OnGameStarted.AddUniqueDynamic(this, &ThisClass::OnGameplayStart);
 		ASpaceShooterGameState::OnGameEnded.AddUniqueDynamic(this, &ThisClass::OnGameplayEnd);
+		ASpaceShooterGameState::OnRequestPauseGame.AddUniqueDynamic(this, &ThisClass::OnRequestPauseGame);
+		ASpaceShooterGameState::OnRequestUnpauseGame.AddUniqueDynamic(this, &ThisClass::OnRequestUnpauseGame);
 
 		// Subscribe to all menu delegates
 		OnMainMenuPlayClicked.AddUniqueDynamic(this, &ThisClass::MainMenuPlayClicked);
@@ -171,6 +174,12 @@ void USpaceShooterMenuController::HighScoreBackClicked()
 	OpenMainMenuScreen();
 }
 
+void USpaceShooterMenuController::PauseScreenResumeClicked()
+{
+	PlayButtonClickSound();
+	ClosePauseScreen();
+}
+
 UUserWidget* USpaceShooterMenuController::OpenScreen(TSubclassOf<class UUserWidget> ScreenClass)
 {
 	UUserWidget* NewScreen = nullptr;
@@ -295,6 +304,17 @@ void USpaceShooterMenuController::CloseHighScoreScreen()
 	HighScoreScreen = nullptr;
 }
 
+void USpaceShooterMenuController::OpenPauseScreen()
+{
+	PauseScreen = Cast<UPauseScreen>(OpenScreen(PauseScreenClass));
+	ensure(PauseScreen != nullptr);
+}
+
+void USpaceShooterMenuController::ClosePauseScreen()
+{
+	CloseScreen(PauseScreen);
+}
+
 void USpaceShooterMenuController::SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray)
 {
 	if (SoundVOArray.Num() <= 0)
@@ -334,4 +354,16 @@ void USpaceShooterMenuController::PlayButtonClickSound()
 	{
 		UGameplayStatics::PlaySound2D(GetWorld(), UIButtonClickSound);
 	}
+}
+
+void USpaceShooterMenuController::OnRequestPauseGame()
+{
+	PlayButtonClickSound();
+	OpenPauseScreen();
+}
+
+void USpaceShooterMenuController::OnRequestUnpauseGame()
+{
+	PlayButtonClickSound();
+	ClosePauseScreen();
 }

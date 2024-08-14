@@ -228,6 +228,10 @@ void APlayerShipPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		// Bind Dash
 		ensureAlways(InputActionDash != nullptr);
 		EnhancedInputComponent->BindAction(InputActionDash, ETriggerEvent::Started, this, &ThisClass::InputDash);
+
+		// Bind Pause
+		ensureAlways(InputActionPause != nullptr);
+		EnhancedInputComponent->BindAction(InputActionPause, ETriggerEvent::Started, this, &ThisClass::InputPause);
 	}
 }
 
@@ -894,6 +898,34 @@ void APlayerShipPawn::InputDash(const FInputActionValue& InputActionValue)
 	OnPlayerDashUpdated.Broadcast(0.0f);
 }
 
+void APlayerShipPawn::InputPause(const FInputActionValue& InputActionValue)
+{
+	// Do not allow pausing if the player is dead or "disabled"
+	if (bPlayerDead || IsPlayerDisabled())
+	{
+		return;
+	}
+
+	// Handle Pause/Unpause
+	bool bGameIsPaused = UGameplayStatics::IsGamePaused(GetWorld());
+	if (bGameIsPaused)
+	{
+		// Game is Paused. Unpause the game.
+		ASpaceShooterGameState::OnRequestUnpauseGame.Broadcast();
+	}
+	else
+	{
+		// Game is not Paused. Pause the game.
+		ASpaceShooterGameState::OnRequestPauseGame.Broadcast();
+
+		// Ensure the mouse cursor does not auto-hide while the pause screen is open
+		if (APlayerController* PlayerController = Cast<APlayerController>(Controller))
+		{
+			SetMouseCursorVisiblityFromInput(PlayerController, true);
+		}
+	}
+}
+
 void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 {
 	// Do not allow projectile firing while dashing
@@ -1272,5 +1304,4 @@ void APlayerShipPawn::HideDashShield()
 		//DashShieldSpriteComp->SetComponentTickEnabled(false);
 	}
 }
-
 

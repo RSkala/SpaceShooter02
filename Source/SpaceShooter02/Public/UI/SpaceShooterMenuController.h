@@ -68,6 +68,7 @@ private:
 	UFUNCTION() void ShipSelectBackClicked();
 	UFUNCTION() void MainMenuHighScoreClicked();
 	UFUNCTION() void HighScoreBackClicked();
+	UFUNCTION() void PauseScreenResumeClicked();
 
 	UUserWidget* OpenScreen(TSubclassOf<class UUserWidget> ScreenClass);
 	void CloseScreen(UUserWidget* const ScreenToClose);
@@ -87,12 +88,21 @@ private:
 	void OpenHighScoreScreen();
 	void CloseHighScoreScreen();
 
+	void OpenPauseScreen();
+	void ClosePauseScreen();
+
 	void SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray);
 
 	bool HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const;
 	void SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed);
 
 	void PlayButtonClickSound();
+
+	UFUNCTION()
+	void OnRequestPauseGame();
+
+	UFUNCTION()
+	void OnRequestUnpauseGame();
 
 public:
 	static FMainMenuPlayClickedDelegateSignature OnMainMenuPlayClicked;
@@ -126,6 +136,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TSubclassOf<class UUserWidget> HighScoreScreenClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TSubclassOf<class UUserWidget> PauseScreenClass;
+
 	// --- Menu Screen Instances ---
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
@@ -142,6 +155,9 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UHighScoreScreen> HighScoreScreen;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UPauseScreen> PauseScreen;
 
 	// --- Menu VO ---
 
