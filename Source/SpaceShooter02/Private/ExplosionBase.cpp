@@ -9,7 +9,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogExplosion, Log, All)
 
 AExplosionBase::AExplosionBase()
 {
-	UE_LOG(LogExplosion, Log, TEXT("AExplosionBase::AExplosionBase - %s"), *GetName());
+	//UE_LOG(LogExplosion, Log, TEXT("AExplosionBase::AExplosionBase - %s"), *GetName());
 
 	PrimaryActorTick.bCanEverTick = true;
 
