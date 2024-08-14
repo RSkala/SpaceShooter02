@@ -125,6 +125,11 @@ UPaperSprite* USpaceShooterGameInstance::GetShipSpriteForIndex(int32 ShipSpriteI
 	}
 }
 
+int32 USpaceShooterGameInstance::GetPlayerHighestScore() const
+{
+	return SpaceShooterSaveGame != nullptr ? SpaceShooterSaveGame->GetHighestSavedScore() : 0;
+}
+
 void USpaceShooterGameInstance::Init()
 {
 	Super::Init();

@@ -33,6 +33,7 @@ public:
 	USpaceShooterSaveGame();
 	const TArray<FHighScoreData>& GetHighScoreDataList() const { return HighScoreDataList; }
 	void SetHighScoreDataList(TArray<FHighScoreData> InHighScoreDataList) { HighScoreDataList = InHighScoreDataList; }
+	int32 GetHighestSavedScore() const { return HighScoreDataList.Num() > 0 ? HighScoreDataList[0].HighScore : 0; }
 
 private:
 	// List of high score data

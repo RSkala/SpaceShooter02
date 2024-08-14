@@ -12,6 +12,7 @@
 #include "PickupItemSatelliteWeapon.h"
 #include "PickupItemScoreMultiplier.h"
 #include "PlayerShipPawn.h"
+#include "SpaceShooterGameInstance.h"
 #include "UI/SpaceShooterMenuController.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSpaceShooterGameState, Log, All)
@@ -66,6 +67,11 @@ void ASpaceShooterGameState::StartGame()
 	// Notify player score changes with "default" values
 	OnPlayerScoreChanged.Broadcast(0);
 	OnPlayerMultiplierChanged.Broadcast(1);
+
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		PlayerHighScore = GameInstance->GetPlayerHighestScore();
+	}
 	OnPlayerHighScoreChanged.Broadcast(PlayerHighScore);
 
 	// Reset collected multipliers

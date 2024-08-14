@@ -15,6 +15,7 @@ public:
 	void RecordHighScore(int32 Score, int32 SelectedShipSpriteIndex);
 	const TArray<struct FHighScoreData>& GetHighScoreDataList() const;
 	class UPaperSprite* GetShipSpriteForIndex(int32 ShipSpriteIndex) const;
+	int32 GetPlayerHighestScore() const;
 
 	static FString GetGameVersionString() { return GameVersion; }
 
