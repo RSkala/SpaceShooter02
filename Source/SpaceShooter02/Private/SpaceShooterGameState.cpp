@@ -31,7 +31,7 @@ FRequestSelfDestructDelegateSignature ASpaceShooterGameState::OnRequestSelfDestr
 
 ASpaceShooterGameState::ASpaceShooterGameState()
 {
-	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::ASpaceShooterGameState - %s"), *GetName());
+	//UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::ASpaceShooterGameState - %s"), *GetName());
 }
 
 void ASpaceShooterGameState::StartGame()
@@ -56,10 +56,13 @@ void ASpaceShooterGameState::StartGame()
 	// Set game state to "Gameplay"
 	ShooterMenuGameState = EShooterMenuGameState::Gameplay;
 
-	// Reset Score and Multiplier
+	// Reset Score, Multiplier and other game-tracking stats
 	PlayerScore = 0;
 	CurrentScoreMultiplier = 1;
-	NumEnemiesDefeated = 0;
+	TotalNumEnemiesSpawnedThisGame = 0;
+	TotalNumEnemiesKilledThisGame = 0;
+	CurrentDifficultyLevel = 1; // Always start at level 1
+	CurrentTimeBetweenSpawns = 1.0f; // Always start at 1 second between each spewn
 
 	// Notify all listeners that gameplay has started
 	OnGameStarted.Broadcast();
@@ -183,6 +186,32 @@ void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSy
 		PlayerHighScore = PlayerScore;
 		OnPlayerHighScoreChanged.Broadcast(PlayerHighScore);
 	}
+
+	// ---------------------------------------------------------
+	// Difficulty scaling
+	TotalNumEnemiesKilledThisGame++;
+
+	// Increase difficulty level every X enemies killed
+	if (TotalNumEnemiesKilledThisGame % DifficultySpikeInterval == 0)
+	{
+		// Increase difficulty level
+		CurrentDifficultyLevel++;
+
+		// Ensure the time between spawns never gets below the absolute minimum
+		if (CurrentTimeBetweenSpawns > TimeBetweenSpawnsAbsoluteMinimum)
+		{
+			// Decrease time between each enemy spawn
+			CurrentTimeBetweenSpawns -= TimeBetweenSpawnDecreaseAmount;
+			if (CurrentTimeBetweenSpawns < TimeBetweenSpawnsAbsoluteMinimum)
+			{
+				CurrentTimeBetweenSpawns = TimeBetweenSpawnsAbsoluteMinimum;
+			}
+		}
+
+		UE_LOG(LogSpaceShooterGameState, Log, TEXT("TotalNumEnemiesKilledThisGame = %d, New Difficulty: %d, TimeBetweenSpawns: %f"), TotalNumEnemiesKilledThisGame, CurrentDifficultyLevel, CurrentTimeBetweenSpawns);
+	}
+
+	// ---------------------------------------------------------
 
 	// Spawn a score multiplier at enemy death position
 	SpawnScoreMultiplierPickup(EnemyDeathPosition);

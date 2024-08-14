@@ -31,6 +31,9 @@ void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// Get the game state
+	SpaceShooterGameState = Cast<ASpaceShooterGameState>(UGameplayStatics::GetGameState(GetWorld()));
+
 	UE_CLOG(
 		!bSpawningEnabledDebug,
 		LogEnemySpawner,
@@ -71,7 +74,7 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 	}
 
 	TimeSinceLastEnemySpawned += DeltaTime;
-	if (TimeSinceLastEnemySpawned >= TimeBetweenSpawns)
+	if (TimeSinceLastEnemySpawned >= GetTimeBetweenSpawns())
 	{
 		// Choose a random enemy to spawn from the list
 		if (ensureMsgf(EnemyClasses.Num() > 0, TEXT("%s - No EnemyClasses set in EnemySpawner"), ANSI_TO_TCHAR(__FUNCTION__)))
@@ -137,7 +140,7 @@ void AEnemySpawner::OnGameStarted()
 
 void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, USoundBase* EnemyDeathSound)
 {
-	UE_LOG(LogEnemySpawner, Warning, TEXT("%s - EnemyDeathPosition: %s"), ANSI_TO_TCHAR(__FUNCTION__), *EnemyDeathPosition.ToString());
+	//UE_LOG(LogEnemySpawner, Warning, TEXT("%s - EnemyDeathPosition: %s"), ANSI_TO_TCHAR(__FUNCTION__), *EnemyDeathPosition.ToString());
 
 	UWorld* World = GetWorld();
 
@@ -188,6 +191,16 @@ void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* Ene
 	static const float ExplodeSoundPitchAdjust = 0.1f;
 	float DeathSoundPitch = 1.0f + FMath::FRandRange(-ExplodeSoundPitchAdjust, ExplodeSoundPitchAdjust);
 	CurrentEnemyExplosionSound = UGameplayStatics::SpawnSound2D(World, EnemyDeathSound, DeathSoundPitch);
+}
+
+float AEnemySpawner::GetTimeBetweenSpawns() const
+{
+	float CurTimeBetweenSpawns = FallbackTimeBetweenSpawns;
+	if (SpaceShooterGameState.IsValid())
+	{
+		CurTimeBetweenSpawns = SpaceShooterGameState.Get()->GetTimeBetweenSpawns();
+	}
+	return CurTimeBetweenSpawns;
 }
 
 #if WITH_EDITOR

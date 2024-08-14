@@ -27,6 +27,8 @@ protected:
 	UFUNCTION()
 	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect, class USoundBase* EnemyDeathSound);
 
+	float GetTimeBetweenSpawns() const;
+
 #if WITH_EDITOR
 	virtual bool CanEditChange(const FProperty* InProperty) const override;
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
@@ -37,9 +39,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TSubclassOf<class AEnemyBase>> EnemyClasses;
 
-	// Number of seconds that need to elapse before spawning another enemy
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Units = "Seconds"))
-	float TimeBetweenSpawns = 1.0f;
+	// Default Time Between Spawns. Only used if GameInstance ptr is invalid
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (Units = "Seconds"))
+	float FallbackTimeBetweenSpawns = 1.0f;
 
 	// Distance to spawn from player (min)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "50", ClampMax = "5000", UIMin = "50", UIMax = "5000"))
@@ -72,12 +74,11 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TArray<TSubclassOf<class ASpawnAnimBase>> EnemySpawnAnimClasses;
 
-	// TODO:
-	// * DifficultySpikeInterval -- every X enemy defeated, increase difficulty
-	// * get player reference, pass to enemies
-
 	UPROPERTY()
 	TObjectPtr<class UAudioComponent> CurrentEnemyExplosionSound;
+
+	UPROPERTY()
+	TWeakObjectPtr<class ASpaceShooterGameState> SpaceShooterGameState;
 	
 	// Last time an enemy was spawned
 	float TimeSinceLastEnemySpawned = 0.0f;

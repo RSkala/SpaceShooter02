@@ -69,16 +69,6 @@ void AEnemyBase::DestroyEnemy()
 
 	// Destroy this enemy
 	Destroy();
-
-	if (UWorld* World = GetWorld())
-	{
-		if (ASpaceShooterGameState* SpaceShooterGameState = Cast<ASpaceShooterGameState>(World->GetGameState()))
-		{
-			SpaceShooterGameState->IncrementNumEnemiesDefeated();
-
-			UE_LOG(LogTemp, Warning, TEXT("NumEnemiesDefeated: %d"), SpaceShooterGameState->GetNumEnemiesDefeated());
-		}
-	}
 }
 
 void AEnemyBase::SetTarget(TSoftObjectPtr<AActor> InTargetActor)

@@ -37,8 +37,6 @@ class SPACESHOOTER02_API ASpaceShooterGameState : public AGameStateBase
 
 public:
 	ASpaceShooterGameState();
-	int32 GetNumEnemiesDefeated() const { return NumEnemiesDefeated; }
-	void IncrementNumEnemiesDefeated() { NumEnemiesDefeated++; }
 
 	void StartGame();
 	void EndGame(int32 FinalScore);
@@ -46,6 +44,11 @@ public:
 	int32 GetPlayerScore() const { return PlayerScore; }
 
 	void AddCurrentScoreMultiplier(int32 AmountToAdd);
+
+	// -----------------------------------------------------------------------------
+	// --- Difficulty Scaling ---
+
+	float GetTimeBetweenSpawns() const { return CurrentTimeBetweenSpawns; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -100,9 +103,7 @@ public:
 	static FRequestSelfDestructDelegateSignature OnRequestSelfDestruct;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 NumEnemiesDefeated = 0;
-
+	// Player's score during the current game
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 PlayerScore = 0;
 
@@ -114,12 +115,15 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
 	TObjectPtr<class AEnemySpawner> EnemySpawner;
 
+	// Menu state -- currently unused
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	EShooterMenuGameState ShooterMenuGameState;
 
+	// Class for creating menu controller instance
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSubclassOf<class USpaceShooterMenuController> MenuControllerClass;
 
+	// MenuController instance
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class USpaceShooterMenuController> MenuController;
 
@@ -127,12 +131,15 @@ protected:
 	UPROPERTY()
 	TSoftObjectPtr<class APlayerShipPawn> PlayerShipPawn;
 
+	// Player's score multiplier during the current game
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 CurrentScoreMultiplier = 1;
 
+	// Enemy score value -- TODO: Move to enemy class or data object
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 EnemyScoreValue = 1; // first implementation: all enemies have a score value of 1
 
+	// The player's high score at the start of a game
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 PlayerHighScore = 0;
 
@@ -168,5 +175,40 @@ protected:
 	UPROPERTY()
 	TObjectPtr<class UAudioComponent> CurrentMultiplierPickupSound;
 
+	// ----------------------------------------------------------
+	// --------------------------
+	// --- Difficulty Scaling ---
+	// --------------------------
+
+	// Number of enemies spawned in the current game 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 TotalNumEnemiesSpawnedThisGame = 0;
+
+	// Number of enemies killed by the player in the current game
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 TotalNumEnemiesKilledThisGame = 0;
+
+	// Every X enemy spawned or killed, increase difficulty
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 DifficultySpikeInterval = 10;
+
+	// Keeps track of currently difficulty spike level
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 CurrentDifficultyLevel = 1;
+
+	// Amount of time that needs to elapse between spawned enemies (seconds)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float CurrentTimeBetweenSpawns = 1.0f;
+
+	// Time between spawns should be decreased no lower than this
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float TimeBetweenSpawnsAbsoluteMinimum = 0.25f;
+
+	// Amount of time to decrease between spawns at each difficulty spike increase
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float TimeBetweenSpawnDecreaseAmount = 0.05f;
+
+	// ----------------------------------------------------------
+	// The player's currently selected ship sprite index
 	int32 SelectedShipSpriteIndex = -1;
 };
