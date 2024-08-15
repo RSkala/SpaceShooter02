@@ -1,0 +1,21 @@
+
+
+-----------------------------------------------
+Paper Flipbook Issue:
+* While I was setting up the "Dash Ready" flipbook, the sprites were not appearing at all in the flipbook.
+* PFB_Dash_Ready.uasset
+
+Solution:
+* When using a Paper Flipbook, if the sprite has any translucency, the material needs to be set for the key frame:
+
+It defaults to:
+* MaskedUnlitSpriteMaterial
+
+But it needs to be set to:
+* TranslucentUnlitSpriteMaterial
+
+This is set for the entire Flipbook in Details under:
+* Default Material
+
+-----------------------------------------------
+
