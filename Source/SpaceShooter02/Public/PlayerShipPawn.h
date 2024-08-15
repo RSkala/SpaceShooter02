@@ -413,6 +413,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<class UAudioComponent> CurrentPowerupTimeAddSound;
 
+	UPROPERTY()
+	TWeakObjectPtr<class ASpaceShooterGameState> SpaceShooterGameState;
+
 	// -------------------------------------------------------------------------------------
 
 	// Flag to ensure the "dash ready" flipbook animation only plays once and only after a full recharge

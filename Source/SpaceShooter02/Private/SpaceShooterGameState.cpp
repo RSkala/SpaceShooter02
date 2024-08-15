@@ -12,6 +12,8 @@
 #include "PickupItemSatelliteWeapon.h"
 #include "PickupItemScoreMultiplier.h"
 #include "PlayerShipPawn.h"
+#include "ProjectileBase.h"
+#include "ProjectileController.h"
 #include "SpaceShooterGameInstance.h"
 #include "UI/SpaceShooterMenuController.h"
 
@@ -108,6 +110,20 @@ void ASpaceShooterGameState::AddCurrentScoreMultiplier(int32 AmountToAdd)
 	OnPlayerMultiplierChanged.Broadcast(CurrentScoreMultiplier);
 }
 
+void ASpaceShooterGameState::FireProjectile(FVector ProjectilePosition, FRotator ProjectileRotation, APawn* InInstigator)
+{
+	if (ProjectileController != nullptr)
+	{
+		AProjectileBase* Projectile = ProjectileController->GetInactiveProjectile();
+		if (Projectile != nullptr)
+		{
+			Projectile->SetInstigator(InInstigator);
+			Projectile->SetActorLocationAndRotation(ProjectilePosition, ProjectileRotation);
+			Projectile->ActivateProjectile();
+		}
+	}
+}
+
 void ASpaceShooterGameState::BeginPlay()
 {
 	Super::BeginPlay();
@@ -123,6 +139,16 @@ void ASpaceShooterGameState::BeginPlay()
 
 	// Start game in Main Menu
 	ShooterMenuGameState = EShooterMenuGameState::MainMenu;
+
+	// Create projectile controller
+	if (ensure(ProjectileControllerClass != nullptr))
+	{
+		ProjectileController = NewObject<UProjectileController>(this, ProjectileControllerClass);
+		if (ensure(ProjectileController != nullptr))
+		{
+			ProjectileController->InitProjectilePool();
+		}
+	}
 
 	// Create the MenuController
 	if (ensure(MenuControllerClass != nullptr))

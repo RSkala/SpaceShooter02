@@ -19,8 +19,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void Init(FVector ProjectilePosition, FRotator ProjectileRotation);
 
+	void ActivateProjectile();
+	void DeactivateProjectile();
+
+	bool IsProjectileActive() const { return bIsProjectileActive; }
+
 protected:
 	virtual void BeginPlay() override;
+	virtual void BeginDestroy() override;
 
 	void CreateProjectileDefaultSubobjects(); // Should be called in the constructor of any subclass. Will create all the proper default subobjects.
 	virtual TSubclassOf<class UShapeComponent> GetCollisionVolumeComponentClass() const; // PURE_VIRTUAL(GetCollisionVolumeComponentClass, ;)
@@ -81,4 +87,10 @@ protected:
 	// Each Projectile should NOT be carrying a hard reference to an asset like this!
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class UNiagaraSystem> ProjectileImpactEffect;
+
+	// Whether this projectile is active and visible in the world
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool bIsProjectileActive = false;
+
+	static const FVector InactiveProjectilePosition;
 };

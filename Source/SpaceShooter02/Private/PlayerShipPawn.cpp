@@ -324,6 +324,10 @@ void APlayerShipPawn::BeginPlay()
 
 	// Hide dash shield sprite
 	HideDashShield();
+
+	// Get the game state reference
+	SpaceShooterGameState = Cast<ASpaceShooterGameState>(UGameplayStatics::GetGameState(GetWorld()));
+	ensure(SpaceShooterGameState != nullptr);
 }
 
 void APlayerShipPawn::UpdateMovement(float DeltaTime)
@@ -994,12 +998,20 @@ void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 
 			if (FirePointComp1 != nullptr)
 			{
-				AProjectileBase* FiredProjectile1 = World->SpawnActor<AProjectileBase>(ProjectileClass, FirePointComp1->GetComponentLocation(), FirePointComp1->GetComponentRotation(), ProjectileSpawnParameters);
+				//AProjectileBase* FiredProjectile1 = World->SpawnActor<AProjectileBase>(ProjectileClass, FirePointComp1->GetComponentLocation(), FirePointComp1->GetComponentRotation(), ProjectileSpawnParameters);
+				if (SpaceShooterGameState != nullptr)
+				{
+					SpaceShooterGameState->FireProjectile(FirePointComp1->GetComponentLocation(), FirePointComp1->GetComponentRotation(), this);
+				}
 			}
 
 			if (FirePointComp2 != nullptr)
 			{
-				AProjectileBase* FiredProjectile2 = World->SpawnActor<AProjectileBase>(ProjectileClass, FirePointComp2->GetComponentLocation(), FirePointComp2->GetComponentRotation(), ProjectileSpawnParameters);
+				//AProjectileBase* FiredProjectile2 = World->SpawnActor<AProjectileBase>(ProjectileClass, FirePointComp2->GetComponentLocation(), FirePointComp2->GetComponentRotation(), ProjectileSpawnParameters);
+				if (SpaceShooterGameState != nullptr)
+				{
+					SpaceShooterGameState->FireProjectile(FirePointComp2->GetComponentLocation(), FirePointComp2->GetComponentRotation(), this);
+				}
 			}
 
 			//AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, PlayerShipRotation, ProjectileSpawnParameters);
@@ -1164,13 +1176,18 @@ void APlayerShipPawn::FireProjectileFromSatelliteWeapon(
 		return;
 	}
 
-	if (World != nullptr && ProjectileClass != nullptr)
+	/*if (World != nullptr && ProjectileClass != nullptr)
 	{
 		World->SpawnActor<AProjectileBase>(
 			ProjectileClass,
 			SatelliteWeapon->GetComponentLocation(),
 			SatelliteWeapon->GetComponentRotation(),
 			ProjectileSpawnParameters);
+	}*/
+
+	if (SpaceShooterGameState != nullptr)
+	{
+		SpaceShooterGameState->FireProjectile(SatelliteWeapon->GetComponentLocation(), SatelliteWeapon->GetComponentRotation(), this);
 	}
 }
 

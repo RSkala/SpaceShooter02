@@ -50,6 +50,8 @@ public:
 
 	float GetTimeBetweenSpawns() const { return CurrentTimeBetweenSpawns; }
 
+	void FireProjectile(FVector ProjectilePosition, FRotator ProjectileRotation, APawn* InInstigator);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -207,6 +209,14 @@ protected:
 	// Amount of time to decrease between spawns at each difficulty spike increase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float TimeBetweenSpawnDecreaseAmount = 0.05f;
+
+	// ----------------------------------------------------------
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class UProjectileController> ProjectileControllerClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UProjectileController> ProjectileController;
 
 	// ----------------------------------------------------------
 	// The player's currently selected ship sprite index
