@@ -1,6 +1,30 @@
+--------------------------------------------------
+How to Extract a Single Sprite from a SpriteSheet
 
+Reason:
+* If you have a sprite sheet / texture containing sprites with varying sizes and you don't have a texture atlas.
 
------------------------------------------------
+Directions:
+* In the Content Browser, right-click the Texture asset
+* Sprite Actions -> Extract Sprites
+* Under Settings, change Sprite Extract Mode from Auto to Grid
+* Under Settings -> Grid:
+  * Cell Width: (your desired sprite size Width)
+  * Cell Height: (your desired sprite size height)
+  * Num Cells X: 1
+  * Num Cells Y: 1
+  * Margin X: Adjust this to move the "extract box" left and right
+  * Margin Y: Adjust this to move the "extract box" up and down
+  * Spacing X: 0 (default)
+  * Spacing Y: 0 (default)
+* Continue adjusting Cell Width & Height and Margin X & Y to "surround" the sprite.
+* Once your desired sprite is enclosed by the box, click the "Extract" button
+
+IMPORTANT NOTES:
+(1) By default, an Extracted sprite will have "Snap Pivot to Pixel Grid" ENABLED, which you DO NOT want, if you want your sprites centered.
+(2) If your sprite has transparency and you intend on using a sprite with Paper Flipbook, ensure the Paper Flipbook is using the "TranslucentUnlitSpriteMaterial" or "TranslucentUnlitSpriteMaterial", otherwise the transparency will not appear in the Flipbook (because Paper Flipbooks seem to default to "MaskedUnlitSpriteMaterial")
+
+--------------------------------------------------
 Paper Flipbook Issue:
 * While I was setting up the "Dash Ready" flipbook, the sprites were not appearing at all in the flipbook.
 * PFB_Dash_Ready.uasset
