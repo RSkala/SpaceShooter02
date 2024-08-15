@@ -99,6 +99,10 @@ void ASpaceShooterGameState::EndGame(int32 FinalScore)
 	else
 	{
 		OnGameEnded.Broadcast(FinalScore, SelectedShipSpriteIndex);
+		if (ProjectileController != nullptr)
+		{
+			ProjectileController->ResetProjectilePool();
+		}
 	}
 }
 
@@ -325,6 +329,10 @@ void ASpaceShooterGameState::OnGameOverTimerTimeout(int32 FinalScore)
 {
 	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::OnGameOverTimerTimeout"));
 	OnGameEnded.Broadcast(FinalScore, SelectedShipSpriteIndex);
+	if (ProjectileController != nullptr)
+	{
+		ProjectileController->ResetProjectilePool();
+	}
 }
 
 void ASpaceShooterGameState::HandleRequestPauseGame()
