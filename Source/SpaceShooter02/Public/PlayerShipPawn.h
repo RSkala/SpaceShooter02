@@ -140,6 +140,9 @@ protected:
 	void ShowDashShield();
 	void HideDashShield();
 
+	UFUNCTION()
+	void OnDashReadyAnimationFinished();
+
 protected:
 	// --- Components ---
 
@@ -157,6 +160,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
 	TObjectPtr<class UNiagaraComponent> DashExhaustParticleComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "PlayerShipPawn|Components")
+	TObjectPtr<class UPaperFlipbookComponent> DashReadyFlipbookComp;
 
 	// --- Camera ---
 	
@@ -257,7 +263,7 @@ protected:
 
 	// How long it takes to recharge Dash ability
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming")
-	float DashRechargeTime = 10.0f;
+	float DashRechargeTime = 5.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming")
 	float DashRechargeTimeElapsed = 0.0f;
@@ -408,4 +414,7 @@ protected:
 	TObjectPtr<class UAudioComponent> CurrentPowerupTimeAddSound;
 
 	// -------------------------------------------------------------------------------------
+
+	// Flag to ensure the "dash ready" flipbook animation only plays once and only after a full recharge
+	bool bDashReadyAnimPlayed = false;
 };

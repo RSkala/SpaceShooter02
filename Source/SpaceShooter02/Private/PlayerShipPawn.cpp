@@ -122,6 +122,11 @@ APlayerShipPawn::APlayerShipPawn()
 	DashExhaustParticleComp = CreateDefaultSubobject<UNiagaraComponent>(TEXT("DashExhaustParticleComp"));
 	DashExhaustParticleComp->SetupAttachment(RootComponent);
 
+	DashReadyFlipbookComp = CreateDefaultSubobject<UPaperFlipbookComponent>(TEXT("DashReadyFlipbookComp"));
+	DashReadyFlipbookComp->SetupAttachment(RootComponent);
+	DashReadyFlipbookComp->SetLooping(false);
+	DashReadyFlipbookComp->SetCollisionProfileName(UCollisionProfile::NoCollision_ProfileName);
+
 	// --- Satellite Weapon Components ---
 
 	SatelliteWeaponRotatorComp = CreateDefaultSubobject<USceneComponent>(TEXT("SatelliteWeaponRotatorComp"));
@@ -288,6 +293,16 @@ void APlayerShipPawn::BeginPlay()
 		DashExhaustParticleComp->Deactivate();
 	}
 
+	if (DashReadyFlipbookComp != nullptr)
+	{
+		ensure(DashReadyFlipbookComp->GetFlipbook() != nullptr);
+
+		// Subscribe to the OnFinishedPlaying delegate to be notified when the flipbook animation completed. bLooping MUST be false.
+		DashReadyFlipbookComp->OnFinishedPlaying.AddUniqueDynamic(this, &ThisClass::OnDashReadyAnimationFinished);
+		DashReadyFlipbookComp->SetHiddenInGame(true);
+		bDashReadyAnimPlayed = true; // Ensure the dash animation doesn't play when first starting up a game
+	}
+
 	// Start the player disabled
 	DisablePlayer();
 
@@ -341,6 +356,9 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 			{
 				DashExhaustParticleComp->Deactivate();
 			}
+
+			// Reset "dash ready" anim flag
+			bDashReadyAnimPlayed = false;
 		}
 		else
 		{
@@ -358,6 +376,21 @@ void APlayerShipPawn::UpdateMovement(float DeltaTime)
 		DashRechargeTimeElapsed += DeltaTime;
 		DashRechargeTimeElapsed = FMath::Min(DashRechargeTimeElapsed, DashRechargeTime);
 		OnPlayerDashUpdated.Broadcast(DashRechargeTimeElapsed / DashRechargeTime);
+
+		// When the dash recharge time has elapsed, play the "dash ready" animation
+		if (DashRechargeTimeElapsed >= DashRechargeTime)
+		{
+			// Play dash ready flipbook animation
+			if (DashReadyFlipbookComp != nullptr)
+			{
+				if (!bDashReadyAnimPlayed)
+				{
+					DashReadyFlipbookComp->SetHiddenInGame(false);
+					DashReadyFlipbookComp->PlayFromStart();
+					bDashReadyAnimPlayed = true;
+				}
+			}
+		}
 	}
 	// =======================================================================
 
@@ -650,6 +683,7 @@ void APlayerShipPawn::EnablePlayer()
 	//DashRechargeTimeElapsed = 0.0f;
 	DashRechargeTimeElapsed = DashRechargeTime; // Start player with full dash ability
 	DashTimeElapsed = 0.0f;
+	bDashReadyAnimPlayed = true; // Don't play the dash ready animation when the player first starts
 }
 
 void APlayerShipPawn::KillPlayerFromSelfDestruct()
@@ -1307,6 +1341,14 @@ void APlayerShipPawn::HideDashShield()
 		DashShieldSpriteComp->SetHiddenInGame(true, true);
 		DashShieldSpriteComp->SetVisibility(false, true);
 		//DashShieldSpriteComp->SetComponentTickEnabled(false);
+	}
+}
+
+void APlayerShipPawn::OnDashReadyAnimationFinished()
+{
+	if (DashReadyFlipbookComp != nullptr)
+	{
+		DashReadyFlipbookComp->SetHiddenInGame(true);
 	}
 }
 
