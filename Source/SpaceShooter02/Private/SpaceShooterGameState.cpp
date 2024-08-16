@@ -130,7 +130,7 @@ void ASpaceShooterGameState::FireProjectile(FVector ProjectilePosition, FRotator
 		{
 			Projectile->SetInstigator(InInstigator);
 			Projectile->SetActorLocationAndRotation(ProjectilePosition, ProjectileRotation);
-			Projectile->ActivateProjectile();
+			Projectile->ActivatePoolObject();
 		}
 	}
 }

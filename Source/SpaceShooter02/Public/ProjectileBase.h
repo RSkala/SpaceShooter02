@@ -3,11 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+
+#include "PoolActor.h"
+
 #include "ProjectileBase.generated.h"
 
 UCLASS(Abstract, NotBlueprintable)
-class SPACESHOOTER02_API AProjectileBase : public AActor
+class SPACESHOOTER02_API AProjectileBase : public APoolActor
 {
 	GENERATED_BODY()
 
@@ -17,12 +19,6 @@ public:
 public:	
 	AProjectileBase();
 	virtual void Tick(float DeltaTime) override;
-	virtual void Init(FVector ProjectilePosition, FRotator ProjectileRotation);
-
-	void ActivateProjectile();
-	void DeactivateProjectile();
-
-	bool IsProjectileActive() const { return bIsProjectileActive; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -33,7 +29,6 @@ protected:
 	virtual const TCHAR* GetDefaultSpritePath() const; // PURE_VIRTUAL(GetDefaultSpritePath, ;)
 
 	virtual void UpdateMovement(float DeltaTime);
-	virtual void UpdateLifetime(float DeltaTime);
 
 	UFUNCTION()
 	virtual void OnCollisionOverlap(
@@ -75,22 +70,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileBase|Behavior", meta = (ClampMin = "0"))
 	float Damage = 100.0f;
 
-	// How long this projectile stays alive before being destroyed
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "ProjectileBase|Behavior", meta = (ClampMin = "0"))
-	float LifetimeSeconds = 10.0f;
-
-	// How long this projectile has been active
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "ProjectileBase|Behavior")
-	float TimeAlive = 0.0f;
-
 	// NOTE: This is just temporary. This MUST be moved into a ProjectileController once pooling is implemented!
 	// Each Projectile should NOT be carrying a hard reference to an asset like this!
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class UNiagaraSystem> ProjectileImpactEffect;
-
-	// Whether this projectile is active and visible in the world
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool bIsProjectileActive = false;
-
-	static const FVector InactiveProjectilePosition;
 };

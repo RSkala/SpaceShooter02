@@ -21,7 +21,7 @@ void UProjectileController::ResetProjectilePool()
 	{
 		if (Projectile != nullptr)
 		{
-			Projectile->DeactivateProjectile();
+			Projectile->DeactivatePoolObject();
 		}
 	}
 }
@@ -32,7 +32,7 @@ AProjectileBase* UProjectileController::GetInactiveProjectile()
 	AProjectileBase* InactiveProjectile = nullptr;
 	for (AProjectileBase* Projectile : ProjectilePool)
 	{
-		if (Projectile != nullptr && !Projectile->IsProjectileActive())
+		if (Projectile != nullptr && !Projectile->IsPoolObjectActive())
 		{
 			// Found an inactive projectile
 			InactiveProjectile = Projectile;

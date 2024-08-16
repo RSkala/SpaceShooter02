@@ -10,8 +10,6 @@
 
 DEFINE_LOG_CATEGORY_CLASS(AProjectileBase, LogProjectiles)
 
-const FVector AProjectileBase::InactiveProjectilePosition = FVector(-10000.0f, -10000.0f, -10000.0f);
-
 AProjectileBase::AProjectileBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -20,38 +18,11 @@ AProjectileBase::AProjectileBase()
 void AProjectileBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (bIsProjectileActive)
+
+	if (bIsPoolObjectActive)
 	{
 		UpdateMovement(DeltaTime);
-		UpdateLifetime(DeltaTime);
 	}
-}
-
-void AProjectileBase::Init(FVector ProjectilePosition, FRotator ProjectileRotation)
-{
-	// TODO: Set movespeed, etc
-
-	//SetActorLocation(ProjectilePosition);
-	//SetActorRotation(ProjectileRotation);
-}
-
-void AProjectileBase::ActivateProjectile()
-{
-	bIsProjectileActive = true;
-	SetActorHiddenInGame(false); // Show visible components
-	SetActorEnableCollision(true); // Enable collision components
-	SetActorTickEnabled(true); // Start ticking
-	TimeAlive = 0.0f;
-}
-
-void AProjectileBase::DeactivateProjectile()
-{
-	bIsProjectileActive = false;
-	SetActorHiddenInGame(true); // Hide visible components
-	SetActorEnableCollision(false); // Disable collision components
-	SetActorTickEnabled(false); // Stop ticking
-	SetActorLocation(InactiveProjectilePosition);
-	TimeAlive = 0.0f;
 }
 
 void AProjectileBase::BeginPlay()
@@ -62,14 +33,11 @@ void AProjectileBase::BeginPlay()
 	{
 		CollisionShapeComp->OnComponentBeginOverlap.AddUniqueDynamic(this, &ThisClass::OnCollisionOverlap);
 	}
-
-	// Start all projectiles inactive
-	DeactivateProjectile();
 }
 
 void AProjectileBase::BeginDestroy()
 {
-	UE_LOG(LogTemp, Warning, TEXT("AProjectileBase::BeginDestroy - %s"), *GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("AProjectileBase::BeginDestroy - %s"), *GetName());
 	Super::BeginDestroy();
 }
 
@@ -191,22 +159,9 @@ void AProjectileBase::UpdateMovement(float DeltaTime)
 
 			// Successful line trace into walls. Spawn a particle at the position and destroy this particle.
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(World, ProjectileImpactEffect, ImpactEffectSpawnPos);
-			DeactivateProjectile();
-			//Destroy();
+			DeactivatePoolObject();
 		}
 	}
 }
-
-void AProjectileBase::UpdateLifetime(float DeltaTime)
-{
-	TimeAlive += DeltaTime;
-	if (TimeAlive >= LifetimeSeconds)
-	{
-		// This projectile has exceeded its lifespan. Deactivate this projectile.
-		//Destroy();
-		DeactivateProjectile();
-	}
-}
-
 
 
