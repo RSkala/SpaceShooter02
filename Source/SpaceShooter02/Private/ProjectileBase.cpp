@@ -41,7 +41,6 @@ void AProjectileBase::ActivateProjectile()
 	SetActorHiddenInGame(false); // Show visible components
 	SetActorEnableCollision(true); // Enable collision components
 	SetActorTickEnabled(true); // Start ticking
-	//SetActorLocation(InactiveParticlePosition);
 	TimeAlive = 0.0f;
 }
 
