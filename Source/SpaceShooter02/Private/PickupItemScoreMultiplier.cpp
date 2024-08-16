@@ -22,12 +22,12 @@ void APickupItemScoreMultiplier::UpdateLifetime(float DeltaTime)
 			if (PercentAlive <= 0.8f)
 			{
 				// greater than 50%, less than 80%
-				PaperSpriteComp->SetSpriteColor(FLinearColor::Yellow);
+				//PaperSpriteComp->SetSpriteColor(FLinearColor::Yellow);
 			}
 			else
 			{
 				// greater than 80%
-				PaperSpriteComp->SetSpriteColor(FLinearColor::Red);
+				//PaperSpriteComp->SetSpriteColor(FLinearColor::Red);
 			}
 		}
 	}
