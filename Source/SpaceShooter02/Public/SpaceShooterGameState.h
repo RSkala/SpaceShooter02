@@ -147,9 +147,6 @@ protected:
 
 	// --- Pickups ---
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class APickupItemBase> ScoreMultiplierPickupItemClass;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (ClampMin = "0.0", ClampMax = "1.0", UIMin = "0.0", UIMax = "1.0"))
 	float ScoreMultiplierDropChance = 0.5f;
 
@@ -217,6 +214,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UProjectileController> ProjectileController;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class UPickupItemController> PickupItemControllerClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TObjectPtr<class UPickupItemController> PickupItemController;
 
 	// ----------------------------------------------------------
 	// The player's currently selected ship sprite index

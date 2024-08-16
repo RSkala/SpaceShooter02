@@ -3,28 +3,32 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+
+#include "PoolActor.h"
+
 #include "PickupItemBase.generated.h"
 
 UCLASS(Abstract, NotBlueprintable)
-class SPACESHOOTER02_API APickupItemBase : public AActor
+class SPACESHOOTER02_API APickupItemBase : public APoolActor
 {
 	GENERATED_BODY()
 	
 public:	
 	APickupItemBase();
 	virtual void Tick(float DeltaTime) override;
+	virtual void ActivatePoolObject() override;
+	virtual void DeactivatePoolObject() override;
 
 	void SetMovementDirection(FVector InMovementDirection) { MovementDirection = InMovementDirection; }
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void UpdateLifetime(float DeltaTime) override;
 
 	virtual void UpdateMovement(float DeltaTime);
 	virtual void UpdateAttractionMovement(float DeltaTime);
 	virtual void UpdateNonAttractionMovement(float DeltaTime);
 	virtual void UpdateTargetAttraction(float DeltaTime);
-	virtual void UpdateLifetime(float DeltaTime);
 
 	virtual bool IsAttractingToTarget() const { return AttractionTargetActor != nullptr; }
 
@@ -55,14 +59,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	FVector MovementDirection;
-
-	// --- Lifetime ---
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float LifeTimeSeconds = 10.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	float TimeAlive = 0.0f;
 
 	// --- Target Attraction ---
 

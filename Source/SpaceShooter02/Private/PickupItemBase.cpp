@@ -24,7 +24,18 @@ void APickupItemBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	UpdateTargetAttraction(DeltaTime);
 	UpdateMovement(DeltaTime);
-	UpdateLifetime(DeltaTime);
+}
+
+void APickupItemBase::ActivatePoolObject()
+{
+	Super::ActivatePoolObject();
+	AttractionTargetActor = nullptr;
+}
+
+void APickupItemBase::DeactivatePoolObject()
+{
+	Super::DeactivatePoolObject();
+	AttractionTargetActor = nullptr;
 }
 
 void APickupItemBase::BeginPlay()
@@ -44,6 +55,17 @@ void APickupItemBase::BeginPlay()
 
 	// TEMP: Just get the player. TODO: Pass into the pickup item when "spawned" from pickup item spawner.
 	PlayerShipActor = UGameplayStatics::GetActorOfClass(GetWorld(), APlayerShipPawn::StaticClass());
+}
+
+void APickupItemBase::UpdateLifetime(float DeltaTime)
+{
+	// Do not update lifetime if attracting to target so it doesn't disappear while being pulled in
+	if (IsAttractingToTarget())
+	{
+		return;
+	}
+
+	Super::UpdateLifetime(DeltaTime);
 }
 
 void APickupItemBase::UpdateMovement(float DeltaTime)
@@ -136,21 +158,6 @@ void APickupItemBase::UpdateTargetAttraction(float DeltaTime)
 	}
 }
 
-void APickupItemBase::UpdateLifetime(float DeltaTime)
-{
-	// Do not update lifetime if attracting to target so it doesn't disappear while being pulled in
-	if (IsAttractingToTarget())
-	{
-		return;
-	}
-
-	TimeAlive += DeltaTime;
-	if (TimeAlive >= LifeTimeSeconds)
-	{
-		Destroy();
-	}
-}
-
 void APickupItemBase::OnCollisionOverlap(
 	UPrimitiveComponent* OverlappedComponent,
 	AActor* OtherActor,
@@ -162,12 +169,8 @@ void APickupItemBase::OnCollisionOverlap(
 	APlayerShipPawn* PlayerShipPawn = Cast<APlayerShipPawn>(OtherActor);
 	if (PlayerShipPawn != nullptr)
 	{
-		if (IsActorBeingDestroyed())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Pickup item getting picked up while being destroyed - %s"), *GetName());
-		}
 		HandlePlayerPickup();
-		Destroy();
+		DeactivatePoolObject();
 	}
 }
 

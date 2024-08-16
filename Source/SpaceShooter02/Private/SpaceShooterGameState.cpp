@@ -9,6 +9,7 @@
 
 #include "EnemyBase.h"
 #include "EnemySpawner.h"
+#include "PickupItemController.h"
 #include "PickupItemSatelliteWeapon.h"
 #include "PickupItemScoreMultiplier.h"
 #include "PlayerShipPawn.h"
@@ -99,9 +100,15 @@ void ASpaceShooterGameState::EndGame(int32 FinalScore)
 	else
 	{
 		OnGameEnded.Broadcast(FinalScore, SelectedShipSpriteIndex);
+
 		if (ProjectileController != nullptr)
 		{
 			ProjectileController->ResetProjectilePool();
+		}
+
+		if (PickupItemController != nullptr)
+		{
+			PickupItemController->ResetScoreMultiplierPool();
 		}
 	}
 }
@@ -151,6 +158,16 @@ void ASpaceShooterGameState::BeginPlay()
 		if (ensure(ProjectileController != nullptr))
 		{
 			ProjectileController->InitProjectilePool();
+		}
+	}
+
+	// Create Pickup Item Controller
+	if (ensure(PickupItemControllerClass != nullptr))
+	{
+		PickupItemController = NewObject<UPickupItemController>(this, PickupItemControllerClass);
+		if (ensure(PickupItemController != nullptr))
+		{
+			PickupItemController->InitScoreMultiplierPool();
 		}
 	}
 
@@ -311,15 +328,17 @@ void ASpaceShooterGameState::OnGameOverPlayAgainSelected()
 
 void ASpaceShooterGameState::SpawnScoreMultiplierPickup(FVector SpawnPosition)
 {
-	if (ensure(ScoreMultiplierPickupItemClass != nullptr))
+	if (PickupItemController != nullptr)
 	{
 		// Use a random chance to determine score multiplier drops
 		float RandomChance = FMath::FRandRange(0.0f, 1.0f);
 		if (RandomChance <= ScoreMultiplierDropChance)
 		{
-			if (UWorld* World = GetWorld())
+			APickupItemScoreMultiplier* ScoreMultiplier = PickupItemController->GetInactiveScoreMultiplier();
+			if (ScoreMultiplier != nullptr)
 			{
-				World->SpawnActor<APickupItemBase>(ScoreMultiplierPickupItemClass, SpawnPosition, FRotator::ZeroRotator);
+				ScoreMultiplier->SetActorLocationAndRotation(SpawnPosition, FRotator::ZeroRotator);
+				ScoreMultiplier->ActivatePoolObject();
 			}
 		}
 	}
@@ -329,9 +348,15 @@ void ASpaceShooterGameState::OnGameOverTimerTimeout(int32 FinalScore)
 {
 	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::OnGameOverTimerTimeout"));
 	OnGameEnded.Broadcast(FinalScore, SelectedShipSpriteIndex);
+
 	if (ProjectileController != nullptr)
 	{
 		ProjectileController->ResetProjectilePool();
+	}
+	
+	if (PickupItemController != nullptr)
+	{
+		PickupItemController->ResetScoreMultiplierPool();
 	}
 }
 
