@@ -34,7 +34,9 @@ AProjectileBase* UProjectileController::GetInactiveProjectile()
 	{
 		if (Projectile != nullptr && !Projectile->IsProjectileActive())
 		{
+			// Found an inactive projectile
 			InactiveProjectile = Projectile;
+			break;
 		}
 	}
 

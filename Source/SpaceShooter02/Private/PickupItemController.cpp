@@ -34,6 +34,7 @@ APickupItemScoreMultiplier* UPickupItemController::GetInactiveScoreMultiplier()
 	{
 		if (ScoreMultiplier != nullptr && !ScoreMultiplier->IsPoolObjectActive())
 		{
+			// Found an inactive score multiplier
 			InactivePickupItem = ScoreMultiplier;
 			break;
 		}
