@@ -998,7 +998,6 @@ void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 
 			if (FirePointComp1 != nullptr)
 			{
-				//AProjectileBase* FiredProjectile1 = World->SpawnActor<AProjectileBase>(ProjectileClass, FirePointComp1->GetComponentLocation(), FirePointComp1->GetComponentRotation(), ProjectileSpawnParameters);
 				if (SpaceShooterGameState != nullptr)
 				{
 					SpaceShooterGameState->FireProjectile(FirePointComp1->GetComponentLocation(), FirePointComp1->GetComponentRotation(), this);
@@ -1007,16 +1006,11 @@ void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 
 			if (FirePointComp2 != nullptr)
 			{
-				//AProjectileBase* FiredProjectile2 = World->SpawnActor<AProjectileBase>(ProjectileClass, FirePointComp2->GetComponentLocation(), FirePointComp2->GetComponentRotation(), ProjectileSpawnParameters);
 				if (SpaceShooterGameState != nullptr)
 				{
 					SpaceShooterGameState->FireProjectile(FirePointComp2->GetComponentLocation(), FirePointComp2->GetComponentRotation(), this);
 				}
 			}
-
-			//AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, PlayerShipRotation, ProjectileSpawnParameters);
-			//AProjectileBase* FiredProjectile = World->SpawnActor<AProjectileBase>(ProjectileClass, PlayerShipPosition, ProjectileRotation, ProjectileSpawnParameters);
-			//FiredProjectile->Init(FVector::ZeroVector, FRotator::ZeroRotator); // wip
 
 			// Play the shoot sound
 			PlayShootSound();
@@ -1175,15 +1169,6 @@ void APlayerShipPawn::FireProjectileFromSatelliteWeapon(
 	{
 		return;
 	}
-
-	/*if (World != nullptr && ProjectileClass != nullptr)
-	{
-		World->SpawnActor<AProjectileBase>(
-			ProjectileClass,
-			SatelliteWeapon->GetComponentLocation(),
-			SatelliteWeapon->GetComponentRotation(),
-			ProjectileSpawnParameters);
-	}*/
 
 	if (SpaceShooterGameState != nullptr)
 	{
