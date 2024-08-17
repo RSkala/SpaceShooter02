@@ -10,6 +10,7 @@
 
 #include "EnemyBase.h"
 #include "ExplosionBase.h"
+#include "ExplosionSpriteController.h"
 #include "PlayerShipPawn.h"
 #include "SpaceShooterGameState.h"
 #include "SpawnAnimBase.h"
@@ -25,6 +26,11 @@ void AEnemySpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	UpdateSpawning(DeltaTime);
+}
+
+void AEnemySpawner::SetExplosionSpriteController(UExplosionSpriteController* InExplosionSpriteController)
+{
+	ExplosionSpriteController = InExplosionSpriteController;
 }
 
 void AEnemySpawner::BeginPlay()
@@ -156,8 +162,16 @@ void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* Ene
 			FRotator RandomExplosionRotation = FRotator(FMath::FRandRange(0.0f, 360.0f), 0.0f, 0.0f);
 
 			// Create the explosion
-			//World->SpawnActor<AExplosionBase>(ExplosionClassToSpawn, EnemyDeathPosition, FRotator());
-			World->SpawnActor<AExplosionBase>(ExplosionClassToSpawn, EnemyDeathPosition, RandomExplosionRotation);
+			//World->SpawnActor<AExplosionBase>(ExplosionClassToSpawn, EnemyDeathPosition, RandomExplosionRotation);
+			if (ExplosionSpriteController != nullptr)
+			{
+				AExplosionBase* ExplosionSprite = ExplosionSpriteController->GetRandomInactiveExplosionSprite();
+				if (ExplosionSprite != nullptr)
+				{
+					ExplosionSprite->SetActorLocationAndRotation(EnemyDeathPosition, RandomExplosionRotation);
+					ExplosionSprite->ActivatePoolObject();
+				}
+			}
 		}
 	}
 

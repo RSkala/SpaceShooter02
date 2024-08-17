@@ -126,7 +126,7 @@ protected:
 	TSubclassOf<class USpaceShooterMenuController> MenuControllerClass;
 
 	// MenuController instance
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
 	TObjectPtr<class USpaceShooterMenuController> MenuController;
 
 	// Reference to player's ship
@@ -209,17 +209,29 @@ protected:
 
 	// ----------------------------------------------------------
 
+	// --- Projectile Controller ---
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class UProjectileController> ProjectileControllerClass;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
 	TObjectPtr<class UProjectileController> ProjectileController;
+
+	// --- Pickup Item Controller
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class UPickupItemController> PickupItemControllerClass;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
 	TObjectPtr<class UPickupItemController> PickupItemController;
+
+	// --- Explosion Sprite Controller ---
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class UExplosionSpriteController> ExplosionSpriteControllerClass;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
+	TObjectPtr<class UExplosionSpriteController> ExplosionSpriteController;
 
 	// ----------------------------------------------------------
 	// The player's currently selected ship sprite index

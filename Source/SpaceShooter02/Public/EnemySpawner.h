@@ -16,6 +16,7 @@ public:
 	AEnemySpawner();
 	virtual void Tick(float DeltaTime) override;
 	void SetSpawningEnabled(bool bInSpawningEnabled) { bSpawningEnabled = bInSpawningEnabled; }
+	void SetExplosionSpriteController(class UExplosionSpriteController* InExplosionSpriteController);
 
 protected:
 	virtual void BeginPlay() override;
@@ -79,6 +80,9 @@ protected:
 
 	UPROPERTY()
 	TWeakObjectPtr<class ASpaceShooterGameState> SpaceShooterGameState;
+
+	UPROPERTY()
+	TWeakObjectPtr<class UExplosionSpriteController> ExplosionSpriteController;
 	
 	// Last time an enemy was spawned
 	float TimeSinceLastEnemySpawned = 0.0f;

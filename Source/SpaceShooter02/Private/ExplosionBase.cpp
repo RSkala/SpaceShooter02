@@ -27,6 +27,29 @@ void AExplosionBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void AExplosionBase::BeginDestroy()
+{
+	Super::BeginDestroy();
+}
+
+void AExplosionBase::ActivatePoolObject()
+{
+	Super::ActivatePoolObject();
+	if (ExplosionFlipbookComp != nullptr)
+	{
+		ExplosionFlipbookComp->PlayFromStart();
+	}
+}
+
+void AExplosionBase::DeactivatePoolObject()
+{
+	Super::DeactivatePoolObject();
+	if (ExplosionFlipbookComp != nullptr)
+	{
+		ExplosionFlipbookComp->Stop();
+	}
+}
+
 void AExplosionBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -42,6 +65,6 @@ void AExplosionBase::OnExplosionAnimationFinished()
 {
 	//UE_LOG(LogExplosion, Log, TEXT("AExplosionBase::OnExplosionAnimationFinished - %s"), *GetName());
 	
-	// This explosion animation has finished. destroy it.
-	Destroy();
+	// This explosion animation has finished. Deactivate it.
+	DeactivatePoolObject();
 }
