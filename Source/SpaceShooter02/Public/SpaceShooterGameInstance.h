@@ -16,6 +16,7 @@ public:
 	const TArray<struct FHighScoreData>& GetHighScoreDataList() const;
 	class UPaperSprite* GetShipSpriteForIndex(int32 ShipSpriteIndex) const;
 	int32 GetPlayerHighestScore() const;
+	void ClearHighScores();
 
 	static FString GetGameVersionString() { return GameVersion; }
 

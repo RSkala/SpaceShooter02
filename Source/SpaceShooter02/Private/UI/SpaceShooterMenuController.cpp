@@ -6,6 +6,7 @@
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "SpaceShooterGameInstance.h"
 #include "SpaceShooterGameState.h"
 #include "UI/GameCreditsScreen.h"
 #include "UI/GameOverScreen.h"
@@ -212,7 +213,10 @@ void USpaceShooterMenuController::OptionsScreenCreditsClicked()
 void USpaceShooterMenuController::OptionsScreenClearScoresClicked()
 {
 	PlayButtonClickSound();
-	UE_LOG(LogTemp, Warning, TEXT("TODO - OptionsScreenClearScoresClicked"));
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		GameInstance->ClearHighScores();
+	}
 }
 
 void USpaceShooterMenuController::OptionsScreenBackClicked()

@@ -130,6 +130,15 @@ int32 USpaceShooterGameInstance::GetPlayerHighestScore() const
 	return SpaceShooterSaveGame != nullptr ? SpaceShooterSaveGame->GetHighestSavedScore() : 0;
 }
 
+void USpaceShooterGameInstance::ClearHighScores()
+{
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		UE_LOG(LogSpaceShooterGameInstance, Log, TEXT("Clearing High Scores"));
+		InitializeHighScoreData();
+	}
+}
+
 void USpaceShooterGameInstance::Init()
 {
 	Super::Init();
