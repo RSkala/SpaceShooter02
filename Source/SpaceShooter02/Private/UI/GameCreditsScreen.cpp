@@ -85,7 +85,7 @@ void UGameCreditsScreen::OnColorShift(FLinearColor LinearColor)
 
 void UGameCreditsScreen::OnBackButtonClicked()
 {
-	USpaceShooterMenuController::OnCreditsMenuBackClicked.Broadcast();
+	USpaceShooterMenuController::OnCreditsScreenBackClicked.Broadcast();
 }
 
 void UGameCreditsScreen::OnBackButtonHovered()

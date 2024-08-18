@@ -1,0 +1,37 @@
+// Copyright 2024 Richard Skala
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "UI/MenuScreenWidget.h"
+#include "OptionsScreen.generated.h"
+
+UCLASS()
+class SPACESHOOTER02_API UOptionsScreen : public UMenuScreenWidget
+{
+	GENERATED_BODY()
+
+protected:
+	virtual void NativeOnInitialized() override;
+	virtual void NativeConstruct() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
+
+	virtual void OnColorShift(FLinearColor LinearColor) override;
+
+private:
+	UFUNCTION() void OnCreditsButtonClicked();
+	UFUNCTION() void OnBackButtonClicked();
+
+	UFUNCTION() void OnCreditsButtonHovered();
+	UFUNCTION() void OnBackButtonHovered();
+
+private:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UTextBlock> OptionsTextBlock;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UButton> CreditsButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UButton> BackButton;
+};

@@ -25,24 +25,16 @@ protected:
 	virtual void OnColorShift(FLinearColor LinearColor) override;
 
 	UFUNCTION() void OnPlayButtonClicked();
+	UFUNCTION() void OnOptionsButtonClicked();
 	UFUNCTION() void OnExitButtonClicked();
 	UFUNCTION() void OnCreditsButtonClicked();
 	UFUNCTION() void OnHighScoresButtonClicked();
 
-	UFUNCTION()
-	void OnPlayButtonHovered();
-
-	UFUNCTION()
-	void OnExitButtonHovered();
-
-	UFUNCTION()
-	void OnCreditsButtonHovered();
-
-	UFUNCTION()
-	void OnHighScoreButtonHovered();
-
-	//UFUNCTION() void OnPlayButtonHovered();
-	//UFUNCTION() void OnPlayButtonUnhovered();
+	UFUNCTION() void OnPlayButtonHovered();
+	UFUNCTION() void OnOptionsButtonHovered();
+	UFUNCTION() void OnExitButtonHovered();
+	UFUNCTION() void OnCreditsButtonHovered();
+	UFUNCTION() void OnHighScoreButtonHovered();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
@@ -50,6 +42,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UButton> PlayButton;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
+	TObjectPtr<class UButton> OptionsButton;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UButton> ExitButton;

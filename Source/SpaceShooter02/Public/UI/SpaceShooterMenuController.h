@@ -15,6 +15,14 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCreditsMenuBackClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FShipSelectBackButtonClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuHighScoreClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHighScoreBackButtonClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuOptionsButtonClickedDelegateSignature);
+
+// Options Screen actions
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenCreditsButtonClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenBackButtonClickedDelegateSignature);
+
+// Credits Screen actions
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCreditsScreenBackButtonClickedDelegateSignature);
 
 // Enum for tracking whether or not a sound VO was played
 UENUM(BlueprintType, meta = (BitFlags, UseEnumValuesAsMaskValuesInEditor = "true"))
@@ -71,6 +79,12 @@ private:
 	UFUNCTION() void MainMenuHighScoreClicked();
 	UFUNCTION() void HighScoreBackClicked();
 	UFUNCTION() void PauseScreenResumeClicked();
+	UFUNCTION() void MainMenuOptionsButtonClicked();
+
+	UFUNCTION() void OptionsScreenCreditsClicked();
+	UFUNCTION() void OptionsScreenBackClicked();
+
+	UFUNCTION() void CreditsScreenBackClicked();
 
 	UUserWidget* OpenScreen(TSubclassOf<class UUserWidget> ScreenClass);
 	void CloseScreen(UUserWidget* const ScreenToClose);
@@ -92,6 +106,9 @@ private:
 
 	void OpenPauseScreen();
 	void ClosePauseScreen();
+
+	void OpenOptionsScreen();
+	void CloseOptionsScreen();
 
 	void SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray);
 
@@ -116,6 +133,17 @@ public:
 	static FShipSelectBackButtonClickedDelegateSignature OnShipSelectBackClicked;
 	static FMainMenuHighScoreClickedDelegateSignature OnMainMenuHighScoreClicked;
 	static FHighScoreBackButtonClickedDelegateSignature OnHighScoreBackClicked;
+	static FMainMenuOptionsButtonClickedDelegateSignature OnMainMenuOptionsClicked;
+
+
+
+	// Options Screen Actions
+	static FOptionsScreenCreditsButtonClickedDelegateSignature OnOptionsScreenCreditsClicked;
+	static FOptionsScreenBackButtonClickedDelegateSignature OnOptionsScreenBackClicked;
+
+	// Credits Screen Actions
+	static FCreditsScreenBackButtonClickedDelegateSignature OnCreditsScreenBackClicked;
+
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
@@ -141,6 +169,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TSubclassOf<class UUserWidget> PauseScreenClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TSubclassOf<class UUserWidget> OptionsScreenClass;
+
 	// --- Menu Screen Instances ---
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
@@ -160,6 +191,9 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UPauseScreen> PauseScreen;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UOptionsScreen> OptionsScreen;
 
 	// --- Menu VO ---
 

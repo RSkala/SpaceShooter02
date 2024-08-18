@@ -11,6 +11,7 @@
 #include "UI/GameOverScreen.h"
 #include "UI/HighScoreScreen.h"
 #include "UI/MainMenuScreen.h"
+#include "UI/OptionsScreen.h"
 #include "UI/PauseScreen.h"
 #include "UI/PlayerShipSelectScreen.h"
 
@@ -21,10 +22,18 @@ FShipSelectedDelegateSignature USpaceShooterMenuController::OnPlayerShipSelected
 FGameOverSelectShipClickedDelegateSignature USpaceShooterMenuController::OnGameOverSelectShipClicked;
 FGameOverPlayAgainClickedDelegateSignature USpaceShooterMenuController::OnGameOverPlayAgainClicked;
 FMainMenuCreditsClickedDelegateSignature USpaceShooterMenuController::OnMainMenuCreditsClicked;
-FCreditsMenuBackClickedDelegateSignature USpaceShooterMenuController::OnCreditsMenuBackClicked;
+//FCreditsMenuBackClickedDelegateSignature USpaceShooterMenuController::OnCreditsMenuBackClicked;
 FShipSelectBackButtonClickedDelegateSignature USpaceShooterMenuController::OnShipSelectBackClicked;
 FMainMenuHighScoreClickedDelegateSignature USpaceShooterMenuController::OnMainMenuHighScoreClicked;
 FHighScoreBackButtonClickedDelegateSignature USpaceShooterMenuController::OnHighScoreBackClicked;
+FMainMenuOptionsButtonClickedDelegateSignature USpaceShooterMenuController::OnMainMenuOptionsClicked;
+
+// Options Screen actions
+FOptionsScreenCreditsButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenCreditsClicked;
+FOptionsScreenBackButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenBackClicked;
+
+// Credits Screen actions
+FCreditsScreenBackButtonClickedDelegateSignature USpaceShooterMenuController::OnCreditsScreenBackClicked;
 
 USpaceShooterMenuController::USpaceShooterMenuController()
 {
@@ -48,10 +57,18 @@ void USpaceShooterMenuController::PostInitProperties()
 		OnGameOverSelectShipClicked.AddUniqueDynamic(this, &ThisClass::GameOverSelectShipClicked);
 		OnGameOverPlayAgainClicked.AddUniqueDynamic(this, &ThisClass::GameOverPlayAgainClicked);
 		OnMainMenuCreditsClicked.AddUniqueDynamic(this, &ThisClass::MainMenuCreditsClicked);
-		OnCreditsMenuBackClicked.AddUniqueDynamic(this, &ThisClass::CreditsMenuBackClicked);
+		//OnCreditsMenuBackClicked.AddUniqueDynamic(this, &ThisClass::CreditsMenuBackClicked);
 		OnShipSelectBackClicked.AddUniqueDynamic(this, &ThisClass::ShipSelectBackClicked);
 		OnMainMenuHighScoreClicked.AddUniqueDynamic(this, &ThisClass::MainMenuHighScoreClicked);
 		OnHighScoreBackClicked.AddUniqueDynamic(this, &ThisClass::HighScoreBackClicked);
+		OnMainMenuOptionsClicked.AddUniqueDynamic(this, &ThisClass::MainMenuOptionsButtonClicked);
+
+		// Options Screen
+		OnOptionsScreenCreditsClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenCreditsClicked);
+		OnOptionsScreenBackClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenBackClicked);
+
+		// Credits Screen
+		OnCreditsScreenBackClicked.AddUniqueDynamic(this, &ThisClass::CreditsScreenBackClicked);
 	}
 }
 
@@ -151,12 +168,12 @@ void USpaceShooterMenuController::MainMenuCreditsClicked()
 	OpenCreditsScreen();
 }
 
-void USpaceShooterMenuController::CreditsMenuBackClicked()
-{
-	PlayButtonClickSound();
-	CloseCreditsScreen();
-	OpenMainMenuScreen();
-}
+//void USpaceShooterMenuController::CreditsMenuBackClicked()
+//{
+//	PlayButtonClickSound();
+//	CloseCreditsScreen();
+//	OpenMainMenuScreen();
+//}
 
 void USpaceShooterMenuController::ShipSelectBackClicked()
 {
@@ -183,6 +200,34 @@ void USpaceShooterMenuController::PauseScreenResumeClicked()
 {
 	PlayButtonClickSound();
 	ClosePauseScreen();
+}
+
+void USpaceShooterMenuController::MainMenuOptionsButtonClicked()
+{
+	PlayButtonClickSound();
+	CloseMainMenuScreen();
+	OpenOptionsScreen();
+}
+
+void USpaceShooterMenuController::OptionsScreenCreditsClicked()
+{
+	PlayButtonClickSound();
+	CloseOptionsScreen();
+	OpenCreditsScreen();
+}
+
+void USpaceShooterMenuController::OptionsScreenBackClicked()
+{
+	PlayButtonClickSound();
+	CloseOptionsScreen();
+	OpenMainMenuScreen();
+}
+
+void USpaceShooterMenuController::CreditsScreenBackClicked()
+{
+	PlayButtonClickSound();
+	CloseCreditsScreen();
+	OpenOptionsScreen();
 }
 
 UUserWidget* USpaceShooterMenuController::OpenScreen(TSubclassOf<class UUserWidget> ScreenClass)
@@ -319,6 +364,18 @@ void USpaceShooterMenuController::ClosePauseScreen()
 {
 	CloseScreen(PauseScreen);
 	PauseScreen = nullptr;
+}
+
+void USpaceShooterMenuController::OpenOptionsScreen()
+{
+	OptionsScreen = Cast<UOptionsScreen>(OpenScreen(OptionsScreenClass));
+	ensure(OptionsScreen != nullptr);
+}
+
+void USpaceShooterMenuController::CloseOptionsScreen()
+{
+	CloseScreen(OptionsScreen);
+	OptionsScreen = nullptr;
 }
 
 void USpaceShooterMenuController::SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray)
