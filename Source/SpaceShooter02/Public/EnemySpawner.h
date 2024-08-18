@@ -17,6 +17,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	void SetSpawningEnabled(bool bInSpawningEnabled) { bSpawningEnabled = bInSpawningEnabled; }
 	void SetExplosionSpriteController(class UExplosionSpriteController* InExplosionSpriteController);
+	void SetSpawnAnimController(class USpawnAnimController* InSpawnAnimController);
 
 protected:
 	virtual void BeginPlay() override;
@@ -83,6 +84,9 @@ protected:
 
 	UPROPERTY()
 	TWeakObjectPtr<class UExplosionSpriteController> ExplosionSpriteController;
+
+	UPROPERTY()
+	TWeakObjectPtr<class USpawnAnimController> SpawnAnimController;
 	
 	// Last time an enemy was spawned
 	float TimeSinceLastEnemySpawned = 0.0f;

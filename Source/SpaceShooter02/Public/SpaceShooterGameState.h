@@ -233,6 +233,14 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
 	TObjectPtr<class UExplosionSpriteController> ExplosionSpriteController;
 
+	// --- Spawn Anim Controller ---
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class USpawnAnimController> SpawnAnimControllerClass;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
+	TObjectPtr<class USpawnAnimController> SpawnAnimController;
+
 	// ----------------------------------------------------------
 	// The player's currently selected ship sprite index
 	int32 SelectedShipSpriteIndex = -1;

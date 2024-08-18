@@ -22,6 +22,24 @@ void ASpawnAnimBase::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ASpawnAnimBase::ActivatePoolObject()
+{
+	Super::ActivatePoolObject();
+	if (SpawnAnimFlipbookComp != nullptr)
+	{
+		SpawnAnimFlipbookComp->PlayFromStart();
+	}
+}
+
+void ASpawnAnimBase::DeactivatePoolObject()
+{
+	Super::DeactivatePoolObject();
+	if (SpawnAnimFlipbookComp != nullptr)
+	{
+		SpawnAnimFlipbookComp->Stop();
+	}
+}
+
 void ASpawnAnimBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -36,5 +54,6 @@ void ASpawnAnimBase::BeginPlay()
 void ASpawnAnimBase::OnSpawnAnimationFinished()
 {
 	// This spawn animation has finished. Destroy it.
-	Destroy();
+	//Destroy();
+	DeactivatePoolObject();
 }

@@ -14,6 +14,7 @@
 #include "PlayerShipPawn.h"
 #include "SpaceShooterGameState.h"
 #include "SpawnAnimBase.h"
+#include "SpawnAnimController.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogEnemySpawner, Log, All)
 
@@ -31,6 +32,11 @@ void AEnemySpawner::Tick(float DeltaTime)
 void AEnemySpawner::SetExplosionSpriteController(UExplosionSpriteController* InExplosionSpriteController)
 {
 	ExplosionSpriteController = InExplosionSpriteController;
+}
+
+void AEnemySpawner::SetSpawnAnimController(USpawnAnimController* InSpawnAnimController)
+{
+	SpawnAnimController = InSpawnAnimController;
 }
 
 void AEnemySpawner::BeginPlay()
@@ -112,11 +118,18 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 				// Spawn the Spawn Animation
 				if (EnemySpawnAnimClasses.Num() > 0)
 				{
-					TSubclassOf<ASpawnAnimBase> SpawnAnimClass = EnemySpawnAnimClasses[FMath::RandRange(0, EnemySpawnAnimClasses.Num() - 1)];
 					float RandomRotation = FMath::FRandRange(0.0f, 360.0f);
 					FRotator SpawnAnimRotation(RandomRotation, 0.0f, 0.0f); // Y rotation is Pitch
-					FVector SpawnAnimPos = FVector(EnemyPosition.X, 0.2f, EnemyPosition.Y); // have spawn anim appear in front of enemy
-					ASpawnAnimBase* SpawnedSpawnAnim = World->SpawnActor<ASpawnAnimBase>(SpawnAnimClass, EnemyPosition, SpawnAnimRotation, EnemySpawnParams);
+					FVector SpawnAnimPos = FVector(EnemyPosition.X, 0.2f, EnemyPosition.Z); // have spawn anim appear in front of enemy
+					if (SpawnAnimController != nullptr)
+					{
+						ASpawnAnimBase* EnemySpawnAnim = SpawnAnimController->GetInactiveSpawnAnim();
+						if (EnemySpawnAnim != nullptr)
+						{
+							EnemySpawnAnim->SetActorLocationAndRotation(SpawnAnimPos, SpawnAnimRotation);
+							EnemySpawnAnim->ActivatePoolObject();
+						}
+					}
 				}
 
 				// Spawn the enemy
@@ -162,7 +175,6 @@ void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* Ene
 			FRotator RandomExplosionRotation = FRotator(FMath::FRandRange(0.0f, 360.0f), 0.0f, 0.0f);
 
 			// Create the explosion
-			//World->SpawnActor<AExplosionBase>(ExplosionClassToSpawn, EnemyDeathPosition, RandomExplosionRotation);
 			if (ExplosionSpriteController != nullptr)
 			{
 				AExplosionBase* ExplosionSprite = ExplosionSpriteController->GetRandomInactiveExplosionSprite();

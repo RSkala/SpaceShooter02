@@ -18,6 +18,7 @@
 #include "ProjectileBase.h"
 #include "ProjectileController.h"
 #include "SpaceShooterGameInstance.h"
+#include "SpawnAnimController.h"
 #include "UI/SpaceShooterMenuController.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogSpaceShooterGameState, Log, All)
@@ -188,6 +189,16 @@ void ASpaceShooterGameState::BeginPlay()
 		}
 	}
 
+	// Create Spawn Anim Controllers
+	if (ensure(SpawnAnimControllerClass != nullptr))
+	{
+		SpawnAnimController = NewObject<USpawnAnimController>(this, SpawnAnimControllerClass);
+		if (ensure(SpawnAnimController != nullptr))
+		{
+			SpawnAnimController->InitSpawnAnimPool();
+		}
+	}
+
 	// Create the MenuController
 	if (ensure(MenuControllerClass != nullptr))
 	{
@@ -208,6 +219,7 @@ void ASpaceShooterGameState::BeginPlay()
 			EnemySpawner->SetOwner(this);
 			EnemySpawner->SetSpawningEnabled(false);
 			EnemySpawner->SetExplosionSpriteController(ExplosionSpriteController);
+			EnemySpawner->SetSpawnAnimController(SpawnAnimController);
 		}
 	}
 

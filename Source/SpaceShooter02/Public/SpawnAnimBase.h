@@ -3,17 +3,21 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+
+#include "PoolActor.h"
+
 #include "SpawnAnimBase.generated.h"
 
 UCLASS(Abstract)
-class SPACESHOOTER02_API ASpawnAnimBase : public AActor
+class SPACESHOOTER02_API ASpawnAnimBase : public APoolActor
 {
 	GENERATED_BODY()
 	
 public:	
 	ASpawnAnimBase();
 	virtual void Tick(float DeltaTime) override;
+	virtual void ActivatePoolObject() override;
+	virtual void DeactivatePoolObject() override;
 
 protected:
 	virtual void BeginPlay() override;
