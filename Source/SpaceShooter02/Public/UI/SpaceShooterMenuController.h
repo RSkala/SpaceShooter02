@@ -11,7 +11,6 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShipSelectedDelegateSignature, int3
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverSelectShipClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverPlayAgainClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuCreditsClickedDelegateSignature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCreditsMenuBackClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FShipSelectBackButtonClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuHighScoreClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHighScoreBackButtonClickedDelegateSignature);
@@ -74,7 +73,6 @@ private:
 	UFUNCTION() void GameOverSelectShipClicked();
 	UFUNCTION() void GameOverPlayAgainClicked();
 	UFUNCTION() void MainMenuCreditsClicked();
-	UFUNCTION() void CreditsMenuBackClicked();
 	UFUNCTION() void ShipSelectBackClicked();
 	UFUNCTION() void MainMenuHighScoreClicked();
 	UFUNCTION() void HighScoreBackClicked();
@@ -129,13 +127,10 @@ public:
 	static FGameOverSelectShipClickedDelegateSignature OnGameOverSelectShipClicked;
 	static FGameOverPlayAgainClickedDelegateSignature OnGameOverPlayAgainClicked;
 	static FMainMenuCreditsClickedDelegateSignature OnMainMenuCreditsClicked;
-	static FCreditsMenuBackClickedDelegateSignature OnCreditsMenuBackClicked;
 	static FShipSelectBackButtonClickedDelegateSignature OnShipSelectBackClicked;
 	static FMainMenuHighScoreClickedDelegateSignature OnMainMenuHighScoreClicked;
 	static FHighScoreBackButtonClickedDelegateSignature OnHighScoreBackClicked;
 	static FMainMenuOptionsButtonClickedDelegateSignature OnMainMenuOptionsClicked;
-
-
 
 	// Options Screen Actions
 	static FOptionsScreenCreditsButtonClickedDelegateSignature OnOptionsScreenCreditsClicked;

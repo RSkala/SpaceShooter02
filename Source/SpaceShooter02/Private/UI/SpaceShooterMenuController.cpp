@@ -22,7 +22,6 @@ FShipSelectedDelegateSignature USpaceShooterMenuController::OnPlayerShipSelected
 FGameOverSelectShipClickedDelegateSignature USpaceShooterMenuController::OnGameOverSelectShipClicked;
 FGameOverPlayAgainClickedDelegateSignature USpaceShooterMenuController::OnGameOverPlayAgainClicked;
 FMainMenuCreditsClickedDelegateSignature USpaceShooterMenuController::OnMainMenuCreditsClicked;
-//FCreditsMenuBackClickedDelegateSignature USpaceShooterMenuController::OnCreditsMenuBackClicked;
 FShipSelectBackButtonClickedDelegateSignature USpaceShooterMenuController::OnShipSelectBackClicked;
 FMainMenuHighScoreClickedDelegateSignature USpaceShooterMenuController::OnMainMenuHighScoreClicked;
 FHighScoreBackButtonClickedDelegateSignature USpaceShooterMenuController::OnHighScoreBackClicked;
@@ -57,7 +56,6 @@ void USpaceShooterMenuController::PostInitProperties()
 		OnGameOverSelectShipClicked.AddUniqueDynamic(this, &ThisClass::GameOverSelectShipClicked);
 		OnGameOverPlayAgainClicked.AddUniqueDynamic(this, &ThisClass::GameOverPlayAgainClicked);
 		OnMainMenuCreditsClicked.AddUniqueDynamic(this, &ThisClass::MainMenuCreditsClicked);
-		//OnCreditsMenuBackClicked.AddUniqueDynamic(this, &ThisClass::CreditsMenuBackClicked);
 		OnShipSelectBackClicked.AddUniqueDynamic(this, &ThisClass::ShipSelectBackClicked);
 		OnMainMenuHighScoreClicked.AddUniqueDynamic(this, &ThisClass::MainMenuHighScoreClicked);
 		OnHighScoreBackClicked.AddUniqueDynamic(this, &ThisClass::HighScoreBackClicked);
@@ -167,13 +165,6 @@ void USpaceShooterMenuController::MainMenuCreditsClicked()
 	CloseMainMenuScreen();
 	OpenCreditsScreen();
 }
-
-//void USpaceShooterMenuController::CreditsMenuBackClicked()
-//{
-//	PlayButtonClickSound();
-//	CloseCreditsScreen();
-//	OpenMainMenuScreen();
-//}
 
 void USpaceShooterMenuController::ShipSelectBackClicked()
 {

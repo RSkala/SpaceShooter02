@@ -13,10 +13,9 @@ class SPACESHOOTER02_API UGameCreditsScreen : public UMenuScreenWidget
 
 protected:
 	virtual void NativeOnInitialized() override;
-	virtual void NativeConstruct() override;
-	virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
 
 	virtual void OnColorShift(FLinearColor LinearColor);
+	virtual class UButton* GetKeyboardFocusLostButton() const override { return BackButton; }
 
 private:
 	UFUNCTION()

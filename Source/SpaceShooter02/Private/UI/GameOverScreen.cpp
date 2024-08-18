@@ -51,34 +51,6 @@ void UGameOverScreen::NativeOnInitialized()
 	}
 }
 
-void UGameOverScreen::NativeConstruct()
-{
-	Super::NativeConstruct();
-
-	if (PlayAgainButton != nullptr)
-	{
-		PlayAgainButton->SetKeyboardFocus();
-	}
-}
-
-void UGameOverScreen::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
-{
-	Super::NativeTick(MyGeometry, DeltaTime);
-
-	// HACK workaround to force keyboard focus if all buttons lose focus.
-	// This will occur if the user clicks the mouse outside of any button.
-	if (PlayAgainButton != nullptr && SelectNewShipButton != nullptr && QuitGameButton != nullptr)
-	{
-		if (!PlayAgainButton->HasKeyboardFocus()
-			&& !SelectNewShipButton->HasKeyboardFocus()
-			&& !QuitGameButton->HasKeyboardFocus())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("UGameOverScreen::NativeTick - No buttons have keyboard focus. Forcing to PlayAgainButton"));
-			PlayAgainButton->SetKeyboardFocus();
-		}
-	}
-}
-
 void UGameOverScreen::OnColorShift(FLinearColor LinearColor)
 {
 	Super::OnColorShift(LinearColor);

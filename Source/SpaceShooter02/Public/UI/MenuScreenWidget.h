@@ -16,7 +16,10 @@ public:
 
 protected:
 	virtual void NativeOnInitialized() override;
+	virtual void NativeConstruct() override;
 	virtual bool NativeSupportsCustomNavigation() const override { return true; }
+	virtual void NativeOnFocusLost(const FFocusEvent& InFocusEvent) override;
+	virtual void NativeOnFocusChanging(const FWeakWidgetPath& PreviousFocusPath, const FWidgetPath& NewWidgetPath, const FFocusEvent& InFocusEvent) override;
 	virtual FNavigationReply NativeOnNavigation(const FGeometry& MyGeometry, const FNavigationEvent& InNavigationEvent, const FNavigationReply& InDefaultReply) override;
 	virtual FNavigationReply NativeOnNavigation(const FGeometry& InGeometry, const FNavigationEvent& NavigationEvent) override;
 	
@@ -27,6 +30,16 @@ protected:
 	void DisableHitTestForImage(class UImage* Image);
 
 	void SetColorShiftForButton(class UButton* Button, FLinearColor ShiftColor);
+
+	virtual class UButton* GetKeyboardFocusLostButton() const
+	{
+		ensureAlwaysMsgf(
+			false,
+			TEXT("%s must be implemented in UMenuScreenWidget subclasses (%s)"),
+				*GET_FUNCTION_NAME_CHECKED(UMenuScreenWidget, GetKeyboardFocusLostButton).ToString(),
+				*this->GetClass()->GetName());
+		return nullptr;
+	}
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))

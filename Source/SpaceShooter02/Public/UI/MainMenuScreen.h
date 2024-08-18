@@ -16,13 +16,9 @@ public:
 
 protected:
 	virtual void NativeOnInitialized() override;
-	virtual void NativeConstruct() override;
-	virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
-
-	virtual void NativeOnFocusLost(const FFocusEvent& InFocusEvent) override;
-	virtual void NativeOnFocusChanging(const FWeakWidgetPath& PreviousFocusPath, const FWidgetPath& NewWidgetPath, const FFocusEvent& InFocusEvent) override;
 
 	virtual void OnColorShift(FLinearColor LinearColor) override;
+	virtual class UButton* GetKeyboardFocusLostButton() const { return PlayButton; }
 
 	UFUNCTION() void OnPlayButtonClicked();
 	UFUNCTION() void OnOptionsButtonClicked();

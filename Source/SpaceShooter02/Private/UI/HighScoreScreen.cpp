@@ -52,35 +52,12 @@ void UHighScoreScreen::NativeOnInitialized()
 	}
 }
 
-void UHighScoreScreen::NativeConstruct()
-{
-	Super::NativeConstruct();
-	if (BackButton != nullptr)
-	{
-		BackButton->SetKeyboardFocus();
-	}
-}
-
 void UHighScoreScreen::NativeDestruct()
 {
 	Super::NativeDestruct();
 
 	// Empty the score display widgets array. This should in theory call their destructors.
 	ScoreDisplayWidgets.Empty();
-}
-
-void UHighScoreScreen::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
-{
-	Super::NativeTick(MyGeometry, DeltaTime);
-
-	if (BackButton != nullptr)
-	{
-		if (!BackButton->HasKeyboardFocus())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("UHighScoreScreen::NativeTick - No buttons have keyboard focus. Forcing to BackButton"));
-			BackButton->SetKeyboardFocus();
-		}
-	}
 }
 
 void UHighScoreScreen::OnColorShift(FLinearColor LinearColor)

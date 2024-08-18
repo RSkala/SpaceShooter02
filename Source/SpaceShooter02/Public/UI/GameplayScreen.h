@@ -19,6 +19,7 @@ protected:
 	virtual FNavigationReply NativeOnNavigation(const FGeometry& InGeometry, const FNavigationEvent& NavigationEvent) override;
 
 	virtual void OnColorShift(FLinearColor LinearColor) override;
+	virtual class UButton* GetKeyboardFocusLostButton() const override { return nullptr; } // Gameplay Screen does not have a focusable widget
 
 	UFUNCTION()
 	void OnPlayerScoreUpdated(int32 PlayerScore);

@@ -26,30 +26,6 @@ void UPauseScreen::NativeOnInitialized()
 	}
 }
 
-void UPauseScreen::NativeConstruct()
-{
-	Super::NativeConstruct();
-
-	if (ResumeButton != nullptr)
-	{
-		ResumeButton->SetKeyboardFocus();
-	}
-}
-
-void UPauseScreen::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
-{
-	Super::NativeTick(MyGeometry, InDeltaTime);
-
-	if (ResumeButton != nullptr && QuitGameButton != nullptr)
-	{
-		if (!ResumeButton->HasKeyboardFocus() && !QuitGameButton->HasKeyboardFocus())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("UPauseScreen::NativeTick - No buttons have keyboard focus. Forcing to ResumeButton"));
-			ResumeButton->SetKeyboardFocus();
-		}
-	}
-}
-
 void UPauseScreen::OnColorShift(FLinearColor ShiftColor)
 {
 	Super::OnColorShift(ShiftColor);

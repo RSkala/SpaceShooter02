@@ -13,9 +13,8 @@ class SPACESHOOTER02_API UPauseScreen : public UMenuScreenWidget
 
 protected:
 	virtual void NativeOnInitialized() override;
-	virtual void NativeConstruct() override;
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	virtual void OnColorShift(FLinearColor ShiftColor) override;
+	virtual class UButton* GetKeyboardFocusLostButton() const override { return ResumeButton; }
 
 	UFUNCTION()
 	void OnResumeButtonClicked();

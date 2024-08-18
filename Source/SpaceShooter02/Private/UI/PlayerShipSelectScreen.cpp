@@ -144,33 +144,6 @@ void UPlayerShipSelectScreen::NativeConstruct()
 		BackButton->SetNavigationRuleExplicit(EUINavigation::Up, ShipSelectionWidget1->GetLaunchButton());
 		BackButton->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget5->GetLaunchButton());
 		BackButton->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget1->GetLaunchButton());
-		BackButton->SetKeyboardFocus();
-	}
-}
-
-void UPlayerShipSelectScreen::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
-{
-	Super::NativeTick(MyGeometry, DeltaTime);
-
-	// HACK workaround to force keyboard focus if all buttons lose focus.
-	// This will occur if the user clicks the mouse outside of any button.
-	if (BackButton != nullptr
-		&& ShipSelectionWidget1 != nullptr && ShipSelectionWidget1->GetLaunchButton() != nullptr
-		&& ShipSelectionWidget2 != nullptr && ShipSelectionWidget2->GetLaunchButton() != nullptr
-		&& ShipSelectionWidget3 != nullptr && ShipSelectionWidget3->GetLaunchButton() != nullptr
-		&& ShipSelectionWidget4 != nullptr && ShipSelectionWidget4->GetLaunchButton() != nullptr
-		&& ShipSelectionWidget5 != nullptr && ShipSelectionWidget5->GetLaunchButton() != nullptr)
-	{
-		if (!BackButton->HasKeyboardFocus()
-			&& !ShipSelectionWidget1->GetLaunchButton()->HasKeyboardFocus()
-			&& !ShipSelectionWidget2->GetLaunchButton()->HasKeyboardFocus()
-			&& !ShipSelectionWidget3->GetLaunchButton()->HasKeyboardFocus()
-			&& !ShipSelectionWidget4->GetLaunchButton()->HasKeyboardFocus()
-			&& !ShipSelectionWidget5->GetLaunchButton()->HasKeyboardFocus())
-		{
-			UE_LOG(LogTemp, Warning, TEXT("UPlayerShipSelectScreen::NativeTick - No buttons have keyboard focus. Forcing to BackButton"));
-			BackButton->SetKeyboardFocus();
-		}
 	}
 }
 
