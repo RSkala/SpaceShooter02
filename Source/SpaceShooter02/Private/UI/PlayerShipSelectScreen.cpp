@@ -26,7 +26,7 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 	{
 		ShipSelectionWidget1->InitShipSelectionWidget(
 			TEXT("SHIP 01"),
-			TEXT("WHITE"),
+			TEXT("WHITE\nSHIP"),
 			FLinearColor::White,
 			0);
 
@@ -40,7 +40,7 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 	{
 		ShipSelectionWidget2->InitShipSelectionWidget(
 			TEXT("SHIP 02"),
-			TEXT("ORANGE"),
+			TEXT("ORANGE\nSHIP"),
 			FLinearColor(1.0f, 0.262251f, 0.0f),
 			1);
 
@@ -54,7 +54,7 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 	{
 		ShipSelectionWidget3->InitShipSelectionWidget(
 			TEXT("SHIP 03"),
-			TEXT("GREEN"),
+			TEXT("GREEN\nSHIP"),
 			FLinearColor(0.165132f, 0.768151f, 0.287441f),
 			2);
 
@@ -68,7 +68,7 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 	{
 		ShipSelectionWidget4->InitShipSelectionWidget(
 			TEXT("SHIP 04"),
-			TEXT("PURPLE"),
+			TEXT("PURPLE\nSHIP"),
 			FLinearColor(0.361307f, 0.165132f, 1.0f),
 			3);
 
@@ -82,7 +82,7 @@ void UPlayerShipSelectScreen::NativeOnInitialized()
 	{
 		ShipSelectionWidget5->InitShipSelectionWidget(
 			TEXT("SHIP 05"),
-			TEXT("RED"),
+			TEXT("RED\nSHIP"),
 			FLinearColor(0.445201f, 0.005182f, 0.029557f),
 			4);
 
