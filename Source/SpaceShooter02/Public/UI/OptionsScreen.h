@@ -20,8 +20,10 @@ protected:
 private:
 	UFUNCTION() void OnCreditsButtonClicked();
 	UFUNCTION() void OnBackButtonClicked();
+	UFUNCTION() void OnClearScoresButtonClicked();
 
 	UFUNCTION() void OnCreditsButtonHovered();
+	UFUNCTION() void OnClearScoresButtonHovered();
 	UFUNCTION() void OnBackButtonHovered();
 
 private:
@@ -30,6 +32,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UButton> CreditsButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UButton> ClearScoresButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UButton> BackButton;

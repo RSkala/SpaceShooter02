@@ -18,6 +18,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuOptionsButtonClickedDelegateSignatur
 
 // Options Screen actions
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenCreditsButtonClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenCreditsClearScoresClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenBackButtonClickedDelegateSignature);
 
 // Credits Screen actions
@@ -80,6 +81,7 @@ private:
 	UFUNCTION() void MainMenuOptionsButtonClicked();
 
 	UFUNCTION() void OptionsScreenCreditsClicked();
+	UFUNCTION() void OptionsScreenClearScoresClicked();
 	UFUNCTION() void OptionsScreenBackClicked();
 
 	UFUNCTION() void CreditsScreenBackClicked();
@@ -134,6 +136,7 @@ public:
 
 	// Options Screen Actions
 	static FOptionsScreenCreditsButtonClickedDelegateSignature OnOptionsScreenCreditsClicked;
+	static FOptionsScreenCreditsClearScoresClickedDelegateSignature OnOptionsScreenClearScoresClicked;
 	static FOptionsScreenBackButtonClickedDelegateSignature OnOptionsScreenBackClicked;
 
 	// Credits Screen Actions

@@ -29,6 +29,7 @@ FMainMenuOptionsButtonClickedDelegateSignature USpaceShooterMenuController::OnMa
 
 // Options Screen actions
 FOptionsScreenCreditsButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenCreditsClicked;
+FOptionsScreenCreditsClearScoresClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenClearScoresClicked;
 FOptionsScreenBackButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenBackClicked;
 
 // Credits Screen actions
@@ -63,6 +64,7 @@ void USpaceShooterMenuController::PostInitProperties()
 
 		// Options Screen
 		OnOptionsScreenCreditsClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenCreditsClicked);
+		OnOptionsScreenClearScoresClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenClearScoresClicked);
 		OnOptionsScreenBackClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenBackClicked);
 
 		// Credits Screen
@@ -205,6 +207,12 @@ void USpaceShooterMenuController::OptionsScreenCreditsClicked()
 	PlayButtonClickSound();
 	CloseOptionsScreen();
 	OpenCreditsScreen();
+}
+
+void USpaceShooterMenuController::OptionsScreenClearScoresClicked()
+{
+	PlayButtonClickSound();
+	UE_LOG(LogTemp, Warning, TEXT("TODO - OptionsScreenClearScoresClicked"));
 }
 
 void USpaceShooterMenuController::OptionsScreenBackClicked()
