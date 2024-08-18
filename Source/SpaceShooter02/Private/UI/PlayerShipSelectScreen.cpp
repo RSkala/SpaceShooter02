@@ -105,7 +105,7 @@ void UPlayerShipSelectScreen::NativeConstruct()
 	{
 		if (UButton* LaunchButton = ShipSelectionWidget1->GetLaunchButton())
 		{
-			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Left, BackButton);
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget5->GetLaunchButton());
 			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget2->GetLaunchButton());
 			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
 		}
@@ -134,16 +134,16 @@ void UPlayerShipSelectScreen::NativeConstruct()
 		if (UButton* LaunchButton = ShipSelectionWidget5->GetLaunchButton())
 		{
 			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget4->GetLaunchButton());
-			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Right, BackButton);
+			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget1->GetLaunchButton());
 			LaunchButton->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
 		}
 	}
 	
 	if (BackButton != nullptr)
 	{
-		BackButton->SetNavigationRuleExplicit(EUINavigation::Up, ShipSelectionWidget1->GetLaunchButton());
-		BackButton->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget5->GetLaunchButton());
-		BackButton->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget1->GetLaunchButton());
+		BackButton->SetNavigationRuleExplicit(EUINavigation::Up, ShipSelectionWidget3->GetLaunchButton());
+		BackButton->SetNavigationRuleExplicit(EUINavigation::Left, ShipSelectionWidget1->GetLaunchButton());
+		BackButton->SetNavigationRuleExplicit(EUINavigation::Right, ShipSelectionWidget5->GetLaunchButton());
 	}
 }
 
