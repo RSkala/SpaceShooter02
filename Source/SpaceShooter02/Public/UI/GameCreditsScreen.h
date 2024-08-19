@@ -26,6 +26,9 @@ private:
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UTextBlock> CreditsTitleTextBlock;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UTextBlock> CreditsTextBlock; // TODO: Change to RichTextBlock
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))

@@ -18,12 +18,12 @@
 //}
 
 // NOTE 2: These also do not update when using Live Coding. Be wary!
-FString UGameCreditsScreen::CreditsLine1 = "PROGRAMMING & DESIGN\nRichard Skala\nrskala.github.io\n\n\n";
-FString UGameCreditsScreen::CreditsLine2 = "DESIGN SUPPORT\nBenjamin Cholewinski\ninstagram.com/happi_axxident\n\n\n";
-FString UGameCreditsScreen::CreditsLine3 = "ART\nGustavo Vituri\ngvituri.itch.io\n\n\n";
-FString UGameCreditsScreen::CreditsLine4 = "SOUND EFFECTS\nSubspaceAudio\nsubspaceaudio.itch.io\n\n\n";
-FString UGameCreditsScreen::CreditsLine5 = "PIXEL CROSSHAIRS\nDonut Studio\ndonut-studio.itch.io\n\n\n";
-FString UGameCreditsScreen::CreditsLine6 = "\n\nBuilt in Unreal Engine 5.4";
+FString UGameCreditsScreen::CreditsLine1 = "PROGRAMMING & DESIGN\nRichard Skala\nrskala.github.io\n\n";
+FString UGameCreditsScreen::CreditsLine2 = "DESIGN SUPPORT\nBenjamin Cholewinski\ninstagram.com/happi_axxident\n\n";
+FString UGameCreditsScreen::CreditsLine3 = "ART\nGustavo Vituri\ngvituri.itch.io\n\n";
+FString UGameCreditsScreen::CreditsLine4 = "SOUND EFFECTS\nSubspaceAudio\nsubspaceaudio.itch.io\n\n";
+FString UGameCreditsScreen::CreditsLine5 = "PIXEL CROSSHAIRS\nDonut Studio\ndonut-studio.itch.io\n\n";
+FString UGameCreditsScreen::CreditsLine6 = "Built in Unreal Engine 5.4";
 
 void UGameCreditsScreen::NativeOnInitialized()
 {
@@ -52,6 +52,11 @@ void UGameCreditsScreen::OnColorShift(FLinearColor LinearColor)
 {
 	Super::OnColorShift(LinearColor);
 	SetColorShiftForButton(BackButton, LinearColor);
+
+	if (CreditsTitleTextBlock != nullptr)
+	{
+		CreditsTitleTextBlock->SetColorAndOpacity(LinearColor);
+	}
 
 	if (CreditsTextBlock != nullptr)
 	{
