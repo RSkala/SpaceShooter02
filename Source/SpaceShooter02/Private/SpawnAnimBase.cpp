@@ -53,7 +53,6 @@ void ASpawnAnimBase::BeginPlay()
 
 void ASpawnAnimBase::OnSpawnAnimationFinished()
 {
-	// This spawn animation has finished. Destroy it.
-	//Destroy();
+	// This spawn animation has finished. Deactivate it.
 	DeactivatePoolObject();
 }
