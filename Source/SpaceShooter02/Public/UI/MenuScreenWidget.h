@@ -44,6 +44,11 @@ protected:
 
 	void OnViewportResized(class FViewport* InViewport, uint32 InParams);
 
+	void OnApplicationActivationStateChanged(bool bIsActive);
+	//DECLARE_EVENT_OneParam(FSlateApplication, FApplicationActivationStateChangedEvent, const bool /*IsActive*/)
+
+	UWidget* GetFocusedWidget() const;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UImage> Image_Screen_Border_L;
@@ -58,4 +63,5 @@ protected:
 	TObjectPtr<class UImage> Image_Screen_Border_B;
 
 	FDelegateHandle ViewportResizeHandle;
+	FDelegateHandle ApplicationFocusChangedHandle;
 };
