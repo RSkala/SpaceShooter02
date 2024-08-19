@@ -32,22 +32,22 @@ void UGameOverScreen::NativeOnInitialized()
 	{
 		PlayAgainButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnPlayAgainButtonClicked);
 		PlayAgainButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnPlayAgainButtonHovered);
-		PlayAgainButton->SetNavigationRuleExplicit(EUINavigation::Right, QuitGameButton);
-		PlayAgainButton->SetNavigationRuleExplicit(EUINavigation::Left, SelectNewShipButton);
+		PlayAgainButton->SetNavigationRuleExplicit(EUINavigation::Down, SelectNewShipButton);
 	}
 
 	if (SelectNewShipButton != nullptr)
 	{
 		SelectNewShipButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnSelectNewShipButtonClicked);
 		SelectNewShipButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnSelectNewShipButtonHovered);
-		SelectNewShipButton->SetNavigationRuleExplicit(EUINavigation::Right, PlayAgainButton);
+		SelectNewShipButton->SetNavigationRuleExplicit(EUINavigation::Up, PlayAgainButton);
+		SelectNewShipButton->SetNavigationRuleExplicit(EUINavigation::Down, QuitGameButton);
 	}
 
 	if (QuitGameButton != nullptr)
 	{
 		QuitGameButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnQuitGameButtonClicked);
 		QuitGameButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnQuitGameButtonHovered);
-		QuitGameButton->SetNavigationRuleExplicit(EUINavigation::Left, PlayAgainButton);
+		QuitGameButton->SetNavigationRuleExplicit(EUINavigation::Up, SelectNewShipButton);
 	}
 }
 
