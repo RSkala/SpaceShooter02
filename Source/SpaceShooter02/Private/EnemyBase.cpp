@@ -87,9 +87,9 @@ void AEnemyBase::BeginPlay()
 		PaperSpriteComp->SetVisibility(false, true);
 	}
 
-	static const float EnemySpawnDelayTime = 0.3f;
+	const float EnemySpawnDelayTimeSeconds = 0.75f;
 	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ThisClass::OnSpawnDelayTimerElapsed, EnemySpawnDelayTime, false);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ThisClass::OnSpawnDelayTimerElapsed, EnemySpawnDelayTimeSeconds, false);
 }
 
 void AEnemyBase::MoveTowardsTarget(float DeltaTime)

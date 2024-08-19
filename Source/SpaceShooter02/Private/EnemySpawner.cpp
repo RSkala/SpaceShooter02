@@ -94,6 +94,7 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 			// Randomly select an enemy type to spawn
 			int32 RandomIdx = FMath::RandRange(0, EnemyClasses.Num() - 1);
 			TSubclassOf<AEnemyBase> EnemyClassToSpawn = EnemyClasses[RandomIdx];
+			ensure(EnemyClassToSpawn != nullptr);
 
 			if (UWorld* World = GetWorld())
 			{
@@ -112,25 +113,26 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 				FVector SourcePosition = PlayerShipPawn != nullptr ? PlayerShipPawn->GetActorLocation() : FVector();
 				FVector EnemyPosition = SourcePosition + FVector(RandomPosition.X, 0.0f, RandomPosition.Y);
 
-				FActorSpawnParameters EnemySpawnParams;
-				EnemySpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-				// Spawn the Spawn Animation
-				if (EnemySpawnAnimClasses.Num() > 0)
+				// Play a Spawn Animation
+				float RandomRotation = FMath::FRandRange(0.0f, 360.0f);
+				FRotator SpawnAnimRotation(RandomRotation, 0.0f, 0.0f); // Y rotation is Pitch
+				FVector SpawnAnimPos = FVector(EnemyPosition.X, 0.2f, EnemyPosition.Z); // have spawn anim appear in front of enemy
+				if (SpawnAnimController != nullptr)
 				{
-					float RandomRotation = FMath::FRandRange(0.0f, 360.0f);
-					FRotator SpawnAnimRotation(RandomRotation, 0.0f, 0.0f); // Y rotation is Pitch
-					FVector SpawnAnimPos = FVector(EnemyPosition.X, 0.2f, EnemyPosition.Z); // have spawn anim appear in front of enemy
-					if (SpawnAnimController != nullptr)
+					ASpawnAnimBase* EnemySpawnAnim = SpawnAnimController->GetInactiveSpawnAnim();
+					if (EnemySpawnAnim != nullptr)
 					{
-						ASpawnAnimBase* EnemySpawnAnim = SpawnAnimController->GetInactiveSpawnAnim();
-						if (EnemySpawnAnim != nullptr)
-						{
-							EnemySpawnAnim->SetActorLocationAndRotation(SpawnAnimPos, SpawnAnimRotation);
-							EnemySpawnAnim->ActivatePoolObject();
-						}
+						EnemySpawnAnim->SetActorLocationAndRotation(SpawnAnimPos, SpawnAnimRotation);
+						EnemySpawnAnim->ActivatePoolObject();
 					}
 				}
+
+				FActorSpawnParameters EnemySpawnParams;
+				//EnemySpawnParams.Name = FName(EnemyClassToSpawn != nullptr ? EnemyClassToSpawn->GetName() : "InvalidEnemyClass");
+				//EnemySpawnParams.NameMode = FActorSpawnParameters::ESpawnActorNameMode::Requested;
+				EnemySpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+				//EnemySpawnParams.bNoFail = true; // enable this to capture when SpawnActor fails
+				// The failure happens in LevelActor.cpp, line 738. Enable logging in console with: Log LogSpawn VeryVerbose
 
 				// Spawn the enemy
 				AEnemyBase* SpawnedEnemy = World->SpawnActor<AEnemyBase>(EnemyClassToSpawn, EnemyPosition, FRotator(), EnemySpawnParams);
@@ -141,7 +143,7 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 				}
 				else
 				{
-					UE_LOG(LogEnemySpawner, Warning, TEXT("%s - Spawn enemy FAILED"), ANSI_TO_TCHAR(__FUNCTION__));
+					UE_LOG(LogEnemySpawner, Warning, TEXT("%s - Spawn enemy FAILED for class: %s"), ANSI_TO_TCHAR(__FUNCTION__), *EnemyClassToSpawn->GetName());
 				}
 			}
 		}
@@ -188,13 +190,11 @@ void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* Ene
 	}
 
 	// Spawn an explosion particle at the enemy death position
-	//if (EnemyExplosionEffect != nullptr)
 	if(EnemyDeathEffect != nullptr)
 	{
 		//UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), EnemyExplosionEffect.Get(), EnemyDeathPosition);
 		FFXSystemSpawnParameters SpawnParams;
 		SpawnParams.WorldContextObject = GetWorld();
-		//SpawnParams.SystemTemplate = EnemyExplosionEffect.Get();
 		SpawnParams.SystemTemplate = EnemyDeathEffect;
 		SpawnParams.Location = EnemyDeathPosition;
 		SpawnParams.Rotation = FRotator::ZeroRotator;

@@ -70,12 +70,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bSpawningEnabledDebug = true; // Set manually for debugging
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<class UNiagaraSystem> EnemyExplosionEffect;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<TSubclassOf<class ASpawnAnimBase>> EnemySpawnAnimClasses;
-
 	UPROPERTY()
 	TObjectPtr<class UAudioComponent> CurrentEnemyExplosionSound;
 
