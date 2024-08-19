@@ -27,6 +27,7 @@ void ASpawnAnimBase::ActivatePoolObject()
 	Super::ActivatePoolObject();
 	if (SpawnAnimFlipbookComp != nullptr)
 	{
+		SpawnAnimFlipbookComp->SetPlaybackPosition(0.0f, false);
 		SpawnAnimFlipbookComp->PlayFromStart();
 	}
 }
