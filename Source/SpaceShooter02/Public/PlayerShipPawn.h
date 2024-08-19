@@ -143,6 +143,9 @@ protected:
 	UFUNCTION()
 	void OnDashReadyAnimationFinished();
 
+	void ResetPowerupLevel();
+	void IncrementPowerupLevel();
+
 protected:
 	// --- Components ---
 
@@ -385,6 +388,13 @@ protected:
 	// When "powerup" is active, number of seconds to add to the active powerup timer
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float SecondsToAddForActivePowerup = 0.5f;
+
+	// -------------------------------------------------------------------------------------
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadWrite)
+	int32 CurrentPowerupLevel = 0;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	int32 MaxPowerupLevels = 4;
 
 	// -------------------------------------------------------------------------------------
 	// Below stuff copied from SpaceShooterGameState. Probably should really be in a PlayerState.

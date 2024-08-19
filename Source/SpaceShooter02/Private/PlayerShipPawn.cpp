@@ -681,6 +681,7 @@ void APlayerShipPawn::EnablePlayer()
 	TotalMultipliersCollected = 0;
 	NumMultipliersCollectedForPowerup = 0;
 	OnPlayerPowerupTimerUpdated.Broadcast(0.0f);
+	ResetPowerupLevel();
 
 	// Reset the Dash values
 	bIsDashing = false;
@@ -1206,8 +1207,8 @@ void APlayerShipPawn::EnableSatelliteWeapon(UPaperSpriteComponent* const Satelli
 
 void APlayerShipPawn::AddSatelliteWeapon()
 {
-	EnableSatelliteWeapon(SatelliteWeaponSprite1);
-	EnableSatelliteWeapon(SatelliteWeaponSprite2);
+	//EnableSatelliteWeapon(SatelliteWeaponSprite1);
+	//EnableSatelliteWeapon(SatelliteWeaponSprite2);
 	PowerupActiveTimer = PowerupActiveTime;
 
 	if (PowerupEarnedSound != nullptr)
@@ -1223,12 +1224,16 @@ void APlayerShipPawn::AddSatelliteWeapon()
 		//UNiagaraFunctionLibrary::SpawnSystemAttached(PlayerPowerupEffectLarge, RootComponent, NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
 		UNiagaraFunctionLibrary::SpawnSystemAttached(PlayerPowerupEffectLarge, PowerupEffectAttachPoint, NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
 	}
+
+	IncrementPowerupLevel();
 }
 
 void APlayerShipPawn::RemoveSatelliteWeapon()
 {
 	DisableSatelliteWeapon(SatelliteWeaponSprite1);
 	DisableSatelliteWeapon(SatelliteWeaponSprite2);
+	DisableSatelliteWeapon(SatelliteWeaponSprite3);
+	DisableSatelliteWeapon(SatelliteWeaponSprite4);
 	PowerupActiveTimer = 0.0f;
 }
 
@@ -1246,6 +1251,7 @@ bool APlayerShipPawn::PlayerHasPowerup() const
 void APlayerShipPawn::PowerupTimerElapsed()
 {
 	RemoveSatelliteWeapon();
+	ResetPowerupLevel();
 }
 
 void APlayerShipPawn::OnScoreMultiplierPickedUp(int32 ScoreMultiplierValue)
@@ -1320,6 +1326,8 @@ void APlayerShipPawn::PickupItemPercentChanged(float Percent)
 			{
 				UNiagaraFunctionLibrary::SpawnSystemAttached(PlayerPowerupEffectSmall, PowerupEffectAttachPoint, NAME_None, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget, true);
 			}
+
+			IncrementPowerupLevel();
 		}
 	}
 }
@@ -1351,6 +1359,37 @@ void APlayerShipPawn::OnDashReadyAnimationFinished()
 	if (DashReadyFlipbookComp != nullptr)
 	{
 		DashReadyFlipbookComp->SetHiddenInGame(true);
+	}
+}
+
+void APlayerShipPawn::ResetPowerupLevel()
+{
+	CurrentPowerupLevel = 0;
+}
+
+void APlayerShipPawn::IncrementPowerupLevel()
+{
+	switch (CurrentPowerupLevel)
+	{
+		case 0:
+			EnableSatelliteWeapon(SatelliteWeaponSprite1);
+			CurrentPowerupLevel++;
+			break;
+
+		case 1:
+			EnableSatelliteWeapon(SatelliteWeaponSprite2);
+			CurrentPowerupLevel++;
+			break;
+
+		case 2:
+			EnableSatelliteWeapon(SatelliteWeaponSprite3);
+			CurrentPowerupLevel++;
+			break;
+
+		case 3:
+			EnableSatelliteWeapon(SatelliteWeaponSprite4);
+			CurrentPowerupLevel++;
+			break;
 	}
 }
 
