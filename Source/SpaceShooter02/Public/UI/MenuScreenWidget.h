@@ -17,6 +17,7 @@ public:
 protected:
 	virtual void NativeOnInitialized() override;
 	virtual void NativeConstruct() override;
+	virtual void NativeDestruct() override;
 	virtual bool NativeSupportsCustomNavigation() const override { return true; }
 	virtual void NativeOnFocusLost(const FFocusEvent& InFocusEvent) override;
 	virtual void NativeOnFocusChanging(const FWeakWidgetPath& PreviousFocusPath, const FWidgetPath& NewWidgetPath, const FFocusEvent& InFocusEvent) override;
@@ -41,6 +42,8 @@ protected:
 		return nullptr;
 	}
 
+	void OnViewportResized(class FViewport* InViewport, uint32 InParams);
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UImage> Image_Screen_Border_L;
@@ -53,4 +56,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UImage> Image_Screen_Border_B;
+
+	FDelegateHandle ViewportResizeHandle;
 };

@@ -28,6 +28,9 @@ void UMenuScreenWidget::NativeOnInitialized()
 	DisableHitTestForImage(Image_Screen_Border_R);
 	DisableHitTestForImage(Image_Screen_Border_T);
 	DisableHitTestForImage(Image_Screen_Border_B);
+
+	// Get notified when the viewport resizes
+	ViewportResizeHandle = FViewport::ViewportResizedEvent.AddUObject(this, &ThisClass::OnViewportResized);
 }
 
 void UMenuScreenWidget::NativeConstruct()
@@ -38,6 +41,18 @@ void UMenuScreenWidget::NativeConstruct()
 	if (KeyboardFocusLostButton != nullptr)
 	{
 		KeyboardFocusLostButton->SetKeyboardFocus();
+	}
+}
+
+void UMenuScreenWidget::NativeDestruct()
+{
+	Super::NativeDestruct();
+
+	// Unsubscribe from the viewport resize event
+	if (ViewportResizeHandle.IsValid())
+	{
+		FViewport::ViewportResizedEvent.Remove(ViewportResizeHandle);
+		ViewportResizeHandle.Reset();
 	}
 }
 
@@ -122,5 +137,41 @@ void UMenuScreenWidget::SetColorShiftForButton(UButton* Button, FLinearColor Shi
 		FLinearColor LinearColor = Button->IsHovered() || Button->HasKeyboardFocus() ? ShiftColor : FLinearColor::White;
 		//Button->SetColorAndOpacity(LinearColor); // This sets the text color
 		Button->SetBackgroundColor(LinearColor);
+	}
+}
+
+void UMenuScreenWidget::OnViewportResized(FViewport* InViewport, uint32 InParams)
+{
+	// We want to force a keyboard focus on viewport resize. There is a known issue 
+	// where keyboard focus will be lost in various circumstances, viewport resize being
+	// one of several, and that is what we have to handle here.
+
+	// Get the currently focused widget
+	// https://georgy.dev/posts/get-focused-widget/
+
+	UWidget* FocusedWidget = nullptr;
+	TSharedPtr<SWidget> FocusedSlateWidget = FSlateApplication::Get().GetUserFocusedWidget(0);
+	if (!FocusedSlateWidget.IsValid())
+	{
+		for (TObjectIterator<UWidget> Itr; Itr; ++Itr)
+		{
+			UWidget* CandidateUMGWidget = *Itr;
+			if (CandidateUMGWidget != nullptr && CandidateUMGWidget->GetCachedWidget() == FocusedSlateWidget)
+			{
+				FocusedWidget = CandidateUMGWidget;
+				break;
+			}
+		}
+	}
+
+	// After a viewport resize, there are no focused widgets so forced the focus now
+	if (FocusedWidget == nullptr)
+	{
+		UButton* KeyboardFocusLostButton = GetKeyboardFocusLostButton();
+		if (KeyboardFocusLostButton != nullptr)
+		{
+			UE_LOG(LogMenus, Warning, TEXT("No focused widget on resize. Forcing to %s"), *KeyboardFocusLostButton->GetName());
+			KeyboardFocusLostButton->SetKeyboardFocus();
+		}
 	}
 }
