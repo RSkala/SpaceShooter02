@@ -24,6 +24,7 @@ void UShipSelectionWidget::InitShipSelectionWidget(
 	{
 		ShipNameTextBlock->SetText(FText::FromString(ShipNameString));
 		ShipNameTextBlock->SetColorAndOpacity(ShipAbilityColor);
+		ShipNameTextBlock->SetVisibility(ESlateVisibility::Hidden); // Hide ship name
 	}
 
 	if (ShipAbilityTextBlock != nullptr)
