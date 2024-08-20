@@ -18,6 +18,7 @@ public:
 	void SetSpawningEnabled(bool bInSpawningEnabled) { bSpawningEnabled = bInSpawningEnabled; }
 	void SetExplosionSpriteController(class UExplosionSpriteController* InExplosionSpriteController);
 	void SetSpawnAnimController(class USpawnAnimController* InSpawnAnimController);
+	void SetEnemyPoolController(class UEnemyPoolController* InEnemyPoolController);
 
 protected:
 	virtual void BeginPlay() override;
@@ -37,10 +38,6 @@ protected:
 #endif
 
 protected:
-	// List of enemies that can be spawned.
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<TSubclassOf<class AEnemyBase>> EnemyClasses;
-
 	// Default Time Between Spawns. Only used if GameInstance ptr is invalid
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (Units = "Seconds"))
 	float FallbackTimeBetweenSpawns = 1.0f;
@@ -81,6 +78,9 @@ protected:
 
 	UPROPERTY()
 	TWeakObjectPtr<class USpawnAnimController> SpawnAnimController;
+
+	UPROPERTY()
+	TWeakObjectPtr<class UEnemyPoolController> EnemyPoolController;
 	
 	// Last time an enemy was spawned
 	float TimeSinceLastEnemySpawned = 0.0f;

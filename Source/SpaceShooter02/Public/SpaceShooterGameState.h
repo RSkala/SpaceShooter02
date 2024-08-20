@@ -241,6 +241,14 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
 	TObjectPtr<class USpawnAnimController> SpawnAnimController;
 
+	// --- Enemy Controller ---
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class UEnemyPoolController> EnemyPoolControllerClass;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly)
+	TObjectPtr<class UEnemyPoolController> EnemyPoolController;
+
 	// ----------------------------------------------------------
 	// The player's currently selected ship sprite index
 	int32 SelectedShipSpriteIndex = -1;

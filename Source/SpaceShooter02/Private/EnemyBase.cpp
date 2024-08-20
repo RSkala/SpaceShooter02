@@ -27,12 +27,6 @@ AEnemyBase::AEnemyBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	//RootSceneComp = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComp"));
-	//SetRootComponent(RootSceneComp);
-
-	//SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
-	//SphereComp->SetupAttachment(RootComponent);
-
 	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxComp"));
 	SetRootComponent(BoxComp);
 
@@ -54,6 +48,33 @@ void AEnemyBase::Tick(float DeltaTime)
 	MoveTowardsTarget(DeltaTime);
 }
 
+void AEnemyBase::BeginDestroy()
+{
+	Super::BeginDestroy();
+}
+
+void AEnemyBase::ActivatePoolObject()
+{
+	Super::ActivatePoolObject();
+
+	bIsSpawning = true;
+	SetActorEnableCollision(false);
+	if (PaperSpriteComp != nullptr)
+	{
+		PaperSpriteComp->SetVisibility(false, true);
+	}
+
+	const float EnemySpawnDelayTimeSeconds = 0.75f; // TODO: Get this from the animation
+	GetWorldTimerManager().SetTimer(SpawnDelayTimerHandle, this, &ThisClass::OnSpawnDelayTimerElapsed, EnemySpawnDelayTimeSeconds, false);
+}
+
+void AEnemyBase::DeactivatePoolObject()
+{
+	Super::DeactivatePoolObject();
+	TargetActor = nullptr; // Clear the target
+	bIsSpawning = false;
+}
+
 void AEnemyBase::DestroyEnemy()
 {
 	// Play the death/explosion sound
@@ -67,8 +88,8 @@ void AEnemyBase::DestroyEnemy()
 	// Notify subscribers that an enemy died
 	OnEnemyDeath.Broadcast(GetActorLocation(), EnemyExplosionEffect.Get(), EnemyDeathSound.Get());
 
-	// Destroy this enemy
-	Destroy();
+	// Deactivate this enemy
+	DeactivatePoolObject();
 }
 
 void AEnemyBase::SetTarget(TSoftObjectPtr<AActor> InTargetActor)
@@ -79,17 +100,6 @@ void AEnemyBase::SetTarget(TSoftObjectPtr<AActor> InTargetActor)
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// Delay movement towards target (to allow the spawn anim to show the player where an enemy will spawn)
-	bIsSpawning = true;
-	if (PaperSpriteComp != nullptr)
-	{
-		PaperSpriteComp->SetVisibility(false, true);
-	}
-
-	const float EnemySpawnDelayTimeSeconds = 0.75f;
-	FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ThisClass::OnSpawnDelayTimerElapsed, EnemySpawnDelayTimeSeconds, false);
 }
 
 void AEnemyBase::MoveTowardsTarget(float DeltaTime)
@@ -105,10 +115,7 @@ void AEnemyBase::MoveTowardsTarget(float DeltaTime)
 	{
 		if (PlayerShipPawn->GetPlayerDead())
 		{
-			if (!IsActorBeingDestroyed())
-			{
-				Destroy(); // TEMP!!!!! Enemies should be added to a pool then removed on gameplay start
-			}
+			DeactivatePoolObject();
 			return;
 		}
 	}
@@ -163,7 +170,13 @@ void AEnemyBase::MoveTowardsTarget(float DeltaTime)
 
 void AEnemyBase::OnSpawnDelayTimerElapsed()
 {
+	if (SpawnDelayTimerHandle.IsValid())
+	{
+		GetWorldTimerManager().ClearTimer(SpawnDelayTimerHandle);
+	}
+
 	bIsSpawning = false;
+	SetActorEnableCollision(true);
 	if (PaperSpriteComp != nullptr)
 	{
 		PaperSpriteComp->SetVisibility(true, true);

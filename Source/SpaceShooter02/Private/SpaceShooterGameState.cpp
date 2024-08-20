@@ -10,6 +10,7 @@
 #include "EnemyBase.h"
 #include "EnemySpawner.h"
 //#include "ExplosionBase.h"
+#include "EnemyPoolController.h"
 #include "ExplosionSpriteController.h"
 #include "PickupItemController.h"
 #include "PickupItemSatelliteWeapon.h"
@@ -118,6 +119,11 @@ void ASpaceShooterGameState::EndGame(int32 FinalScore)
 		{
 			ExplosionSpriteController->ResetExplosionSpritePools();
 		}
+
+		if (EnemyPoolController != nullptr)
+		{
+			EnemyPoolController->ResetEnemyPools();
+		}
 	}
 }
 
@@ -199,6 +205,16 @@ void ASpaceShooterGameState::BeginPlay()
 		}
 	}
 
+	// Create the EnemyPoolController
+	if (ensure(EnemyPoolControllerClass != nullptr))
+	{
+		EnemyPoolController = NewObject<UEnemyPoolController>(this, EnemyPoolControllerClass);
+		if (ensure(EnemyPoolController != nullptr))
+		{
+			EnemyPoolController->InitEnemyPools();
+		}
+	}
+
 	// Create the MenuController
 	if (ensure(MenuControllerClass != nullptr))
 	{
@@ -220,6 +236,7 @@ void ASpaceShooterGameState::BeginPlay()
 			EnemySpawner->SetSpawningEnabled(false);
 			EnemySpawner->SetExplosionSpriteController(ExplosionSpriteController);
 			EnemySpawner->SetSpawnAnimController(SpawnAnimController);
+			EnemySpawner->SetEnemyPoolController(EnemyPoolController);
 		}
 	}
 
@@ -392,6 +409,11 @@ void ASpaceShooterGameState::OnGameOverTimerTimeout(int32 FinalScore)
 	if (ExplosionSpriteController != nullptr)
 	{
 		ExplosionSpriteController->ResetExplosionSpritePools();
+	}
+
+	if (EnemyPoolController != nullptr)
+	{
+		EnemyPoolController->ResetEnemyPools();
 	}
 }
 

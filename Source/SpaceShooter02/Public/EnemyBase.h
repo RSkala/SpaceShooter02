@@ -3,7 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+//#include "GameFramework/Actor.h"
+
+#include "PoolActor.h"
+
 #include "EnemyBase.generated.h"
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnemyDeathDelegateSignature, FVector, EnemyDeathPosition, class UNiagaraSystem*, EnemyDeathEffect);
@@ -15,7 +18,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
 	class USoundBase*, EnemyDeathSound);
 
 UCLASS(Abstract)
-class SPACESHOOTER02_API AEnemyBase : public AActor
+class SPACESHOOTER02_API AEnemyBase : public APoolActor
 {
 	GENERATED_BODY()
 
@@ -25,6 +28,12 @@ public:
 public:	
 	AEnemyBase();
 	virtual void Tick(float DeltaTime) override;
+	virtual void BeginDestroy() override;
+
+	// APoolActor / IPoolObject
+	virtual void ActivatePoolObject() override;
+	virtual void DeactivatePoolObject() override;
+
 	void DestroyEnemy();
 	void SetTarget(TSoftObjectPtr<AActor> InTargetActor);
 
@@ -42,9 +51,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class USceneComponent> RootSceneComp;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TObjectPtr<class USphereComponent> SphereComp; // RKS: To be removed
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UBoxComponent> BoxComp;
@@ -67,16 +73,17 @@ protected:
 	bool bRotateToFaceTarget = true;
 
 	// --- Effects ---
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class USoundBase> EnemyDeathSound; // TODO: Move to global place, so this is not duplicated
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class UNiagaraSystem> EnemyExplosionEffect;
 
+	// Flag for "delaying" the enemy before appearing onscreen (timed with spawn animations)
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool bIsSpawning = true;
-	
 
-	// TODO:
-	// * StopDistance
+	UPROPERTY()
+	FTimerHandle SpawnDelayTimerHandle;
 };

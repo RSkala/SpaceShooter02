@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 
 #include "EnemyBase.h"
+#include "EnemyPoolController.h"
 #include "ExplosionBase.h"
 #include "ExplosionSpriteController.h"
 #include "PlayerShipPawn.h"
@@ -37,6 +38,11 @@ void AEnemySpawner::SetExplosionSpriteController(UExplosionSpriteController* InE
 void AEnemySpawner::SetSpawnAnimController(USpawnAnimController* InSpawnAnimController)
 {
 	SpawnAnimController = InSpawnAnimController;
+}
+
+void AEnemySpawner::SetEnemyPoolController(UEnemyPoolController* InEnemyPoolController)
+{
+	EnemyPoolController = InEnemyPoolController;
 }
 
 void AEnemySpawner::BeginPlay()
@@ -88,63 +94,49 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 	TimeSinceLastEnemySpawned += DeltaTime;
 	if (TimeSinceLastEnemySpawned >= GetTimeBetweenSpawns())
 	{
-		// Choose a random enemy to spawn from the list
-		if (ensureMsgf(EnemyClasses.Num() > 0, TEXT("%s - No EnemyClasses set in EnemySpawner"), ANSI_TO_TCHAR(__FUNCTION__)))
+		// Time has elapsed since the last enemy was spawned. Spawn an enemy.
+
+		// Get a random position to spawn the enemy using the range
+		float RandomDistance = FMath::FRandRange(SpawnDistanceFromPlayerMin, SpawnDistanceFromPlayerMax);
+
+		// Get a random position at the edge of the unit sphere
+		FVector RandomUnitSphereEdgePos = FMath::VRand();
+
+		// Discard the Y-component, then normalize the vector to "push" the position to the edge of a unit circle
+		FVector2D RandomPosition = FVector2D(RandomUnitSphereEdgePos).GetSafeNormal();
+
+		// Multiply by the random distance for the spawn position offset from the player
+		RandomPosition *= RandomDistance;
+
+		// Get the enemy spawn position
+		FVector SourcePosition = PlayerShipPawn != nullptr ? PlayerShipPawn->GetActorLocation() : FVector();
+		FVector EnemyPosition = SourcePosition + FVector(RandomPosition.X, 0.0f, RandomPosition.Y);
+
+		// Play a Spawn Animation at the enemy spawn position
+		if (SpawnAnimController != nullptr)
 		{
-			// Randomly select an enemy type to spawn
-			int32 RandomIdx = FMath::RandRange(0, EnemyClasses.Num() - 1);
-			TSubclassOf<AEnemyBase> EnemyClassToSpawn = EnemyClasses[RandomIdx];
-			ensure(EnemyClassToSpawn != nullptr);
-
-			if (UWorld* World = GetWorld())
+			ASpawnAnimBase* EnemySpawnAnim = SpawnAnimController->GetInactiveSpawnAnim();
+			if (EnemySpawnAnim != nullptr)
 			{
-				// Get a random position to spawn the enemy using the range
-				float RandomDistance = FMath::FRandRange(SpawnDistanceFromPlayerMin, SpawnDistanceFromPlayerMax);
-
-				// Get a random position at the edge of the unit sphere
-				FVector RandomUnitSphereEdgePos = FMath::VRand();
-
-				// Discard the Y-component, then normalize the vector to "push" the position to the edge of a unit circle
-				FVector2D RandomPosition = FVector2D(RandomUnitSphereEdgePos).GetSafeNormal();
-
-				// Multiply by the random distance for the spawn position offset from the player
-				RandomPosition *= RandomDistance;
-
-				FVector SourcePosition = PlayerShipPawn != nullptr ? PlayerShipPawn->GetActorLocation() : FVector();
-				FVector EnemyPosition = SourcePosition + FVector(RandomPosition.X, 0.0f, RandomPosition.Y);
-
-				// Play a Spawn Animation
 				float RandomRotation = FMath::FRandRange(0.0f, 360.0f);
 				FRotator SpawnAnimRotation(RandomRotation, 0.0f, 0.0f); // Y rotation is Pitch
 				FVector SpawnAnimPos = FVector(EnemyPosition.X, 0.2f, EnemyPosition.Z); // have spawn anim appear in front of enemy
-				if (SpawnAnimController != nullptr)
-				{
-					ASpawnAnimBase* EnemySpawnAnim = SpawnAnimController->GetInactiveSpawnAnim();
-					if (EnemySpawnAnim != nullptr)
-					{
-						EnemySpawnAnim->SetActorLocationAndRotation(SpawnAnimPos, SpawnAnimRotation);
-						EnemySpawnAnim->ActivatePoolObject();
-					}
-				}
 
-				FActorSpawnParameters EnemySpawnParams;
-				//EnemySpawnParams.Name = FName(EnemyClassToSpawn != nullptr ? EnemyClassToSpawn->GetName() : "InvalidEnemyClass");
-				//EnemySpawnParams.NameMode = FActorSpawnParameters::ESpawnActorNameMode::Requested;
-				EnemySpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-				//EnemySpawnParams.bNoFail = true; // enable this to capture when SpawnActor fails
-				// The failure happens in LevelActor.cpp, line 738. Enable logging in console with: Log LogSpawn VeryVerbose
+				EnemySpawnAnim->SetActorLocationAndRotation(SpawnAnimPos, SpawnAnimRotation);
+				EnemySpawnAnim->ActivatePoolObject();
+			}
+		}
 
-				// Spawn the enemy
-				AEnemyBase* SpawnedEnemy = World->SpawnActor<AEnemyBase>(EnemyClassToSpawn, EnemyPosition, FRotator(), EnemySpawnParams);
-				if (SpawnedEnemy != nullptr)
-				{
-					// Set the player as the enemy's target
-					SpawnedEnemy->SetTarget(PlayerShipPawn);
-				}
-				else
-				{
-					UE_LOG(LogEnemySpawner, Warning, TEXT("%s - Spawn enemy FAILED for class: %s"), ANSI_TO_TCHAR(__FUNCTION__), *EnemyClassToSpawn->GetName());
-				}
+		// Spawn the enemy
+		if (EnemyPoolController != nullptr)
+		{
+			AEnemyBase* SpawnedEnemy = EnemyPoolController->GetRandomEnemy();
+			if (SpawnedEnemy != nullptr)
+			{
+				// Set player as the enemy's target and place at the spawn position
+				SpawnedEnemy->SetTarget(PlayerShipPawn);
+				SpawnedEnemy->SetActorLocation(EnemyPosition);
+				SpawnedEnemy->ActivatePoolObject();
 			}
 		}
 
