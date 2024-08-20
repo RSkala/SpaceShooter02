@@ -100,6 +100,7 @@ protected:
 	void InputDash(const struct FInputActionValue& InputActionValue);
 
 	void InputPause(const struct FInputActionValue& InputActionValue);
+	void InputCleanPause(const struct FInputActionValue& InputActionValue); // Pause game without opening pause screen (for screenshots and such)
 	
 	void FireProjectile(FRotator ProjectileRotation);
 	void PlayShootSound();
@@ -243,6 +244,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
 	TObjectPtr<class UInputAction> InputActionPause;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
+	TObjectPtr<class UInputAction> InputActionCleanPause;
 
 	// --- Movement and Aiming ---
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "PlayerShipPawn|Movement & Aiming")

@@ -237,6 +237,12 @@ void APlayerShipPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		// Bind Pause
 		ensureAlways(InputActionPause != nullptr);
 		EnhancedInputComponent->BindAction(InputActionPause, ETriggerEvent::Started, this, &ThisClass::InputPause);
+
+		// Bind Clean Pause
+#if !UE_BUILD_SHIPPING // No clean pause in shipping builds
+		ensureAlways(InputActionCleanPause != nullptr);
+		EnhancedInputComponent->BindAction(InputActionCleanPause, ETriggerEvent::Started, this, &ThisClass::InputCleanPause);
+#endif
 	}
 }
 
@@ -968,6 +974,20 @@ void APlayerShipPawn::InputPause(const FInputActionValue& InputActionValue)
 			SetMouseCursorVisiblityFromInput(PlayerController, true);
 		}
 	}
+}
+
+void APlayerShipPawn::InputCleanPause(const FInputActionValue& InputActionValue)
+{	
+	// Do not allow clean pause if player is dead or disabled (meaning dead or in menus)
+	if (bPlayerDead || IsPlayerDisabled())
+	{
+		return;
+	}
+
+	UWorld* World = GetWorld();
+	bool bIsGamePaused = UGameplayStatics::IsGamePaused(World);
+	UE_LOG(LogPlayerShipPawn, Warning, TEXT("Clean Pausing/Unpausing game: %d"), bIsGamePaused);
+	UGameplayStatics::SetGamePaused(World, !bIsGamePaused);
 }
 
 void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
