@@ -11,11 +11,12 @@
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnemyDeathDelegateSignature, FVector, EnemyDeathPosition, class UNiagaraSystem*, EnemyDeathEffect);
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnemyDeathDelegateSignature, FVector, EnemyDeathPosition, class UNiagaraSystem*, EnemyDeathEffect);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(
 	FEnemyDeathDelegateSignature,
 	FVector, EnemyDeathPosition,
 	class UNiagaraSystem*, EnemyDeathEffect,
-	class USoundBase*, EnemyDeathSound);
+	class USoundBase*, EnemyDeathSound,
+	bool, bKilledFromBoost);
 
 UCLASS(Abstract)
 class SPACESHOOTER02_API AEnemyBase : public APoolActor
@@ -34,7 +35,7 @@ public:
 	virtual void ActivatePoolObject() override;
 	virtual void DeactivatePoolObject() override;
 
-	void DestroyEnemy();
+	void DestroyEnemy(bool bDestroyedFromBoost = false);
 	void SetTarget(TSoftObjectPtr<AActor> InTargetActor);
 
 protected:

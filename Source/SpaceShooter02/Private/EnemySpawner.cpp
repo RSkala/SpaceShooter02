@@ -151,7 +151,7 @@ void AEnemySpawner::OnGameStarted()
 	SetSpawningEnabled(true);
 }
 
-void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, USoundBase* EnemyDeathSound)
+void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, USoundBase* EnemyDeathSound, bool bKilledFromBoost)
 {
 	//UE_LOG(LogEnemySpawner, Warning, TEXT("%s - EnemyDeathPosition: %s"), ANSI_TO_TCHAR(__FUNCTION__), *EnemyDeathPosition.ToString());
 

@@ -136,6 +136,37 @@ void USpaceShooterGameInstance::ClearHighScores()
 	{
 		UE_LOG(LogSpaceShooterGameInstance, Log, TEXT("Clearing High Scores"));
 		InitializeHighScoreData();
+
+		bool bSaveGameSuccess = UGameplayStatics::SaveGameToSlot(SpaceShooterSaveGame, DefaultSaveSlotName, DefaultSaveSlotIndex);
+		UE_CLOG(!bSaveGameSuccess, LogSpaceShooterGameInstance, Warning, TEXT("%s - Failed to save game"), ANSI_TO_TCHAR(__FUNCTION__));
+	}
+}
+
+void USpaceShooterGameInstance::RecordPostGameStats(int32 NumEnemiesDefeated, int32 NumScoreMultipliersCollected, int32 NumEnemiesDefeatedWithBoost, int32 SelectedShipSpriteIndex)
+{
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		// Save the score
+		SpaceShooterSaveGame->IncrementNumGamesPlayed();
+		SpaceShooterSaveGame->AddNumEnemiesDefeated(NumEnemiesDefeated);
+		SpaceShooterSaveGame->AddNumScoreMultipliersCollected(NumScoreMultipliersCollected);
+		SpaceShooterSaveGame->AddNumEnemiesDefeatedWithBoost(NumEnemiesDefeatedWithBoost);
+		SpaceShooterSaveGame->IncrementShipSelectedCount(SelectedShipSpriteIndex);
+
+		bool bSaveGameSuccess = UGameplayStatics::SaveGameToSlot(SpaceShooterSaveGame, DefaultSaveSlotName, DefaultSaveSlotIndex);
+		UE_CLOG(!bSaveGameSuccess, LogSpaceShooterGameInstance, Warning, TEXT("%s - Failed to save game"), ANSI_TO_TCHAR(__FUNCTION__));
+	}
+}
+
+void USpaceShooterGameInstance::ClearStats()
+{
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		UE_LOG(LogSpaceShooterGameInstance, Log, TEXT("Clearing Stats"));
+		InitializeStatsData();
+
+		bool bSaveGameSuccess = UGameplayStatics::SaveGameToSlot(SpaceShooterSaveGame, DefaultSaveSlotName, DefaultSaveSlotIndex);
+		UE_CLOG(!bSaveGameSuccess, LogSpaceShooterGameInstance, Warning, TEXT("%s - Failed to save data"), ANSI_TO_TCHAR(__FUNCTION__));
 	}
 }
 
@@ -162,6 +193,9 @@ void USpaceShooterGameInstance::Init()
 		// Initialize the high score data list
 		InitializeHighScoreData();
 
+		// Initialize stats data
+		InitializeStatsData();
+
 		// Save the game to disk (This will be located in Saved/SaveGames)
 		bool bSaveGameSuccess = UGameplayStatics::SaveGameToSlot(SpaceShooterSaveGame, DefaultSaveSlotName, DefaultSaveSlotIndex);
 		UE_CLOG(!bSaveGameSuccess, LogSpaceShooterGameInstance, Warning, TEXT("Failed to create Save Game"));
@@ -173,9 +207,15 @@ void USpaceShooterGameInstance::OnStart()
 	Super::OnStart();
 }
 
-void USpaceShooterGameInstance::OnGameEnded(int32 FinalScore, int32 SelectedShipSpriteIndex)
+void USpaceShooterGameInstance::OnGameEnded(
+	int32 FinalScore,
+	int32 SelectedShipSpriteIndex,
+	int32 NumEnemiesDefeated,
+	int32 NumScoreMultipliersCollected,
+	int32 NumEnemiesDefeatedWithBoost)
 {
 	RecordHighScore(FinalScore, SelectedShipSpriteIndex);
+	RecordPostGameStats(NumEnemiesDefeated, NumScoreMultipliersCollected, NumEnemiesDefeatedWithBoost, SelectedShipSpriteIndex);
 }
 
 void USpaceShooterGameInstance::InitializeHighScoreData()
@@ -196,6 +236,14 @@ void USpaceShooterGameInstance::InitializeHighScoreData()
 		}
 
 		SpaceShooterSaveGame->SetHighScoreDataList(HighScoreDataList);
+	}
+}
+
+void USpaceShooterGameInstance::InitializeStatsData()
+{
+	if (ensure(SpaceShooterSaveGame != nullptr))
+	{
+		SpaceShooterSaveGame->ResetStats();
 	}
 }
 

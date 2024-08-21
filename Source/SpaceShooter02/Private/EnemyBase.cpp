@@ -75,7 +75,7 @@ void AEnemyBase::DeactivatePoolObject()
 	bIsSpawning = false;
 }
 
-void AEnemyBase::DestroyEnemy()
+void AEnemyBase::DestroyEnemy(bool bDestroyedFromBoost /*= false*/)
 {
 	// Play the death/explosion sound
 	/*if (EnemyDeathSound != nullptr)
@@ -86,7 +86,7 @@ void AEnemyBase::DestroyEnemy()
 	}*/
 
 	// Notify subscribers that an enemy died
-	OnEnemyDeath.Broadcast(GetActorLocation(), EnemyExplosionEffect.Get(), EnemyDeathSound.Get());
+	OnEnemyDeath.Broadcast(GetActorLocation(), EnemyExplosionEffect.Get(), EnemyDeathSound.Get(), bDestroyedFromBoost);
 
 	// Deactivate this enemy
 	DeactivatePoolObject();

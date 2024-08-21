@@ -68,6 +68,9 @@ void ASpaceShooterGameState::StartGame()
 	CurrentScoreMultiplier = 1;
 	TotalNumEnemiesSpawnedThisGame = 0;
 	TotalNumEnemiesKilledThisGame = 0;
+	TotalNumScoreMultipliersCollectedThisGame = 0;
+	TotalNumEnemiesKilledWithBoostThisGame = 0;
+
 	CurrentDifficultyLevel = 1; // Always start at level 1
 	CurrentTimeBetweenSpawns = 1.0f; // Always start at 1 second between each spewn
 
@@ -103,7 +106,13 @@ void ASpaceShooterGameState::EndGame(int32 FinalScore)
 	}
 	else
 	{
-		OnGameEnded.Broadcast(FinalScore, SelectedShipSpriteIndex);
+		// Broadcast game ended
+		OnGameEnded.Broadcast(
+			FinalScore,
+			SelectedShipSpriteIndex,
+			TotalNumEnemiesKilledThisGame,
+			TotalNumScoreMultipliersCollectedThisGame,
+			TotalNumEnemiesKilledWithBoostThisGame);
 
 		if (ProjectileController != nullptr)
 		{
@@ -129,6 +138,7 @@ void ASpaceShooterGameState::EndGame(int32 FinalScore)
 
 void ASpaceShooterGameState::AddCurrentScoreMultiplier(int32 AmountToAdd)
 {
+	TotalNumScoreMultipliersCollectedThisGame++;
 	CurrentScoreMultiplier += AmountToAdd;
 
 	// Broadcast score multiplier changed
@@ -266,7 +276,7 @@ void ASpaceShooterGameState::OnPlayerShipDestroyed()
 	EndGame(PlayerScore);
 }
 
-void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, USoundBase* EnemyDeathSound)
+void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, USoundBase* EnemyDeathSound, bool bKilledFromBoost)
 {
 	int32 ScoreToAdd = EnemyScoreValue * CurrentScoreMultiplier;
 	PlayerScore += ScoreToAdd;
@@ -284,6 +294,7 @@ void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSy
 	// ---------------------------------------------------------
 	// Difficulty scaling
 	TotalNumEnemiesKilledThisGame++;
+	TotalNumEnemiesKilledWithBoostThisGame += bKilledFromBoost ? 1 : 0;
 
 	// Increase difficulty level every X enemies killed
 	if (TotalNumEnemiesKilledThisGame % DifficultySpikeInterval == 0)
@@ -394,7 +405,12 @@ void ASpaceShooterGameState::SpawnScoreMultiplierPickup(FVector SpawnPosition)
 void ASpaceShooterGameState::OnGameOverTimerTimeout(int32 FinalScore)
 {
 	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::OnGameOverTimerTimeout"));
-	OnGameEnded.Broadcast(FinalScore, SelectedShipSpriteIndex);
+	OnGameEnded.Broadcast(
+		FinalScore,
+		SelectedShipSpriteIndex,
+		TotalNumEnemiesKilledThisGame,
+		TotalNumScoreMultipliersCollectedThisGame,
+		TotalNumEnemiesKilledWithBoostThisGame);
 
 	if (ProjectileController != nullptr)
 	{

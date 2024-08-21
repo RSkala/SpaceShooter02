@@ -7,7 +7,16 @@
 #include "SpaceShooterGameState.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameStartedDelegateSignature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FGameEndedDelegateSignature, int32, FinalScore, int32, SelectedShipSpriteIndex);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(
+	FGameEndedDelegateSignature,
+	int32, FinalScore,
+	int32, SelectedShipSpriteIndex,
+	int32, NumEnemiesDefeated,
+	int32, NumScoreMultipliersCollected,
+	int32, NumEnemiesDefeatedWithBoost);
+
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerScoreChangedDelegateSignature, int32, PlayerScore);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerMultiplierChangedDelegateSignature, int32, ScoreMultiplier);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FHighScoreChangedDelegateSignature, int32, HighScore);
@@ -60,7 +69,7 @@ protected:
 	UFUNCTION()
 	void OnPlayerShipDestroyed();
 	UFUNCTION()
-	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect, class USoundBase* EnemyDeathSound);
+	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect, class USoundBase* EnemyDeathSound, bool bKilledFromBoost);
 	UFUNCTION()
 	void OnScoreMultiplierPickedUp(int32 ScoreMultiplierValue);
 
@@ -186,6 +195,14 @@ protected:
 	// Number of enemies killed by the player in the current game
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 TotalNumEnemiesKilledThisGame = 0;
+
+	// Number of score multipliers collected in the current game
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 TotalNumScoreMultipliersCollectedThisGame = 0;
+
+	// Number of enemies killed using the boost ability
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 TotalNumEnemiesKilledWithBoostThisGame = 0;
 
 	// Every X enemy spawned or killed, increase difficulty
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

@@ -126,7 +126,12 @@ void USpaceShooterMenuController::OnGameplayStart()
 	}
 }
 
-void USpaceShooterMenuController::OnGameplayEnd(int32 FinalScore, int32 SelectedShipSpriteIndex)
+void USpaceShooterMenuController::OnGameplayEnd(
+	int32 FinalScore,
+	int32 SelectedShipSpriteIndex,
+	int32 NumEnemiesDefeated,
+	int32 NumScoreMultipliersCollected,
+	int32 NumEnemiesDefeatedWithBoost)
 {
 	CurrentMenuState = EMenuState::GameOver;
 

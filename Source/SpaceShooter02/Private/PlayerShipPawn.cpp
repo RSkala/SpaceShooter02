@@ -713,7 +713,7 @@ void APlayerShipPawn::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponen
 		if (bIsDashing)
 		{
 			// Player is Dashing. Kill the enemy.
-			OverlappedEnemy->DestroyEnemy();
+			OverlappedEnemy->DestroyEnemy(true);
 		}
 		else
 		{
@@ -729,7 +729,12 @@ void APlayerShipPawn::OnGameStarted()
 	bPlayerDead = false;
 }
 
-void APlayerShipPawn::OnGameEnded(int32 FinalScore, int32 SelectedShipSpriteIndex)
+void APlayerShipPawn::OnGameEnded(
+	int32 FinalScore,
+	int32 SelectedShipSpriteIndex,
+	int32 NumEnemiesDefeated,
+	int32 NumScoreMultipliersCollected,
+	int32 NumEnemiesDefeatedWithBoost)
 {
 	// The game has ended. Force show the mouse cursor, as it likely was hidden from right-stick aiming
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))

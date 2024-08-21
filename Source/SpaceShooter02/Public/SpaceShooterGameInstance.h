@@ -12,11 +12,24 @@ class SPACESHOOTER02_API USpaceShooterGameInstance : public UGameInstance
 	GENERATED_BODY()
 
 public:
+	// Saves the high score
 	void RecordHighScore(int32 Score, int32 SelectedShipSpriteIndex);
 	const TArray<struct FHighScoreData>& GetHighScoreDataList() const;
 	class UPaperSprite* GetShipSpriteForIndex(int32 ShipSpriteIndex) const;
 	int32 GetPlayerHighestScore() const;
+
+	// Clears and saves high score data
 	void ClearHighScores();
+
+	// Saves the game stats
+	void RecordPostGameStats(
+		int32 NumEnemiesDefeated,
+		int32 NumScoreMultipliersCollected,
+		int32 NumEnemiesDefeatedWithBoost,
+		int32 SelectedShipSpriteIndex);
+
+	// Clears and saves game stat data
+	void ClearStats();
 
 	static FString GetGameVersionString() { return GameVersion; }
 
@@ -26,10 +39,18 @@ protected:
 
 private:
 	UFUNCTION()
-	void OnGameEnded(int32 FinalScore, int32 SelectedShipSpriteIndex);
+	void OnGameEnded(
+		int32 FinalScore,
+		int32 SelectedShipSpriteIndex,
+		int32 NumEnemiesDefeated,
+		int32 NumScoreMultipliersCollected,
+		int32 NumEnemiesDefeatedWithBoost);
 
-	// Initialize the high score data list with empty data
+	// Initialize the high score data list with empty data (does NOT save)
 	void InitializeHighScoreData();
+
+	// Initialize stats data with zeroes (does NOT save)
+	void InitializeStatsData();
 
 	FString GetTodaysDateFormatted() const;
 

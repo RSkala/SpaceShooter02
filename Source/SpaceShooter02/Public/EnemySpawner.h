@@ -28,7 +28,7 @@ protected:
 	void OnGameStarted();
 
 	UFUNCTION()
-	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect, class USoundBase* EnemyDeathSound);
+	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect, class USoundBase* EnemyDeathSound, bool bKilledFromBoost);
 
 	float GetTimeBetweenSpawns() const;
 

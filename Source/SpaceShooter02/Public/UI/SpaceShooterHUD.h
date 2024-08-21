@@ -18,7 +18,12 @@ protected:
 	void OnGameStarted();
 	
 	UFUNCTION()
-	void OnGameEnded(int32 FinalScore, int32 SelectedShipSpriteIndex);
+	void OnGameEnded(
+		int32 FinalScore,
+		int32 SelectedShipSpriteIndex,
+		int32 NumEnemiesDefeated,
+		int32 NumScoreMultipliersCollected,
+		int32 NumEnemiesDefeatedWithBoost);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

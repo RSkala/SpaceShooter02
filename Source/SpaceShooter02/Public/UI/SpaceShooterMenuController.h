@@ -68,7 +68,12 @@ private:
 	void OnPlayerShipSelectStart();
 
 	UFUNCTION() void OnGameplayStart();
-	UFUNCTION() void OnGameplayEnd(int32 FinalScore, int32 SelectedShipSpriteIndex);
+	UFUNCTION() void OnGameplayEnd(
+		int32 FinalScore,
+		int32 SelectedShipSpriteIndex,
+		int32 NumEnemiesDefeated,
+		int32 NumScoreMultipliersCollected,
+		int32 NumEnemiesDefeatedWithBoost);
 	UFUNCTION() void MainMenuPlayClicked();
 	UFUNCTION() void PlayerShipSelected(int32 ShipSpriteIndex);
 	UFUNCTION() void GameOverSelectShipClicked();
