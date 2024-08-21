@@ -18,11 +18,16 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuOptionsButtonClickedDelegateSignatur
 
 // Options Screen actions
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenCreditsButtonClickedDelegateSignature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenCreditsClearScoresClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenStatsButtonClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenClearScoresClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenClearStatsClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenBackButtonClickedDelegateSignature);
 
 // Credits Screen actions
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCreditsScreenBackButtonClickedDelegateSignature);
+
+// Stats Screen actions
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FStatsScreenBackButtonClickedDelegateSignature);
 
 // Enum for tracking whether or not a sound VO was played
 UENUM(BlueprintType, meta = (BitFlags, UseEnumValuesAsMaskValuesInEditor = "true"))
@@ -86,10 +91,14 @@ private:
 	UFUNCTION() void MainMenuOptionsButtonClicked();
 
 	UFUNCTION() void OptionsScreenCreditsClicked();
+	UFUNCTION() void OptionsScreenStatsClicked();
 	UFUNCTION() void OptionsScreenClearScoresClicked();
+	UFUNCTION() void OptionsScreenClearStatsClicked();
 	UFUNCTION() void OptionsScreenBackClicked();
 
 	UFUNCTION() void CreditsScreenBackClicked();
+
+	UFUNCTION() void StatsScreenBackClicked();
 
 	UUserWidget* OpenScreen(TSubclassOf<class UUserWidget> ScreenClass);
 	void CloseScreen(UUserWidget* const ScreenToClose);
@@ -114,6 +123,9 @@ private:
 
 	void OpenOptionsScreen();
 	void CloseOptionsScreen();
+
+	void OpenStatsScreen();
+	void CloseStatsScreen();
 
 	void SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray);
 
@@ -141,12 +153,16 @@ public:
 
 	// Options Screen Actions
 	static FOptionsScreenCreditsButtonClickedDelegateSignature OnOptionsScreenCreditsClicked;
-	static FOptionsScreenCreditsClearScoresClickedDelegateSignature OnOptionsScreenClearScoresClicked;
+	static FOptionsScreenStatsButtonClickedDelegateSignature OnOptionsScreenStatsClicked;
+	static FOptionsScreenClearScoresClickedDelegateSignature OnOptionsScreenClearScoresClicked;
+	static FOptionsScreenClearStatsClickedDelegateSignature OnOptionsScreenClearStatsClicked;
 	static FOptionsScreenBackButtonClickedDelegateSignature OnOptionsScreenBackClicked;
 
 	// Credits Screen Actions
 	static FCreditsScreenBackButtonClickedDelegateSignature OnCreditsScreenBackClicked;
 
+	// Stats Screen Actions
+	static FStatsScreenBackButtonClickedDelegateSignature OnStatsScreenBackClicked;
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
@@ -175,6 +191,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TSubclassOf<class UUserWidget> OptionsScreenClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TSubclassOf<class UUserWidget> StatsScreenClass;
+
 	// --- Menu Screen Instances ---
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
@@ -197,6 +216,9 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UOptionsScreen> OptionsScreen;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatsScreen> StatsScreen;
 
 	// --- Menu VO ---
 

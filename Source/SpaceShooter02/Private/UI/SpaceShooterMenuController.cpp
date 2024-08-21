@@ -15,6 +15,7 @@
 #include "UI/OptionsScreen.h"
 #include "UI/PauseScreen.h"
 #include "UI/PlayerShipSelectScreen.h"
+#include "UI/StatsScreen.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogMenuController, Warning, All)
 
@@ -30,11 +31,16 @@ FMainMenuOptionsButtonClickedDelegateSignature USpaceShooterMenuController::OnMa
 
 // Options Screen actions
 FOptionsScreenCreditsButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenCreditsClicked;
-FOptionsScreenCreditsClearScoresClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenClearScoresClicked;
+FOptionsScreenStatsButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenStatsClicked;
+FOptionsScreenClearScoresClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenClearScoresClicked;
+FOptionsScreenClearStatsClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenClearStatsClicked;
 FOptionsScreenBackButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenBackClicked;
 
 // Credits Screen actions
 FCreditsScreenBackButtonClickedDelegateSignature USpaceShooterMenuController::OnCreditsScreenBackClicked;
+
+// Stats Screen actions
+FStatsScreenBackButtonClickedDelegateSignature USpaceShooterMenuController::OnStatsScreenBackClicked;
 
 USpaceShooterMenuController::USpaceShooterMenuController()
 {
@@ -65,11 +71,16 @@ void USpaceShooterMenuController::PostInitProperties()
 
 		// Options Screen
 		OnOptionsScreenCreditsClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenCreditsClicked);
+		OnOptionsScreenStatsClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenStatsClicked);
 		OnOptionsScreenClearScoresClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenClearScoresClicked);
+		OnOptionsScreenClearStatsClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenClearStatsClicked);
 		OnOptionsScreenBackClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenBackClicked);
 
 		// Credits Screen
 		OnCreditsScreenBackClicked.AddUniqueDynamic(this, &ThisClass::CreditsScreenBackClicked);
+
+		// Stats Screen
+		OnStatsScreenBackClicked.AddUniqueDynamic(this, &ThisClass::StatsScreenBackClicked);
 	}
 }
 
@@ -215,12 +226,28 @@ void USpaceShooterMenuController::OptionsScreenCreditsClicked()
 	OpenCreditsScreen();
 }
 
+void USpaceShooterMenuController::OptionsScreenStatsClicked()
+{
+	PlayButtonClickSound();
+	CloseOptionsScreen();
+	OpenStatsScreen();
+}
+
 void USpaceShooterMenuController::OptionsScreenClearScoresClicked()
 {
 	PlayButtonClickSound();
 	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
 		GameInstance->ClearHighScores();
+	}
+}
+
+void USpaceShooterMenuController::OptionsScreenClearStatsClicked()
+{
+	PlayButtonClickSound();
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		GameInstance->ClearStats();
 	}
 }
 
@@ -235,6 +262,13 @@ void USpaceShooterMenuController::CreditsScreenBackClicked()
 {
 	PlayButtonClickSound();
 	CloseCreditsScreen();
+	OpenOptionsScreen();
+}
+
+void USpaceShooterMenuController::StatsScreenBackClicked()
+{
+	PlayButtonClickSound();
+	CloseStatsScreen();
 	OpenOptionsScreen();
 }
 
@@ -383,6 +417,18 @@ void USpaceShooterMenuController::OpenOptionsScreen()
 void USpaceShooterMenuController::CloseOptionsScreen()
 {
 	CloseScreen(OptionsScreen);
+	OptionsScreen = nullptr;
+}
+
+void USpaceShooterMenuController::OpenStatsScreen()
+{
+	StatsScreen = Cast<UStatsScreen>(OpenScreen(StatsScreenClass));
+	ensure(StatsScreen != nullptr);
+}
+
+void USpaceShooterMenuController::CloseStatsScreen()
+{
+	CloseScreen(StatsScreen);
 	OptionsScreen = nullptr;
 }
 
