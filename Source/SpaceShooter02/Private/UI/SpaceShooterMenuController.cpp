@@ -21,8 +21,12 @@ DEFINE_LOG_CATEGORY_STATIC(LogMenuController, Warning, All)
 
 FMainMenuPlayClickedDelegateSignature USpaceShooterMenuController::OnMainMenuPlayClicked;
 FShipSelectedDelegateSignature USpaceShooterMenuController::OnPlayerShipSelected;
+
+// Game Over screen actions
 FGameOverSelectShipClickedDelegateSignature USpaceShooterMenuController::OnGameOverSelectShipClicked;
 FGameOverPlayAgainClickedDelegateSignature USpaceShooterMenuController::OnGameOverPlayAgainClicked;
+FGameOverMainMenuClickedDelegateSignature USpaceShooterMenuController::OnGameOverMainMenuClicked;
+
 FMainMenuCreditsClickedDelegateSignature USpaceShooterMenuController::OnMainMenuCreditsClicked;
 FShipSelectBackButtonClickedDelegateSignature USpaceShooterMenuController::OnShipSelectBackClicked;
 FMainMenuHighScoreClickedDelegateSignature USpaceShooterMenuController::OnMainMenuHighScoreClicked;
@@ -61,8 +65,12 @@ void USpaceShooterMenuController::PostInitProperties()
 		// Subscribe to all menu delegates
 		OnMainMenuPlayClicked.AddUniqueDynamic(this, &ThisClass::MainMenuPlayClicked);
 		OnPlayerShipSelected.AddUniqueDynamic(this, &ThisClass::PlayerShipSelected);
+
+		// Game Over screen
 		OnGameOverSelectShipClicked.AddUniqueDynamic(this, &ThisClass::GameOverSelectShipClicked);
 		OnGameOverPlayAgainClicked.AddUniqueDynamic(this, &ThisClass::GameOverPlayAgainClicked);
+		OnGameOverMainMenuClicked.AddUniqueDynamic(this, &ThisClass::GameOverMainMenuClicked);
+
 		OnMainMenuCreditsClicked.AddUniqueDynamic(this, &ThisClass::MainMenuCreditsClicked);
 		OnShipSelectBackClicked.AddUniqueDynamic(this, &ThisClass::ShipSelectBackClicked);
 		OnMainMenuHighScoreClicked.AddUniqueDynamic(this, &ThisClass::MainMenuHighScoreClicked);
@@ -176,6 +184,13 @@ void USpaceShooterMenuController::GameOverPlayAgainClicked()
 
 	// Close the Game Over screen. The GameState will handle starting the game.
 	CloseGameOverScreen();
+}
+
+void USpaceShooterMenuController::GameOverMainMenuClicked()
+{
+	PlayButtonClickSound();
+	CloseGameOverScreen();
+	OpenMainMenuScreen();
 }
 
 void USpaceShooterMenuController::MainMenuCreditsClicked()

@@ -84,8 +84,7 @@ void UGameOverScreen::OnSelectNewShipButtonClicked()
 
 void UGameOverScreen::OnQuitGameButtonClicked()
 {
-	UE_LOG(LogMenus, Log, TEXT("Quitting game from Game Over Screen..."));
-	UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
+	USpaceShooterMenuController::OnGameOverMainMenuClicked.Broadcast();
 }
 
 void UGameOverScreen::OnPlayAgainButtonHovered()

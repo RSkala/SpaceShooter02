@@ -52,5 +52,5 @@ protected:
 	TObjectPtr<class UButton> SelectNewShipButton;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
-	TObjectPtr<class UButton> QuitGameButton;
+	TObjectPtr<class UButton> QuitGameButton; // Renamed to MainMenu
 };

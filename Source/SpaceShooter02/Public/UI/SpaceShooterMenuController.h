@@ -8,13 +8,19 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuPlayClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FShipSelectedDelegateSignature, int32, ShipSpriteIndex);
+
+// Game Over Screen actions
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverSelectShipClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverPlayAgainClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameOverMainMenuClickedDelegateSignature);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuCreditsClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FShipSelectBackButtonClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuHighScoreClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHighScoreBackButtonClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuOptionsButtonClickedDelegateSignature);
+
+
 
 // Options Screen actions
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenCreditsButtonClickedDelegateSignature);
@@ -81,8 +87,13 @@ private:
 		int32 NumEnemiesDefeatedWithBoost);
 	UFUNCTION() void MainMenuPlayClicked();
 	UFUNCTION() void PlayerShipSelected(int32 ShipSpriteIndex);
+
+
 	UFUNCTION() void GameOverSelectShipClicked();
 	UFUNCTION() void GameOverPlayAgainClicked();
+	UFUNCTION() void GameOverMainMenuClicked();
+
+
 	UFUNCTION() void MainMenuCreditsClicked();
 	UFUNCTION() void ShipSelectBackClicked();
 	UFUNCTION() void MainMenuHighScoreClicked();
@@ -143,8 +154,12 @@ private:
 public:
 	static FMainMenuPlayClickedDelegateSignature OnMainMenuPlayClicked;
 	static FShipSelectedDelegateSignature OnPlayerShipSelected;
+
+	// Game Over screen actions
 	static FGameOverSelectShipClickedDelegateSignature OnGameOverSelectShipClicked;
 	static FGameOverPlayAgainClickedDelegateSignature OnGameOverPlayAgainClicked;
+	static FGameOverMainMenuClickedDelegateSignature OnGameOverMainMenuClicked;
+
 	static FMainMenuCreditsClickedDelegateSignature OnMainMenuCreditsClicked;
 	static FShipSelectBackButtonClickedDelegateSignature OnShipSelectBackClicked;
 	static FMainMenuHighScoreClickedDelegateSignature OnMainMenuHighScoreClicked;
