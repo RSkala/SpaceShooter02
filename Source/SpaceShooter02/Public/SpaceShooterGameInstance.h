@@ -31,6 +31,17 @@ public:
 	// Clears and saves game stat data
 	void ClearStats();
 
+	// --- Save Game Data Accessor ---
+	void GetSaveGameStatsData(
+		int32& OutNumGamesPlayed,
+		int32& OutNumEnemiesDefeated,
+		int32& OutNumScoreMultipliersCollected,
+		int32& OutNumEnemiesDefeatedWithBoost,
+		float& OutTimeSpentLookingAtStats,
+		TMap<int32, int32>& OutShipIndexToNumTimesSelected);
+
+	void SaveTimeSpentLookingAtStats(float InTimeSpentLookingAtStats);
+
 	static FString GetGameVersionString() { return GameVersion; }
 
 protected:
