@@ -27,7 +27,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenBackButtonClickedDelegateSignat
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCreditsScreenBackButtonClickedDelegateSignature);
 
 // Stats Screen actions
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FStatsScreenBackButtonClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatsScreenBackButtonClickedDelegateSignature, float, TimeSpentLookingAtStats);
 
 // Enum for tracking whether or not a sound VO was played
 UENUM(BlueprintType, meta = (BitFlags, UseEnumValuesAsMaskValuesInEditor = "true"))
@@ -98,7 +98,7 @@ private:
 
 	UFUNCTION() void CreditsScreenBackClicked();
 
-	UFUNCTION() void StatsScreenBackClicked();
+	UFUNCTION() void StatsScreenBackClicked(float TimeSpentLookingAtStats);
 
 	UUserWidget* OpenScreen(TSubclassOf<class UUserWidget> ScreenClass);
 	void CloseScreen(UUserWidget* const ScreenToClose);

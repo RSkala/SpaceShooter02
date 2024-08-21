@@ -265,9 +265,16 @@ void USpaceShooterMenuController::CreditsScreenBackClicked()
 	OpenOptionsScreen();
 }
 
-void USpaceShooterMenuController::StatsScreenBackClicked()
+void USpaceShooterMenuController::StatsScreenBackClicked(float TimeSpentLookingAtStats)
 {
 	PlayButtonClickSound();
+
+	// Save stat
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		GameInstance->SaveTimeSpentLookingAtStats(TimeSpentLookingAtStats);
+	}
+
 	CloseStatsScreen();
 	OpenOptionsScreen();
 }

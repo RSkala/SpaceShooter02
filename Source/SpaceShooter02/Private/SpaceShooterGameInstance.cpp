@@ -170,6 +170,36 @@ void USpaceShooterGameInstance::ClearStats()
 	}
 }
 
+void USpaceShooterGameInstance::GetSaveGameStatsData(
+	int32& OutNumGamesPlayed,
+	int32& OutNumEnemiesDefeated,
+	int32& OutNumScoreMultipliersCollected,
+	int32& OutNumEnemiesDefeatedWithBoost,
+	float& OutTimeSpentLookingAtStats,
+	TMap<int32, int32>& OutShipIndexToNumTimesSelected)
+{
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		OutNumGamesPlayed = SpaceShooterSaveGame->NumGamesPlayed;
+		OutNumEnemiesDefeated = SpaceShooterSaveGame->NumEnemiesDefeated;
+		OutNumScoreMultipliersCollected = SpaceShooterSaveGame->NumScoreMultipliersCollected;
+		OutNumEnemiesDefeatedWithBoost = SpaceShooterSaveGame->NumEnemiesDefeatedWithBoost;
+		OutTimeSpentLookingAtStats = SpaceShooterSaveGame->TimeSpentLookingAtStats;
+		OutShipIndexToNumTimesSelected = SpaceShooterSaveGame->ShipIndexToNumTimesSelected;
+	}
+}
+
+void USpaceShooterGameInstance::SaveTimeSpentLookingAtStats(float InTimeSpentLookingAtStats)
+{
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		SpaceShooterSaveGame->AddTimeSpentLookingAtStats(InTimeSpentLookingAtStats);
+
+		bool bSaveGameSuccess = UGameplayStatics::SaveGameToSlot(SpaceShooterSaveGame, DefaultSaveSlotName, DefaultSaveSlotIndex);
+		UE_CLOG(!bSaveGameSuccess, LogSpaceShooterGameInstance, Warning, TEXT("%s - Failed to save game"), ANSI_TO_TCHAR(__FUNCTION__));
+	}
+}
+
 void USpaceShooterGameInstance::Init()
 {
 	Super::Init();

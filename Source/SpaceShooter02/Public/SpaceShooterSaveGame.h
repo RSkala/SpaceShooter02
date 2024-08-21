@@ -42,6 +42,7 @@ public:
 	void AddNumScoreMultipliersCollected(int32 InNumScoreMultipliersCollected) { NumScoreMultipliersCollected += InNumScoreMultipliersCollected; }
 	void AddNumEnemiesDefeatedWithBoost(int32 InNumEnemiesDefeatedWithBoost) { NumEnemiesDefeatedWithBoost += InNumEnemiesDefeatedWithBoost; }
 	void IncrementShipSelectedCount(int32 SelectedShipIndex);
+	void AddTimeSpentLookingAtStats(float InTimeSpentLookingAtStats) { TimeSpentLookingAtStats += InTimeSpentLookingAtStats; }
 
 private:
 	// List of high score data
@@ -67,4 +68,10 @@ private:
 	// Number of games played with each ship
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TMap<int32, int32> ShipIndexToNumTimesSelected;
+
+	// Time spent looking at stats
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	float TimeSpentLookingAtStats = 0.0f;
+
+	friend class USpaceShooterGameInstance;
 };

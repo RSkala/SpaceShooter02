@@ -24,6 +24,7 @@ void USpaceShooterSaveGame::ResetStats()
 	ShipIndexToNumTimesSelected.Add(2, 0); // Ship 3 (Green)
 	ShipIndexToNumTimesSelected.Add(3, 0); // Ship 4 (Purple)
 	ShipIndexToNumTimesSelected.Add(4, 0); // Ship 5 (Red)
+	TimeSpentLookingAtStats = 0.0f;
 }
 
 void USpaceShooterSaveGame::IncrementShipSelectedCount(int32 SelectedShipIndex)
