@@ -1,0 +1,45 @@
+------------------------------------------------
+Achievements:
+
+* Played Ship 01 Once
+  * Repeat for other ships
+* Played Ship X 10x, 100x, etc.
+
+* Killed 1,000 Enemies
+* Killed 10,000 Enemies
+* Killed 100,000 Enemies
+
+* Fired 1,000 Projectiles
+* Fired 10,000 Projectiles
+* Fired 100,000 Projectiles
+
+* Collected 100 Powerups
+* Collected 1,000 Powerups
+* Collected 10,000 Powerups
+
+* Boosted 10x
+* Boosted 100x
+
+* Killed 10 Enemies while Boosting
+* Killed 100 Enemies while Boosting
+* Killed 1000 Enemies while Boosting
+
+* Viewed Credits Screen Once
+* Viewed Credits Screen 10x
+* Viewed Credits Screen 100x
+
+* Looked at Stats for 1 minutes
+* Looked at Stats for 10 minutes
+
+------------------------------------------------
+Stats:
+* Num Games Played
+* Num Enemies Defeated
+* Num Score Multipliers Collected
+* Num Enemies Defeated With Boost
+* Num Projectiles Fired
+* Num Times Boosted (Dashed)
+* Num Times Played with Ship X
+* TimeSpentLookingAtStats
+
+------------------------------------------------
