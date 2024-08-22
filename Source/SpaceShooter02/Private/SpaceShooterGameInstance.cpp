@@ -222,7 +222,12 @@ void USpaceShooterGameInstance::PlayGameplayMusic()
 {
 	if (AudioController != nullptr)
 	{
-		AudioController->PlayGameplayMusic();
+		EMusicSelection MusicSelection = EMusicSelection::Random;
+		if (SpaceShooterSaveGame != nullptr)
+		{
+			MusicSelection = static_cast<EMusicSelection>(SpaceShooterSaveGame->MusicSelection);
+		}
+		AudioController->PlayGameplayMusic(MusicSelection);
 	}
 }
 
@@ -240,6 +245,54 @@ void USpaceShooterGameInstance::FadeOutGameplayMusic()
 	{
 		AudioController->FadeOutGameplayMusic();
 	}
+}
+
+void USpaceShooterGameInstance::OnCycleMusicSelection()
+{
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		uint8 MusicSelection = SpaceShooterSaveGame->MusicSelection;
+		MusicSelection++;
+		if (MusicSelection >= static_cast<uint8>(EMusicSelection::NumMusicTracks))
+		{
+			MusicSelection = static_cast<uint8>(EMusicSelection::Track1);
+		}
+		SpaceShooterSaveGame->SetMusicSelection(MusicSelection);
+	}
+}
+
+void USpaceShooterGameInstance::OnCycleSoundEffectOption()
+{
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		SpaceShooterSaveGame->SetSoundEffectsEnabled(!SpaceShooterSaveGame->bSoundEffectsEnabled);
+	}
+}
+
+void USpaceShooterGameInstance::SaveAudioOptionData()
+{
+	bool bSaveGameSuccess = UGameplayStatics::SaveGameToSlot(SpaceShooterSaveGame, DefaultSaveSlotName, DefaultSaveSlotIndex);
+	UE_CLOG(!bSaveGameSuccess, LogSpaceShooterGameInstance, Warning, TEXT("%s - Failed to save game"), ANSI_TO_TCHAR(__FUNCTION__));
+}
+
+uint8 USpaceShooterGameInstance::GetMusicSelection() const
+{
+	uint8 MusicSelection = (uint8)EMusicSelection::Random;
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		MusicSelection = SpaceShooterSaveGame->MusicSelection;
+	}
+	return MusicSelection;
+}
+
+bool USpaceShooterGameInstance::GetSoundEffectsEnabled() const
+{
+	bool bSoundEffectsEnabled = true;
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		bSoundEffectsEnabled = SpaceShooterSaveGame->bSoundEffectsEnabled;
+	}
+	return bSoundEffectsEnabled;
 }
 
 void USpaceShooterGameInstance::Init()

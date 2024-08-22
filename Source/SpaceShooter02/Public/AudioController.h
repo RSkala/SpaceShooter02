@@ -6,6 +6,18 @@
 #include "UObject/NoExportTypes.h"
 #include "AudioController.generated.h"
 
+UENUM(BlueprintType)
+enum class EMusicSelection : uint8 // An enum MUST be uint8 if using a BlueprintType
+{
+	Track1 = 0, // Index 0 into music list
+	Track2 = 1, // Index 1 into music list
+	Track3 = 2, // Index 2 into music list
+	MusicOff = 3, // Gameplay music will not play
+	Random = 4, // Randomly select a gameplay music track
+	NumMusicTracks UMETA(Hidden)
+};
+ENUM_RANGE_BY_FIRST_AND_LAST(EMusicSelection, EMusicSelection::Track1, EMusicSelection::Random);
+
 UCLASS(Abstract, Blueprintable)
 class SPACESHOOTER02_API UAudioController : public UObject
 {
@@ -15,7 +27,7 @@ public:
 	virtual void PostInitProperties() override;
 
 	// Music
-	void PlayGameplayMusic();
+	void PlayGameplayMusic(EMusicSelection MusicSelection);
 	void FadeOutGameplayMusic();
 	void StopGameplayMusicImmediately();
 

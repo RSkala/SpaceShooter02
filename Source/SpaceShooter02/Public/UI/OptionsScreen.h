@@ -13,6 +13,7 @@ class SPACESHOOTER02_API UOptionsScreen : public UMenuScreenWidget
 
 protected:
 	virtual void NativeOnInitialized() override;
+	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 
 	virtual void OnColorShift(FLinearColor LinearColor) override;
 	virtual class UButton* GetKeyboardFocusLostButton() const override { return CreditsButton; }
@@ -23,22 +24,34 @@ private:
 	UFUNCTION() void OnClearScoresButtonClicked();
 	UFUNCTION() void OnStatsButtonClicked();
 	UFUNCTION() void OnClearStatsButtonClicked();
+	UFUNCTION() void OnSoundEffectsOnOffButtonClicked();
+	UFUNCTION() void OnMusicSelectButtonClicked();
 
 	UFUNCTION() void OnCreditsButtonHovered();
 	UFUNCTION() void OnClearScoresButtonHovered();
 	UFUNCTION() void OnBackButtonHovered();
 	UFUNCTION() void OnStatsButtonHovered();
 	UFUNCTION() void OnClearStatsButtonHovered();
+	UFUNCTION() void OnSoundEffectsOnOffButtonHovered();
+	UFUNCTION() void OnMusicSelectButtonHovered();
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UTextBlock> OptionsTextBlock;
+
+	// --- Buttons ---
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UButton> CreditsButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UButton> StatsButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UButton> SoundEffectsOnOffButton;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UButton> MusicSelectButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UButton> ClearScoresButton;
@@ -48,4 +61,12 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UButton> BackButton;
+
+	// -- Button Texts ---
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UTextBlock> SoundEffectsOnOffButtonTextBlock;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UTextBlock> MusicSelectButtonTextBlock;
 };

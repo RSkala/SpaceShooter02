@@ -20,14 +20,15 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuHighScoreClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHighScoreBackButtonClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuOptionsButtonClickedDelegateSignature);
 
-
-
 // Options Screen actions
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenCreditsButtonClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenStatsButtonClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenClearScoresClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenClearStatsClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenBackButtonClickedDelegateSignature);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenMusicSelectClickedDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenSoundEffectClickedDelegateSignature);
 
 // Credits Screen actions
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCreditsScreenBackButtonClickedDelegateSignature);
@@ -108,6 +109,8 @@ private:
 	UFUNCTION() void OptionsScreenClearScoresClicked();
 	UFUNCTION() void OptionsScreenClearStatsClicked();
 	UFUNCTION() void OptionsScreenBackClicked();
+	UFUNCTION() void OptionsScreenMusicSelectClicked();
+	UFUNCTION() void OptionsScreenSoundEffectClicked();
 
 	UFUNCTION() void CreditsScreenBackClicked();
 
@@ -174,6 +177,8 @@ public:
 	static FOptionsScreenClearScoresClickedDelegateSignature OnOptionsScreenClearScoresClicked;
 	static FOptionsScreenClearStatsClickedDelegateSignature OnOptionsScreenClearStatsClicked;
 	static FOptionsScreenBackButtonClickedDelegateSignature OnOptionsScreenBackClicked;
+	static FOptionsScreenMusicSelectClickedDelegateSignature OnOptionsMusicSelectClicked;
+	static FOptionsScreenSoundEffectClickedDelegateSignature OnOptionsSoundEffectClicked;
 
 	// Credits Screen Actions
 	static FCreditsScreenBackButtonClickedDelegateSignature OnCreditsScreenBackClicked;

@@ -48,10 +48,18 @@ public:
 	void IncrementShipSelectedCount(int32 SelectedShipIndex);
 	void AddTimeSpentLookingAtStats(float InTimeSpentLookingAtStats) { TimeSpentLookingAtStats += InTimeSpentLookingAtStats; }
 
+	void SetMusicSelection(uint8 InMusicSelection) { MusicSelection = InMusicSelection; }
+	void SetSoundEffectsEnabled(bool bInSoundEffectsEnabled) { bSoundEffectsEnabled = bInSoundEffectsEnabled; }
+
 private:
+
+	// -- High Score Data ---
+
 	// List of high score data
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TArray<FHighScoreData> HighScoreDataList;
+
+	// --- Game / Player Statistics ---
 
 	// Total number of games played
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
@@ -84,6 +92,14 @@ private:
 	// Time spent looking at stats
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	float TimeSpentLookingAtStats = 0.0f;
+
+	// --- Various Options ---
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	uint8 MusicSelection = 4; // EMusicSelection::Random
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	bool bSoundEffectsEnabled = true;
 
 	friend class USpaceShooterGameInstance;
 };

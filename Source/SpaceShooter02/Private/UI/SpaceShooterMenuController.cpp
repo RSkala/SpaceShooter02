@@ -39,6 +39,8 @@ FOptionsScreenStatsButtonClickedDelegateSignature USpaceShooterMenuController::O
 FOptionsScreenClearScoresClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenClearScoresClicked;
 FOptionsScreenClearStatsClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenClearStatsClicked;
 FOptionsScreenBackButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenBackClicked;
+FOptionsScreenMusicSelectClickedDelegateSignature USpaceShooterMenuController::OnOptionsMusicSelectClicked;
+FOptionsScreenSoundEffectClickedDelegateSignature USpaceShooterMenuController::OnOptionsSoundEffectClicked;
 
 // Credits Screen actions
 FCreditsScreenBackButtonClickedDelegateSignature USpaceShooterMenuController::OnCreditsScreenBackClicked;
@@ -83,6 +85,8 @@ void USpaceShooterMenuController::PostInitProperties()
 		OnOptionsScreenClearScoresClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenClearScoresClicked);
 		OnOptionsScreenClearStatsClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenClearStatsClicked);
 		OnOptionsScreenBackClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenBackClicked);
+		OnOptionsMusicSelectClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenMusicSelectClicked);
+		OnOptionsSoundEffectClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenSoundEffectClicked);
 
 		// Credits Screen
 		OnCreditsScreenBackClicked.AddUniqueDynamic(this, &ThisClass::CreditsScreenBackClicked);
@@ -273,6 +277,31 @@ void USpaceShooterMenuController::OptionsScreenBackClicked()
 	PlayButtonClickSound();
 	CloseOptionsScreen();
 	OpenMainMenuScreen();
+
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		GameInstance->SaveAudioOptionData();
+	}
+}
+
+void USpaceShooterMenuController::OptionsScreenMusicSelectClicked()
+{
+	PlayButtonClickSound();
+	UE_LOG(LogTemp, Warning, TEXT("USpaceShooterMenuController::OptionsScreenMusicSelectClicked"));
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		GameInstance->OnCycleMusicSelection();
+	}
+}
+
+void USpaceShooterMenuController::OptionsScreenSoundEffectClicked()
+{
+	PlayButtonClickSound();
+	UE_LOG(LogTemp, Warning, TEXT("USpaceShooterMenuController::OptionsScreenSoundEffectClicked"));
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		GameInstance->OnCycleSoundEffectOption();
+	}
 }
 
 void USpaceShooterMenuController::CreditsScreenBackClicked()

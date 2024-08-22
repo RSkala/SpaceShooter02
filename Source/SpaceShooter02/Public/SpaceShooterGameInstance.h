@@ -45,10 +45,19 @@ public:
 		TMap<int32, int32>& OutShipIndexToNumTimesSelected);
 
 	void SaveTimeSpentLookingAtStats(float InTimeSpentLookingAtStats);
-
+	
+	// Music
 	void PlayGameplayMusic();
 	void StopGameplayMusic();
 	void FadeOutGameplayMusic();
+
+	// Audio Options
+	void OnCycleMusicSelection();
+	void OnCycleSoundEffectOption();
+	void SaveAudioOptionData();
+
+	uint8 GetMusicSelection() const;
+	bool GetSoundEffectsEnabled() const;
 
 	static FString GetGameVersionString() { return GameVersion; }
 

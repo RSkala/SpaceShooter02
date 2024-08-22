@@ -22,7 +22,7 @@ void UAudioController::PostInitProperties()
 	}
 }
 
-void UAudioController::PlayGameplayMusic()
+void UAudioController::PlayGameplayMusic(EMusicSelection MusicSelection)
 {
 	if (GameplayMusicSoundWaveObjects.Num() <= 0)
 	{
@@ -32,12 +32,31 @@ void UAudioController::PlayGameplayMusic()
 	// First stop any currently playing music
 	StopGameplayMusicImmediately();
 
-	// Randomly select a music track to play
-	int32 RandomIdx = FMath::RandRange(0, GameplayMusicSoundWaveObjects.Num() - 1);
-	USoundWave* MusicToPlay = GameplayMusicSoundWaveObjects[RandomIdx];
-	if (MusicToPlay != nullptr)
+	// Do not play music if music is disabled
+	if (MusicSelection == EMusicSelection::MusicOff)
 	{
-		CurrentGameplayMusic = UGameplayStatics::SpawnSound2D(GetWorld(), MusicToPlay, MusicVolume);
+		return;
+	}
+
+	int32 MusicTrackIndex = 0;
+	if (MusicSelection == EMusicSelection::Random)
+	{
+		// Randomly select a music track to play
+		MusicTrackIndex = FMath::RandRange(0, GameplayMusicSoundWaveObjects.Num() - 1);
+	}
+	else
+	{
+		MusicTrackIndex = static_cast<uint8>(MusicSelection);
+	}
+
+	if (ensure(MusicTrackIndex < GameplayMusicSoundWaveObjects.Num()))
+	{
+		USoundWave* MusicToPlay = GameplayMusicSoundWaveObjects[MusicTrackIndex];
+		if (MusicToPlay != nullptr)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("PLAYING MUSIC TRACK: %s"), *MusicToPlay->GetName());
+			CurrentGameplayMusic = UGameplayStatics::SpawnSound2D(GetWorld(), MusicToPlay, MusicVolume);
+		}
 	}
 }
 
