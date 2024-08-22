@@ -7,6 +7,7 @@
 #include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetTextLibrary.h"
 
 #include "SpaceShooterGameInstance.h"
 #include "UI/SpaceShooterMenuController.h"
@@ -80,25 +81,33 @@ void UStatsScreen::NativeOnInitialized()
 			if (NumGamesPlayedStatDisplay != nullptr)
 			{
 				NumGamesPlayedStatDisplay->SetStatNameText(FText::FromString(TEXT("Total Games Played:")));
-				NumGamesPlayedStatDisplay->UpdateStatDataText(FText::FromString(FString::Printf(TEXT("%d"), NumGamesPlayed)));
+
+				FText NumGamesPlayedTextGrouped = UKismetTextLibrary::Conv_IntToText(NumGamesPlayed, false, true);
+				NumGamesPlayedStatDisplay->UpdateStatDataText(NumGamesPlayedTextGrouped);
 			}
 
 			if (NumEnemiesDefeatedStatDisplay != nullptr)
 			{
 				NumEnemiesDefeatedStatDisplay->SetStatNameText(FText::FromString(TEXT("Total Enemies Defeated:")));
-				NumEnemiesDefeatedStatDisplay->UpdateStatDataText(FText::FromString(FString::Printf(TEXT("%d"), NumEnemiesDefeated)));
+
+				FText NumEnemiesDefeatedTextGrouped = UKismetTextLibrary::Conv_IntToText(NumEnemiesDefeated, false, true);
+				NumEnemiesDefeatedStatDisplay->UpdateStatDataText(NumEnemiesDefeatedTextGrouped);
 			}
 
 			if (NumScoreMultipliersCollectedStatDisplay != nullptr)
 			{
 				NumScoreMultipliersCollectedStatDisplay->SetStatNameText(FText::FromString(TEXT("Score Multipliers Collected:")));
-				NumScoreMultipliersCollectedStatDisplay->UpdateStatDataText(FText::FromString(FString::Printf(TEXT("%d"), NumScoreMultipliersCollected)));
+
+				FText NumScoreMultipliersCollectedTextGrouped = UKismetTextLibrary::Conv_IntToText(NumScoreMultipliersCollected, false, true);
+				NumScoreMultipliersCollectedStatDisplay->UpdateStatDataText(NumScoreMultipliersCollectedTextGrouped);
 			}
 
 			if (NumEnemiesDefeatedWithBoostStatDisplay != nullptr)
 			{
 				NumEnemiesDefeatedWithBoostStatDisplay->SetStatNameText(FText::FromString(TEXT("Enemies Defeated With Boost:")));
-				NumEnemiesDefeatedWithBoostStatDisplay->UpdateStatDataText(FText::FromString(FString::Printf(TEXT("%d"), NumEnemiesDefeatedWithBoost)));
+
+				FText NumEnemiesDefeatedWithBoostTextGrouped = UKismetTextLibrary::Conv_IntToText(NumEnemiesDefeatedWithBoost, false, true);
+				NumEnemiesDefeatedWithBoostStatDisplay->UpdateStatDataText(NumEnemiesDefeatedWithBoostTextGrouped);
 			}
 			
 			// --- Ship Selection Stats ---
@@ -108,8 +117,11 @@ void UStatsScreen::NativeOnInitialized()
 				if (ShipIndexToNumTimesSelected.Contains(0))
 				{
 					int32 NumTimesPlayed = ShipIndexToNumTimesSelected[0];
-					NumTimesSelectedShip1StatDisplay->SetStatNameText(FText::FromString(TEXT("Games Played with Ship01:")));
-					NumTimesSelectedShip1StatDisplay->UpdateStatDataText(FText::FromString(FString::Printf(TEXT("%d"), NumTimesPlayed)));
+					NumTimesSelectedShip1StatDisplay->SetStatNameText(FText::FromString(TEXT("Games Played with Ship01 ..")));
+
+					FText NumTimesPlayedTextGrouped = UKismetTextLibrary::Conv_IntToText(NumTimesPlayed, false, true);
+					NumTimesSelectedShip1StatDisplay->UpdateStatDataText(NumTimesPlayedTextGrouped);
+
 					NumTimesSelectedShip1StatDisplay->SetShipImageSpriteByIndex(0);
 				}
 			}
@@ -119,8 +131,11 @@ void UStatsScreen::NativeOnInitialized()
 				if (ShipIndexToNumTimesSelected.Contains(1))
 				{
 					int32 NumTimesPlayed = ShipIndexToNumTimesSelected[1];
-					NumTimesSelectedShip2StatDisplay->SetStatNameText(FText::FromString(TEXT("Games Played with Ship02:")));
-					NumTimesSelectedShip2StatDisplay->UpdateStatDataText(FText::FromString(FString::Printf(TEXT("%d"), NumTimesPlayed)));
+					NumTimesSelectedShip2StatDisplay->SetStatNameText(FText::FromString(TEXT("Games Played with Ship02 ..")));
+
+					FText NumTimesPlayedTextGrouped = UKismetTextLibrary::Conv_IntToText(NumTimesPlayed, false, true);
+					NumTimesSelectedShip2StatDisplay->UpdateStatDataText(NumTimesPlayedTextGrouped);
+
 					NumTimesSelectedShip2StatDisplay->SetShipImageSpriteByIndex(1);
 				}
 			}
@@ -130,8 +145,11 @@ void UStatsScreen::NativeOnInitialized()
 				if (ShipIndexToNumTimesSelected.Contains(2))
 				{
 					int32 NumTimesPlayed = ShipIndexToNumTimesSelected[2];
-					NumTimesSelectedShip3StatDisplay->SetStatNameText(FText::FromString(TEXT("Games Played with Ship03:")));
-					NumTimesSelectedShip3StatDisplay->UpdateStatDataText(FText::FromString(FString::Printf(TEXT("%d"), NumTimesPlayed)));
+					NumTimesSelectedShip3StatDisplay->SetStatNameText(FText::FromString(TEXT("Games Played with Ship03 ..")));
+
+					FText NumTimesPlayedTextGrouped = UKismetTextLibrary::Conv_IntToText(NumTimesPlayed, false, true);
+					NumTimesSelectedShip3StatDisplay->UpdateStatDataText(NumTimesPlayedTextGrouped);
+
 					NumTimesSelectedShip3StatDisplay->SetShipImageSpriteByIndex(2);
 				}
 			}
@@ -141,8 +159,11 @@ void UStatsScreen::NativeOnInitialized()
 				if (ShipIndexToNumTimesSelected.Contains(3))
 				{
 					int32 NumTimesPlayed = ShipIndexToNumTimesSelected[3];
-					NumTimesSelectedShip4StatDisplay->SetStatNameText(FText::FromString(TEXT("Games Played with Ship04:")));
-					NumTimesSelectedShip4StatDisplay->UpdateStatDataText(FText::FromString(FString::Printf(TEXT("%d"), NumTimesPlayed)));
+					NumTimesSelectedShip4StatDisplay->SetStatNameText(FText::FromString(TEXT("Games Played with Ship04 ..")));
+
+					FText NumTimesPlayedTextGrouped = UKismetTextLibrary::Conv_IntToText(NumTimesPlayed, false, true);
+					NumTimesSelectedShip4StatDisplay->UpdateStatDataText(NumTimesPlayedTextGrouped);
+
 					NumTimesSelectedShip4StatDisplay->SetShipImageSpriteByIndex(3);
 				}
 			}
@@ -152,8 +173,11 @@ void UStatsScreen::NativeOnInitialized()
 				if (ShipIndexToNumTimesSelected.Contains(4))
 				{
 					int32 NumTimesPlayed = ShipIndexToNumTimesSelected[4];
-					NumTimesSelectedShip5StatDisplay->SetStatNameText(FText::FromString(TEXT("Games Played with Ship05:")));
-					NumTimesSelectedShip5StatDisplay->UpdateStatDataText(FText::FromString(FString::Printf(TEXT("%d"), NumTimesPlayed)));
+					NumTimesSelectedShip5StatDisplay->SetStatNameText(FText::FromString(TEXT("Games Played with Ship05 ..")));
+
+					FText NumTimesPlayedTextGrouped = UKismetTextLibrary::Conv_IntToText(NumTimesPlayed, false, true);
+					NumTimesSelectedShip5StatDisplay->UpdateStatDataText(NumTimesPlayedTextGrouped);
+
 					NumTimesSelectedShip5StatDisplay->SetShipImageSpriteByIndex(4);
 				}
 			}
