@@ -85,13 +85,11 @@ void ASpaceShooterGameState::StartGame()
 	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
 		PlayerHighScore = GameInstance->GetPlayerHighestScore();
+
+		// Start gameplay music
+		GameInstance->PlayGameplayMusic();
 	}
 	OnPlayerHighScoreChanged.Broadcast(PlayerHighScore);
-
-	// Reset collected multipliers
-	//TotalMultipliersCollected = 0;
-	//NumMultipliersCollectedForPowerup = 0;
-	//OnPickupItemPercentChanged.Broadcast(0.0f);
 }
 
 void ASpaceShooterGameState::EndGame(int32 FinalScore)
@@ -136,6 +134,12 @@ void ASpaceShooterGameState::EndGame(int32 FinalScore)
 		{
 			EnemyPoolController->ResetEnemyPools();
 		}
+	}
+
+	// Fade out gameplay music
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		GameInstance->FadeOutGameplayMusic();
 	}
 }
 

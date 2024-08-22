@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
+#include "AudioController.h"
 #include "SpaceShooterGameState.h"
 #include "SpaceShooterSaveGame.h"
 
@@ -217,6 +218,30 @@ void USpaceShooterGameInstance::SaveTimeSpentLookingAtStats(float InTimeSpentLoo
 	}
 }
 
+void USpaceShooterGameInstance::PlayGameplayMusic()
+{
+	if (AudioController != nullptr)
+	{
+		AudioController->PlayGameplayMusic();
+	}
+}
+
+void USpaceShooterGameInstance::StopGameplayMusic()
+{
+	if (AudioController != nullptr)
+	{
+		AudioController->StopGameplayMusicImmediately();
+	}
+}
+
+void USpaceShooterGameInstance::FadeOutGameplayMusic()
+{
+	if (AudioController != nullptr)
+	{
+		AudioController->FadeOutGameplayMusic();
+	}
+}
+
 void USpaceShooterGameInstance::Init()
 {
 	Super::Init();
@@ -246,6 +271,13 @@ void USpaceShooterGameInstance::Init()
 		// Save the game to disk (This will be located in Saved/SaveGames)
 		bool bSaveGameSuccess = UGameplayStatics::SaveGameToSlot(SpaceShooterSaveGame, DefaultSaveSlotName, DefaultSaveSlotIndex);
 		UE_CLOG(!bSaveGameSuccess, LogSpaceShooterGameInstance, Warning, TEXT("Failed to create Save Game"));
+	}
+
+	// Create the Audio Controller
+	if (ensure(AudioControllerClass != nullptr))
+	{
+		AudioController = NewObject<UAudioController>(this, AudioControllerClass);
+		ensure(AudioController != nullptr);
 	}
 }
 

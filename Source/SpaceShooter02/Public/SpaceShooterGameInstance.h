@@ -46,6 +46,10 @@ public:
 
 	void SaveTimeSpentLookingAtStats(float InTimeSpentLookingAtStats);
 
+	void PlayGameplayMusic();
+	void StopGameplayMusic();
+	void FadeOutGameplayMusic();
+
 	static FString GetGameVersionString() { return GameVersion; }
 
 protected:
@@ -89,6 +93,12 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UPaperSprite> InvalidShipSprite;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TSubclassOf<class UAudioController> AudioControllerClass;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UAudioController> AudioController;
 
 	static FString GameVersion;
 	static constexpr int32 MaxNumSaveGameHighScores = 15;
