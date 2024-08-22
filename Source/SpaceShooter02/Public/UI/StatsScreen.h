@@ -13,6 +13,7 @@ class SPACESHOOTER02_API UStatsScreen : public UMenuScreenWidget
 
 protected:
 	virtual void NativeOnInitialized() override;
+	virtual void NativeDestruct() override;
 	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime);
 
 	virtual void OnColorShift(FLinearColor LinearColor);
@@ -32,40 +33,53 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UButton> BackButton;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UVerticalBox> StatListVerticalBox;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TSubclassOf<class UStatDisplayWidget> StatDisplayWidgetClass;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TArray<TObjectPtr<class UStatDisplayWidget>> StatDisplayWidgets;
+
 	// --- General Stats ----
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
-	TObjectPtr<class UTextBlock> NumGamesPlayedTextBlock;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> NumGamesPlayedStatDisplay;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
-	TObjectPtr<class UTextBlock> NumEnemiesDefeatedTextBlock;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> NumEnemiesDefeatedStatDisplay;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
-	TObjectPtr<class UTextBlock> NumScoreMultipliersCollectedTextBlock;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> NumScoreMultipliersCollectedStatDisplay;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
-	TObjectPtr<class UTextBlock> NumEnemiesDefeatedWithBoostTextBlock;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> NumEnemiesDefeatedWithBoostStatDisplay;
 
 	// --- Ship Selection Stats ----
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
-	TObjectPtr<class UTextBlock> NumTimesSelectedShip1TextBlock;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> NumTimesSelectedShip1StatDisplay;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
-	TObjectPtr<class UTextBlock> NumTimesSelectedShip2TextBlock;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> NumTimesSelectedShip2StatDisplay;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
-	TObjectPtr<class UTextBlock> NumTimesSelectedShip3TextBlock;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> NumTimesSelectedShip3StatDisplay;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
-	TObjectPtr<class UTextBlock> NumTimesSelectedShip4TextBlock;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> NumTimesSelectedShip4StatDisplay;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
-	TObjectPtr<class UTextBlock> NumTimesSelectedShip5TextBlock;
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> NumTimesSelectedShip5StatDisplay;
 
 	// --- Other ---
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
-	TObjectPtr<class UTextBlock> TimeSpentLookingAtStatsTextBlock;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> TimeSpentLookingAtStatsStatDisplay;
+
+
+	// -------------------------------------------------------------------------
 
 	float SavedTimeSpentLookingAtStats = 0; // Time looking at stats from save data
 	float TimeSpentLookingAtStats = 0; // Time looking at stats this session (of opening the stats screen)
