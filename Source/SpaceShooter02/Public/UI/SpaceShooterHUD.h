@@ -23,7 +23,9 @@ protected:
 		int32 SelectedShipSpriteIndex,
 		int32 NumEnemiesDefeated,
 		int32 NumScoreMultipliersCollected,
-		int32 NumEnemiesDefeatedWithBoost);
+		int32 NumEnemiesDefeatedWithBoost,
+		int32 NumProjectilesFired,
+		int32 CurrentScoreMultiplier);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

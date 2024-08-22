@@ -70,6 +70,7 @@ void ASpaceShooterGameState::StartGame()
 	TotalNumEnemiesKilledThisGame = 0;
 	TotalNumScoreMultipliersCollectedThisGame = 0;
 	TotalNumEnemiesKilledWithBoostThisGame = 0;
+	TotalProjectilesFiredThisGame = 0;
 
 	CurrentDifficultyLevel = 1; // Always start at level 1
 	CurrentTimeBetweenSpawns = 1.0f; // Always start at 1 second between each spewn
@@ -112,7 +113,9 @@ void ASpaceShooterGameState::EndGame(int32 FinalScore)
 			SelectedShipSpriteIndex,
 			TotalNumEnemiesKilledThisGame,
 			TotalNumScoreMultipliersCollectedThisGame,
-			TotalNumEnemiesKilledWithBoostThisGame);
+			TotalNumEnemiesKilledWithBoostThisGame,
+			TotalProjectilesFiredThisGame,
+			CurrentScoreMultiplier);
 
 		if (ProjectileController != nullptr)
 		{
@@ -155,6 +158,7 @@ void ASpaceShooterGameState::FireProjectile(FVector ProjectilePosition, FRotator
 			Projectile->SetInstigator(InInstigator);
 			Projectile->SetActorLocationAndRotation(ProjectilePosition, ProjectileRotation);
 			Projectile->ActivatePoolObject();
+			TotalProjectilesFiredThisGame++;
 		}
 	}
 }
@@ -410,7 +414,9 @@ void ASpaceShooterGameState::OnGameOverTimerTimeout(int32 FinalScore)
 		SelectedShipSpriteIndex,
 		TotalNumEnemiesKilledThisGame,
 		TotalNumScoreMultipliersCollectedThisGame,
-		TotalNumEnemiesKilledWithBoostThisGame);
+		TotalNumEnemiesKilledWithBoostThisGame,
+		TotalProjectilesFiredThisGame,
+		CurrentScoreMultiplier);
 
 	if (ProjectileController != nullptr)
 	{

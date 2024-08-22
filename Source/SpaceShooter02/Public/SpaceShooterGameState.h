@@ -8,13 +8,15 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameStartedDelegateSignature);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(
 	FGameEndedDelegateSignature,
 	int32, FinalScore,
 	int32, SelectedShipSpriteIndex,
 	int32, NumEnemiesDefeated,
 	int32, NumScoreMultipliersCollected,
-	int32, NumEnemiesDefeatedWithBoost);
+	int32, NumEnemiesDefeatedWithBoost,
+	int32, NumProjectilesFired,
+	int32, CurrentScoreMultiplier);
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerScoreChangedDelegateSignature, int32, PlayerScore);
@@ -203,6 +205,10 @@ protected:
 	// Number of enemies killed using the boost ability
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 TotalNumEnemiesKilledWithBoostThisGame = 0;
+
+	// Number of projectiles fired during the current game
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 TotalProjectilesFiredThisGame = 0;
 
 	// Every X enemy spawned or killed, increase difficulty
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

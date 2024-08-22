@@ -734,7 +734,9 @@ void APlayerShipPawn::OnGameEnded(
 	int32 SelectedShipSpriteIndex,
 	int32 NumEnemiesDefeated,
 	int32 NumScoreMultipliersCollected,
-	int32 NumEnemiesDefeatedWithBoost)
+	int32 NumEnemiesDefeatedWithBoost,
+	int32 NumProjectilesFired,
+	int32 CurrentScoreMultiplier)
 {
 	// The game has ended. Force show the mouse cursor, as it likely was hidden from right-stick aiming
 	if (APlayerController* PlayerController = Cast<APlayerController>(Controller))

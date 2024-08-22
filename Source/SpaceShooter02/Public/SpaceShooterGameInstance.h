@@ -26,6 +26,8 @@ public:
 		int32 NumEnemiesDefeated,
 		int32 NumScoreMultipliersCollected,
 		int32 NumEnemiesDefeatedWithBoost,
+		int32 NumProjectilesFired,
+		int32 CurrentScoreMultiplier,
 		int32 SelectedShipSpriteIndex);
 
 	// Clears and saves game stat data
@@ -37,6 +39,8 @@ public:
 		int32& OutNumEnemiesDefeated,
 		int32& OutNumScoreMultipliersCollected,
 		int32& OutNumEnemiesDefeatedWithBoost,
+		int32& OutNumProjectilesFired,
+		int32& OutHighestScoreMultiplier,
 		float& OutTimeSpentLookingAtStats,
 		TMap<int32, int32>& OutShipIndexToNumTimesSelected);
 
@@ -55,7 +59,9 @@ private:
 		int32 SelectedShipSpriteIndex,
 		int32 NumEnemiesDefeated,
 		int32 NumScoreMultipliersCollected,
-		int32 NumEnemiesDefeatedWithBoost);
+		int32 NumEnemiesDefeatedWithBoost,
+		int32 NumProjectilesFired,
+		int32 CurrentScoreMultiplier);
 
 	// Initialize the high score data list with empty data (does NOT save)
 	void InitializeHighScoreData();

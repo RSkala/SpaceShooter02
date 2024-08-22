@@ -142,7 +142,13 @@ void USpaceShooterGameInstance::ClearHighScores()
 	}
 }
 
-void USpaceShooterGameInstance::RecordPostGameStats(int32 NumEnemiesDefeated, int32 NumScoreMultipliersCollected, int32 NumEnemiesDefeatedWithBoost, int32 SelectedShipSpriteIndex)
+void USpaceShooterGameInstance::RecordPostGameStats(
+	int32 NumEnemiesDefeated,
+	int32 NumScoreMultipliersCollected,
+	int32 NumEnemiesDefeatedWithBoost,
+	int32 NumProjectilesFired,
+	int32 CurrentScoreMultiplier,
+	int32 SelectedShipSpriteIndex)
 {
 	if (SpaceShooterSaveGame != nullptr)
 	{
@@ -152,6 +158,13 @@ void USpaceShooterGameInstance::RecordPostGameStats(int32 NumEnemiesDefeated, in
 		SpaceShooterSaveGame->AddNumScoreMultipliersCollected(NumScoreMultipliersCollected);
 		SpaceShooterSaveGame->AddNumEnemiesDefeatedWithBoost(NumEnemiesDefeatedWithBoost);
 		SpaceShooterSaveGame->IncrementShipSelectedCount(SelectedShipSpriteIndex);
+
+		SpaceShooterSaveGame->AddNumProjectilesFired(NumProjectilesFired);
+
+		if (CurrentScoreMultiplier > SpaceShooterSaveGame->HighestScoreMultiplier)
+		{
+			SpaceShooterSaveGame->SetHighestScoreMultiplier(CurrentScoreMultiplier);
+		}
 
 		bool bSaveGameSuccess = UGameplayStatics::SaveGameToSlot(SpaceShooterSaveGame, DefaultSaveSlotName, DefaultSaveSlotIndex);
 		UE_CLOG(!bSaveGameSuccess, LogSpaceShooterGameInstance, Warning, TEXT("%s - Failed to save game"), ANSI_TO_TCHAR(__FUNCTION__));
@@ -175,6 +188,8 @@ void USpaceShooterGameInstance::GetSaveGameStatsData(
 	int32& OutNumEnemiesDefeated,
 	int32& OutNumScoreMultipliersCollected,
 	int32& OutNumEnemiesDefeatedWithBoost,
+	int32& OutNumProjectilesFired,
+	int32& OutHighestScoreMultiplier,
 	float& OutTimeSpentLookingAtStats,
 	TMap<int32, int32>& OutShipIndexToNumTimesSelected)
 {
@@ -184,6 +199,8 @@ void USpaceShooterGameInstance::GetSaveGameStatsData(
 		OutNumEnemiesDefeated = SpaceShooterSaveGame->NumEnemiesDefeated;
 		OutNumScoreMultipliersCollected = SpaceShooterSaveGame->NumScoreMultipliersCollected;
 		OutNumEnemiesDefeatedWithBoost = SpaceShooterSaveGame->NumEnemiesDefeatedWithBoost;
+		OutNumProjectilesFired = SpaceShooterSaveGame->NumProjectilesFired;
+		OutHighestScoreMultiplier = SpaceShooterSaveGame->HighestScoreMultiplier;
 		OutTimeSpentLookingAtStats = SpaceShooterSaveGame->TimeSpentLookingAtStats;
 		OutShipIndexToNumTimesSelected = SpaceShooterSaveGame->ShipIndexToNumTimesSelected;
 	}
@@ -242,10 +259,18 @@ void USpaceShooterGameInstance::OnGameEnded(
 	int32 SelectedShipSpriteIndex,
 	int32 NumEnemiesDefeated,
 	int32 NumScoreMultipliersCollected,
-	int32 NumEnemiesDefeatedWithBoost)
+	int32 NumEnemiesDefeatedWithBoost,
+	int32 NumProjectilesFired,
+	int32 CurrentScoreMultiplier)
 {
 	RecordHighScore(FinalScore, SelectedShipSpriteIndex);
-	RecordPostGameStats(NumEnemiesDefeated, NumScoreMultipliersCollected, NumEnemiesDefeatedWithBoost, SelectedShipSpriteIndex);
+	RecordPostGameStats(
+		NumEnemiesDefeated,
+		NumScoreMultipliersCollected,
+		NumEnemiesDefeatedWithBoost,
+		NumProjectilesFired,
+		CurrentScoreMultiplier,
+		SelectedShipSpriteIndex);
 }
 
 void USpaceShooterGameInstance::InitializeHighScoreData()

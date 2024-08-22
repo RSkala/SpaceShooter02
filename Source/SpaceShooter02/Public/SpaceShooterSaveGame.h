@@ -41,6 +41,10 @@ public:
 	void AddNumEnemiesDefeated(int32 InNumEnemiesDefeated) { NumEnemiesDefeated += InNumEnemiesDefeated; }
 	void AddNumScoreMultipliersCollected(int32 InNumScoreMultipliersCollected) { NumScoreMultipliersCollected += InNumScoreMultipliersCollected; }
 	void AddNumEnemiesDefeatedWithBoost(int32 InNumEnemiesDefeatedWithBoost) { NumEnemiesDefeatedWithBoost += InNumEnemiesDefeatedWithBoost; }
+
+	void AddNumProjectilesFired(int32 InNumProjectilesFired) { NumProjectilesFired += InNumProjectilesFired; }
+	void SetHighestScoreMultiplier(int32 InHighestScoreMultiplier) { HighestScoreMultiplier = InHighestScoreMultiplier; }
+
 	void IncrementShipSelectedCount(int32 SelectedShipIndex);
 	void AddTimeSpentLookingAtStats(float InTimeSpentLookingAtStats) { TimeSpentLookingAtStats += InTimeSpentLookingAtStats; }
 
@@ -64,6 +68,14 @@ private:
 	// Total enemies defeated with boost / dash
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	int32 NumEnemiesDefeatedWithBoost = 0;
+
+	// Total number of projectiles fired
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	int32 NumProjectilesFired = 0;
+
+	// Highest Score Multiplier Achieved
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	int32 HighestScoreMultiplier = 1;
 
 	// Number of games played with each ship
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))

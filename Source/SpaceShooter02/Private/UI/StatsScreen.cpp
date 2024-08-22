@@ -25,13 +25,16 @@ void UStatsScreen::NativeOnInitialized()
 	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
 		// Get saved stats
-		int32 NumGamesPlayed, NumEnemiesDefeated, NumScoreMultipliersCollected, NumEnemiesDefeatedWithBoost;
+		int32 NumGamesPlayed, NumEnemiesDefeated, NumScoreMultipliersCollected, NumEnemiesDefeatedWithBoost, NumProjectilesFired, HighestScoreMultiplier;
+
 		TMap<int32, int32> ShipIndexToNumTimesSelected;
 		GameInstance->GetSaveGameStatsData(
 			NumGamesPlayed,
 			NumEnemiesDefeated,
 			NumScoreMultipliersCollected,
 			NumEnemiesDefeatedWithBoost,
+			NumProjectilesFired,
+			HighestScoreMultiplier,
 			SavedTimeSpentLookingAtStats,
 			ShipIndexToNumTimesSelected);
 
@@ -45,6 +48,10 @@ void UStatsScreen::NativeOnInitialized()
 			NumEnemiesDefeatedStatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
 			NumScoreMultipliersCollectedStatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
 			NumEnemiesDefeatedWithBoostStatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
+
+			NumProjectilesFiredStatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
+			HighestScoreMultiplierStatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
+
 			NumTimesSelectedShip1StatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
 			NumTimesSelectedShip2StatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
 			NumTimesSelectedShip3StatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
@@ -57,6 +64,10 @@ void UStatsScreen::NativeOnInitialized()
 			StatListVerticalBox->AddChildToVerticalBox(NumEnemiesDefeatedStatDisplay);
 			StatListVerticalBox->AddChildToVerticalBox(NumScoreMultipliersCollectedStatDisplay);
 			StatListVerticalBox->AddChildToVerticalBox(NumEnemiesDefeatedWithBoostStatDisplay);
+
+			StatListVerticalBox->AddChildToVerticalBox(NumProjectilesFiredStatDisplay);
+			StatListVerticalBox->AddChildToVerticalBox(HighestScoreMultiplierStatDisplay);
+
 			StatListVerticalBox->AddChildToVerticalBox(NumTimesSelectedShip1StatDisplay);
 			StatListVerticalBox->AddChildToVerticalBox(NumTimesSelectedShip2StatDisplay);
 			StatListVerticalBox->AddChildToVerticalBox(NumTimesSelectedShip3StatDisplay);
@@ -69,6 +80,10 @@ void UStatsScreen::NativeOnInitialized()
 			StatDisplayWidgets.Add(NumEnemiesDefeatedStatDisplay);
 			StatDisplayWidgets.Add(NumScoreMultipliersCollectedStatDisplay);
 			StatDisplayWidgets.Add(NumEnemiesDefeatedWithBoostStatDisplay);
+
+			StatDisplayWidgets.Add(NumProjectilesFiredStatDisplay);
+			StatDisplayWidgets.Add(HighestScoreMultiplierStatDisplay);
+
 			StatDisplayWidgets.Add(NumTimesSelectedShip1StatDisplay);
 			StatDisplayWidgets.Add(NumTimesSelectedShip2StatDisplay);
 			StatDisplayWidgets.Add(NumTimesSelectedShip3StatDisplay);
@@ -108,6 +123,22 @@ void UStatsScreen::NativeOnInitialized()
 
 				FText NumEnemiesDefeatedWithBoostTextGrouped = UKismetTextLibrary::Conv_IntToText(NumEnemiesDefeatedWithBoost, false, true);
 				NumEnemiesDefeatedWithBoostStatDisplay->UpdateStatDataText(NumEnemiesDefeatedWithBoostTextGrouped);
+			}
+
+			if (NumProjectilesFiredStatDisplay != nullptr)
+			{
+				NumProjectilesFiredStatDisplay->SetStatNameText(FText::FromString(TEXT("Total Projectiles Fired:")));
+
+				FText NumProjectilesFiredTextGrouped = UKismetTextLibrary::Conv_IntToText(NumProjectilesFired, false, true);
+				NumProjectilesFiredStatDisplay->UpdateStatDataText(NumProjectilesFiredTextGrouped);
+			}
+
+			if (HighestScoreMultiplierStatDisplay != nullptr)
+			{
+				HighestScoreMultiplierStatDisplay->SetStatNameText(FText::FromString(TEXT("Highest Score Multiplier:")));
+
+				FText HighestScoreMultiplierTextGrouped = UKismetTextLibrary::Conv_IntToText(HighestScoreMultiplier, false, true);
+				HighestScoreMultiplierStatDisplay->UpdateStatDataText(HighestScoreMultiplierTextGrouped);
 			}
 			
 			// --- Ship Selection Stats ---

@@ -18,12 +18,16 @@ void USpaceShooterSaveGame::ResetStats()
 	NumEnemiesDefeated = 0;
 	NumScoreMultipliersCollected = 0;
 	NumEnemiesDefeatedWithBoost = 0;
+	NumProjectilesFired = 0;
+	HighestScoreMultiplier = 1;
+
 	ShipIndexToNumTimesSelected.Empty();
 	ShipIndexToNumTimesSelected.Add(0, 0); // Ship 1 (White)
 	ShipIndexToNumTimesSelected.Add(1, 0); // Ship 2 (Orange)
 	ShipIndexToNumTimesSelected.Add(2, 0); // Ship 3 (Green)
 	ShipIndexToNumTimesSelected.Add(3, 0); // Ship 4 (Purple)
 	ShipIndexToNumTimesSelected.Add(4, 0); // Ship 5 (Red)
+
 	TimeSpentLookingAtStats = 0.0f;
 }
 

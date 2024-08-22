@@ -56,6 +56,12 @@ private:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UStatDisplayWidget> NumEnemiesDefeatedWithBoostStatDisplay;
 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> NumProjectilesFiredStatDisplay;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> HighestScoreMultiplierStatDisplay;
+
 	// --- Ship Selection Stats ----
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
