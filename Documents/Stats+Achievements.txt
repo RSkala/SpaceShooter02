@@ -36,9 +36,10 @@ Stats:
 * Num Games Played
 * Num Enemies Defeated
 * Num Score Multipliers Collected
+* Highest Multiplier
 * Num Enemies Defeated With Boost
 * Num Projectiles Fired
-* Num Times Boosted (Dashed)
+X Num Times Boosted (Dashed)
 * Num Times Played with Ship X
 * TimeSpentLookingAtStats
 

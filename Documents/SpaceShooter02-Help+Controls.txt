@@ -1,0 +1,19 @@
+HELP / HOW TO PLAY
+
+Gamepad Controls:
+* Move ship with Right Thumbstick
+* Aim and fire with Left Thumbstick
+* Boost forward with Right Bumper
+
+Mouse & Keyboard Controls:
+* Move ship with WASD
+* Aim and fire using mouse cursor and left click
+* Boost forward with Space Bar
+
+Instructions:
+* Enemies will often drop Score Multiplier item
+* Picking up Score Multipliers will refill meter
+* Meter will drain once full
+* Pickup Score Multipliers to partially refill meter.
+* Boost refills over time
+* Player is invincible while Boosting!
