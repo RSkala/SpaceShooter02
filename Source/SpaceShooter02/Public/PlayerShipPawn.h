@@ -20,7 +20,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerDashUpdatedDelegateSignature,
 
 
 UENUM(BlueprintType)
-enum class ERightStickDebugBehavior : uint8 // In UE 5.4+, enums MUST be uint8
+enum class ERightStickDebugBehavior : uint8 // In UE 5.4+, enums with BlueprintType MUST be uint8
 {
 	FireOnly UMETA(ToolTip = "Pressing right-stick will fire as normal"),
 	FireAndLineTrace UMETA(ToolTip = "Pressing right-stick will fire AND do a line trace"),
