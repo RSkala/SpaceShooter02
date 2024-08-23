@@ -304,6 +304,14 @@ void USpaceShooterGameInstance::PlaySound(ESoundEffect SoundEffect)
 	}
 }
 
+void USpaceShooterGameInstance::PlayMenuVO(EMenuSoundVO MenuSoundVO)
+{
+	if (AudioController != nullptr)
+	{
+		AudioController->PlayMenuVO(MenuSoundVO);
+	}
+}
+
 void USpaceShooterGameInstance::Init()
 {
 	Super::Init();

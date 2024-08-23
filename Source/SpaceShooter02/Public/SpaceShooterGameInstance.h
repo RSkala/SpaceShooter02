@@ -62,8 +62,9 @@ public:
 	EMusicSelection GetMusicSelection() const;
 	bool GetSoundEffectsEnabled() const;
 
-	// Sound
+	// Sound & VO
 	void PlaySound(ESoundEffect SoundEffect);
+	void PlayMenuVO(EMenuSoundVO MenuSoundVO);
 
 	static FString GetGameVersionString() { return GameVersion; }
 

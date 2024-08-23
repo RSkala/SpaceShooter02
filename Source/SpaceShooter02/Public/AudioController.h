@@ -22,11 +22,20 @@ public:
 	void FadeOutGameplayMusic();
 	void StopGameplayMusicImmediately();
 
-	// Sound
+	// Sound Effects
 	void PlaySound(ESoundEffect SoundEffect);
 
+	// VO
+	void PlayMenuVO(EMenuSoundVO MenuSoundVO);
+
 private:
+	// Sound Effects
 	void StopSound(TObjectPtr<class UAudioComponent>& AudioComponent);
+
+	// VO
+	void SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray);
+	bool HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const;
+	void SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed);
 
 private:
 
@@ -101,4 +110,37 @@ private:
 	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentPowerupLevelUpSound; // TODO
 	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentPowerupTimeAddedSound;
 	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentEnemyDeathSound;
+
+	// ---------------
+	// --- Menu VO ---
+	// ---------------
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
+	TArray<TSoftObjectPtr<class USoundBase>> CreditsVOSounds;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
+	TArray<TSoftObjectPtr<class USoundBase>> GameOverVOSounds;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
+	TArray<TSoftObjectPtr<class USoundBase>> GoodLuckVOSounds;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
+	TArray<TSoftObjectPtr<class USoundBase>> SelectShipVOSounds;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
+	TArray<TSoftObjectPtr<class USoundBase>> TitleVOSounds;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
+	TArray<TSoftObjectPtr<class USoundBase>> WelcomeBackVOSounds;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
+	TArray<TSoftObjectPtr<class USoundBase>> HighScoreVOSounds;
+
+	// --- Flags for limiting VO sound playing ---
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BitMask, BitmaskEnum = "/Script/SpaceShooter02.ESoundVOPlayed", AllowPrivateAccess = true))
+	uint8 SoundVOPlayedFlags;
+
+	// Currently playing VO sound
+	UPROPERTY(meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UAudioComponent> CurrentVOSound;
 };

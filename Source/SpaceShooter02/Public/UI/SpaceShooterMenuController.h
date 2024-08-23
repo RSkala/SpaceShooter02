@@ -36,21 +36,6 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FCreditsScreenBackButtonClickedDelegateSignat
 // Stats Screen actions
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FStatsScreenBackButtonClickedDelegateSignature, float, TimeSpentLookingAtStats);
 
-// Enum for tracking whether or not a sound VO was played
-UENUM(BlueprintType, meta = (BitFlags, UseEnumValuesAsMaskValuesInEditor = "true"))
-enum class ESoundVOPlayed : uint8
-{
-	None = (0x0) UMETA(Hidden),
-	CreditsVOPlayed = 1 << 0,
-	GameOverVOPlayed = 1 << 2,
-	GoodLuckVOPlayed = 1 << 3,
-	SelectShipVOPlayed = 1 << 4,
-	TitleVOPlayed = 1 << 5,
-	WelcomeBackVOPlayed = 1 << 6,
-	HighScoresVOPlayed = 1 << 7
-};
-ENUM_CLASS_FLAGS(ESoundVOPlayed);
-
 UENUM(BlueprintType)
 enum class EMenuState : uint8
 {
@@ -142,11 +127,6 @@ private:
 
 	void OpenStatsScreen();
 	void CloseStatsScreen();
-
-	void SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray);
-
-	bool HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const;
-	void SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed);
 
 	void PlayButtonClickSound();
 
@@ -241,35 +221,4 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UStatsScreen> StatsScreen;
-
-	// --- Menu VO ---
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
-	TArray<TSoftObjectPtr<class USoundBase>> CreditsVOSounds;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
-	TArray<TSoftObjectPtr<class USoundBase>> GameOverVOSounds;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
-	TArray<TSoftObjectPtr<class USoundBase>> GoodLuckVOSounds;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
-	TArray<TSoftObjectPtr<class USoundBase>> SelectShipVOSounds;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
-	TArray<TSoftObjectPtr<class USoundBase>> TitleVOSounds;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
-	TArray<TSoftObjectPtr<class USoundBase>> WelcomeBackVOSounds;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true, Category = "Menu VO"))
-	TArray<TSoftObjectPtr<class USoundBase>> HighScoreVOSounds;
-
-	// --- Flags for limiting VO sound playing ---
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BitMask, BitmaskEnum = "/Script/SpaceShooter02.ESoundVOPlayed", AllowPrivateAccess = true))
-	uint8 SoundVOPlayedFlags;
-
-	// Currently playing VO sound
-	UPROPERTY(meta = (AllowPrivateAccess = true))
-	TObjectPtr<class UAudioComponent> CurrentVOSound;
 };

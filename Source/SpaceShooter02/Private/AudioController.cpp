@@ -145,6 +145,77 @@ void UAudioController::PlaySound(ESoundEffect SoundEffect)
 	}
 }
 
+void UAudioController::PlayMenuVO(EMenuSoundVO MenuSoundVO)
+{
+	switch (MenuSoundVO)
+	{
+		case EMenuSoundVO::Credits:
+			if (!HasSoundVOBeenPlayed(ESoundVOPlayed::CreditsVOPlayed))
+			{
+				SelectAndPlayRandomVO(CreditsVOSounds);
+				SetSoundVOPlayed(ESoundVOPlayed::CreditsVOPlayed);
+			}
+			break;
+
+		case EMenuSoundVO::GameOver:
+			if (!HasSoundVOBeenPlayed(ESoundVOPlayed::GameOverVOPlayed))
+			{
+				SelectAndPlayRandomVO(GameOverVOSounds);
+				SetSoundVOPlayed(ESoundVOPlayed::GameOverVOPlayed);
+			}
+			break;
+
+		case EMenuSoundVO::GoodLuck:
+			if (!HasSoundVOBeenPlayed(ESoundVOPlayed::GoodLuckVOPlayed))
+			{
+				SelectAndPlayRandomVO(GoodLuckVOSounds);
+				SetSoundVOPlayed(ESoundVOPlayed::GoodLuckVOPlayed);
+			}
+			else if (!HasSoundVOBeenPlayed(ESoundVOPlayed::WelcomeBackVOPlayed))
+			{
+				SelectAndPlayRandomVO(WelcomeBackVOSounds);
+				SetSoundVOPlayed(ESoundVOPlayed::WelcomeBackVOPlayed);
+			}
+			break;
+
+		case EMenuSoundVO::SelectShip:
+			if (!HasSoundVOBeenPlayed(ESoundVOPlayed::SelectShipVOPlayed))
+			{
+				SelectAndPlayRandomVO(SelectShipVOSounds);
+				SetSoundVOPlayed(ESoundVOPlayed::SelectShipVOPlayed);
+			}
+			break;
+
+		case EMenuSoundVO::Title:
+			if (!HasSoundVOBeenPlayed(ESoundVOPlayed::TitleVOPlayed))
+			{
+				SelectAndPlayRandomVO(TitleVOSounds);
+				SetSoundVOPlayed(ESoundVOPlayed::TitleVOPlayed);
+			}
+			break;
+
+		case EMenuSoundVO::WelcomeBack:
+			// Handled in GoodLuck case
+			/*if (!HasSoundVOBeenPlayed(ESoundVOPlayed::WelcomeBackVOPlayed))
+			{
+				SelectAndPlayRandomVO(WelcomeBackVOSounds);
+				SetSoundVOPlayed(ESoundVOPlayed::WelcomeBackVOPlayed);
+			}*/
+			break;
+
+		case EMenuSoundVO::HighScores:
+			if (!HasSoundVOBeenPlayed(ESoundVOPlayed::HighScoresVOPlayed))
+			{
+				SelectAndPlayRandomVO(HighScoreVOSounds);
+				SetSoundVOPlayed(ESoundVOPlayed::HighScoresVOPlayed);
+			}
+			break;
+
+		default:
+			break;
+	}
+}
+
 void UAudioController::StopSound(TObjectPtr<class UAudioComponent>& AudioComponent)
 {
 	if (AudioComponent != nullptr)
@@ -152,6 +223,38 @@ void UAudioController::StopSound(TObjectPtr<class UAudioComponent>& AudioCompone
 		AudioComponent->Stop();
 	}
 	AudioComponent = nullptr;
+}
+
+void UAudioController::SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray)
+{
+	if (SoundVOArray.Num() <= 0)
+	{
+		return;
+	}
+
+	int32 RandomIdx = FMath::RandRange(0, SoundVOArray.Num() - 1);
+	TSoftObjectPtr SoundVOToPlayPtr = SoundVOArray[RandomIdx];
+	//USoundBase* SoundVOToPlay = SoundVOToPlayPtr.Get(); // This will not always be valid! Use LoadSynchronous() instead.
+	USoundBase* SoundVOToPlay = SoundVOToPlayPtr.LoadSynchronous();
+
+	// Stop the current VO sound so they don't overlap
+	if (CurrentVOSound != nullptr)
+	{
+		CurrentVOSound->Stop();
+		CurrentVOSound = nullptr;
+	}
+	CurrentVOSound = UGameplayStatics::SpawnSound2D(GetWorld(), SoundVOToPlay);
+}
+
+bool UAudioController::HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const
+{
+	return (SoundVOPlayedFlags & (uint8)SoundVOPlayed) != 0;
+	//return true; // disable VO temp
+}
+
+void UAudioController::SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed)
+{
+	SoundVOPlayedFlags |= (uint8)SoundVOPlayed;
 }
 
 
