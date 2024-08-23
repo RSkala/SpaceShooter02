@@ -248,8 +248,11 @@ void UAudioController::SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> 
 
 bool UAudioController::HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const
 {
+	if (bDisableMenuVO)
+	{
+		return true;
+	}
 	return (SoundVOPlayedFlags & (uint8)SoundVOPlayed) != 0;
-	//return true; // disable VO temp
 }
 
 void UAudioController::SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed)

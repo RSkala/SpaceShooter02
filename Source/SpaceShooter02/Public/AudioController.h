@@ -38,6 +38,11 @@ private:
 	void SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed);
 
 private:
+	// -------------
+	// --- Debug ---
+	// -------------
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug", meta = (AllowPrivateAccess = true))
+	bool bDisableMenuVO = false;
 
 	// -------------
 	// --- Music ---
