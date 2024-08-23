@@ -8,6 +8,7 @@
 #include "UI/SpaceShooterMenuController.h"
 
 // NOTE: These do not update or are sometimes empty when using Live Coding, so moved as static members
+// NOTE 2: Static members do not seem to be refreshed at all with Live Coding either, so these would be best as normal data members.
 //namespace GameCreditsScreen
 //{
 //	static const FString CreditsLine1 = "PROGRAMMING & DESIGN\nRichard Skala\nrskala.github.io\n\n\n";
@@ -19,7 +20,7 @@
 
 // NOTE 2: These also do not update when using Live Coding. Be wary!
 FString UGameCreditsScreen::CreditsLine1 = "PROGRAMMING & DESIGN\nRichard Skala\nrskala.github.io\n\n";
-FString UGameCreditsScreen::CreditsLine2 = "DESIGN SUPPORT\nBenjamin Cholewinski\ninstagram.com/happi_axxident\n\n";
+FString UGameCreditsScreen::CreditsLine2 = "DESIGN & PLAYTEST SUPPORT\nBenjamin Cholewinski\ninstagram.com/happi_axxident\n\n";
 FString UGameCreditsScreen::CreditsLine3 = "ART\nGustavo Vituri\ngvituri.itch.io\n\n";
 FString UGameCreditsScreen::CreditsLine4 = "SOUND EFFECTS & MUSIC\nSubspaceAudio\nsubspaceaudio.itch.io\n\n";
 FString UGameCreditsScreen::CreditsLine5 = "PIXEL CROSSHAIRS\nDonut Studio\ndonut-studio.itch.io\n\n";
