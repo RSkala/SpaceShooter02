@@ -35,15 +35,15 @@ private:
 	// -------------
 
 	// List of gameplay music tracks
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
-	TArray<TObjectPtr<class USoundWave>> GameplayMusicSoundWaveObjects;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Music", meta = (AllowPrivateAccess = true))
+	TArray<TObjectPtr<class USoundWave>> GameplayMusicTracks;
 
 	// How long it takes to fade out the currently playing music
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Music", meta = (AllowPrivateAccess = true))
 	float MusicFadeTime = 2.0f;
 
 	// Volume at which to play music
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Music", meta = (AllowPrivateAccess = true))
 	float MusicVolume = 0.9f;
 
 	// Currently playing music track. Used for fading and stopping.
@@ -54,7 +54,7 @@ private:
 	// --- UI ---
 	// ----------
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI", meta = (AllowPrivateAccess = true))
 	TObjectPtr<class USoundBase> ButtonClickSound;
 
 	// ----------------
@@ -62,35 +62,35 @@ private:
 	// ----------------
 	
 	// Played when the player shoots (if shoot sounds enabled)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (AllowPrivateAccess = true))
 	TObjectPtr<class USoundBase> PlayerShootSound;
 
 	// Played when the player starts a "Boost"
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (AllowPrivateAccess = true))
 	TObjectPtr<class USoundBase> ShipBoostSound;
 
 	// Played when the player picks up a score multiplier
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (AllowPrivateAccess = true))
 	TObjectPtr<class USoundBase> MultiplierPickupSound;
 
 	// Played when the player earned a powerup (after collecting enough pickups)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (AllowPrivateAccess = true))
 	TObjectPtr<class USoundBase> PowerupEarnedSound;
 
 	// Played when the player earns a powerup level (after picking up an item while powered up)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (AllowPrivateAccess = true))
 	TObjectPtr<class USoundBase> PowerupLevelUpSound; // TODO: Not yet implemented
 
 	// Played when the player earns more time (after picking up an item while powered up)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (AllowPrivateAccess = true))
 	TObjectPtr<class USoundBase> PowerupTimeAddedSound;
 
 	// Played when the player's ship is destroyed (game over)
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (AllowPrivateAccess = true))
 	TObjectPtr<class USoundBase> ShipExplosionSound;
 
 	// Played when an enemy is defeated
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (AllowPrivateAccess = true))
 	TObjectPtr<class USoundBase> EnemyDeathSound;
 
 	// -----------------------------------------------------

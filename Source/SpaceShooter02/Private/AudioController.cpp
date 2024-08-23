@@ -15,7 +15,7 @@ void UAudioController::PostInitProperties()
 	if (!HasAnyFlags(EObjectFlags::RF_ClassDefaultObject))
 	{
 		// Ensure each music track is set to looping (should have already been done in the asset)
-		for (USoundWave* MusicSoundWave : GameplayMusicSoundWaveObjects)
+		for (USoundWave* MusicSoundWave : GameplayMusicTracks)
 		{
 			MusicSoundWave->bLooping = true;
 			//MusicSoundWave->bRequiresStopFade = true;
@@ -25,7 +25,7 @@ void UAudioController::PostInitProperties()
 
 void UAudioController::PlayGameplayMusic(EMusicSelection MusicSelection)
 {
-	if (GameplayMusicSoundWaveObjects.Num() <= 0)
+	if (GameplayMusicTracks.Num() <= 0)
 	{
 		return;
 	}
@@ -43,16 +43,16 @@ void UAudioController::PlayGameplayMusic(EMusicSelection MusicSelection)
 	if (MusicSelection == EMusicSelection::Random)
 	{
 		// Randomly select a music track to play
-		MusicTrackIndex = FMath::RandRange(0, GameplayMusicSoundWaveObjects.Num() - 1);
+		MusicTrackIndex = FMath::RandRange(0, GameplayMusicTracks.Num() - 1);
 	}
 	else
 	{
 		MusicTrackIndex = static_cast<uint8>(MusicSelection);
 	}
 
-	if (ensure(MusicTrackIndex < GameplayMusicSoundWaveObjects.Num()))
+	if (ensure(MusicTrackIndex < GameplayMusicTracks.Num()))
 	{
-		USoundWave* MusicToPlay = GameplayMusicSoundWaveObjects[MusicTrackIndex];
+		USoundWave* MusicToPlay = GameplayMusicTracks[MusicTrackIndex];
 		if (MusicToPlay != nullptr)
 		{
 			UE_LOG(LogAudioController, Log, TEXT("Playing Music Track: %s"), *MusicToPlay->GetName());
