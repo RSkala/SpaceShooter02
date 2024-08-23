@@ -33,6 +33,7 @@ private:
 	void StopSound(TObjectPtr<class UAudioComponent>& AudioComponent);
 
 	// VO
+	void SelectAndPlayRandomVO(ESoundVOPlayed SoundVOPlayed, TArray<TSoftObjectPtr<USoundBase>> SoundVOArray);
 	void SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray);
 	bool HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const;
 	void SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed);

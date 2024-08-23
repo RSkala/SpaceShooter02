@@ -150,65 +150,39 @@ void UAudioController::PlayMenuVO(EMenuSoundVO MenuSoundVO)
 	switch (MenuSoundVO)
 	{
 		case EMenuSoundVO::Credits:
-			if (!HasSoundVOBeenPlayed(ESoundVOPlayed::CreditsVOPlayed))
-			{
-				SelectAndPlayRandomVO(CreditsVOSounds);
-				SetSoundVOPlayed(ESoundVOPlayed::CreditsVOPlayed);
-			}
+			SelectAndPlayRandomVO(ESoundVOPlayed::CreditsVOPlayed, CreditsVOSounds);
 			break;
 
 		case EMenuSoundVO::GameOver:
-			if (!HasSoundVOBeenPlayed(ESoundVOPlayed::GameOverVOPlayed))
-			{
-				SelectAndPlayRandomVO(GameOverVOSounds);
-				SetSoundVOPlayed(ESoundVOPlayed::GameOverVOPlayed);
-			}
+			SelectAndPlayRandomVO(ESoundVOPlayed::GameOverVOPlayed, GameOverVOSounds);
 			break;
 
 		case EMenuSoundVO::GoodLuck:
 			if (!HasSoundVOBeenPlayed(ESoundVOPlayed::GoodLuckVOPlayed))
 			{
-				SelectAndPlayRandomVO(GoodLuckVOSounds);
-				SetSoundVOPlayed(ESoundVOPlayed::GoodLuckVOPlayed);
+				SelectAndPlayRandomVO(ESoundVOPlayed::GoodLuckVOPlayed, GoodLuckVOSounds);
 			}
-			else if (!HasSoundVOBeenPlayed(ESoundVOPlayed::WelcomeBackVOPlayed))
+			else
 			{
-				SelectAndPlayRandomVO(WelcomeBackVOSounds);
-				SetSoundVOPlayed(ESoundVOPlayed::WelcomeBackVOPlayed);
+				SelectAndPlayRandomVO(ESoundVOPlayed::WelcomeBackVOPlayed, WelcomeBackVOSounds);
 			}
 			break;
 
 		case EMenuSoundVO::SelectShip:
-			if (!HasSoundVOBeenPlayed(ESoundVOPlayed::SelectShipVOPlayed))
-			{
-				SelectAndPlayRandomVO(SelectShipVOSounds);
-				SetSoundVOPlayed(ESoundVOPlayed::SelectShipVOPlayed);
-			}
+			SelectAndPlayRandomVO(ESoundVOPlayed::SelectShipVOPlayed, SelectShipVOSounds);
 			break;
 
 		case EMenuSoundVO::Title:
-			if (!HasSoundVOBeenPlayed(ESoundVOPlayed::TitleVOPlayed))
-			{
-				SelectAndPlayRandomVO(TitleVOSounds);
-				SetSoundVOPlayed(ESoundVOPlayed::TitleVOPlayed);
-			}
+			SelectAndPlayRandomVO(ESoundVOPlayed::TitleVOPlayed, TitleVOSounds);
 			break;
 
 		case EMenuSoundVO::WelcomeBack:
 			// Handled in GoodLuck case
-			/*if (!HasSoundVOBeenPlayed(ESoundVOPlayed::WelcomeBackVOPlayed))
-			{
-				SelectAndPlayRandomVO(WelcomeBackVOSounds);
-				SetSoundVOPlayed(ESoundVOPlayed::WelcomeBackVOPlayed);
-			}*/
+			//SelectAndPlayRandomVO(ESoundVOPlayed::WelcomeBackVOPlayed, WelcomeBackVOSounds);
 			break;
 
 		case EMenuSoundVO::HighScores:
-			if (!HasSoundVOBeenPlayed(ESoundVOPlayed::HighScoresVOPlayed))
-			{
-				SelectAndPlayRandomVO(HighScoreVOSounds);
-				SetSoundVOPlayed(ESoundVOPlayed::HighScoresVOPlayed);
-			}
+			SelectAndPlayRandomVO(ESoundVOPlayed::HighScoresVOPlayed, HighScoreVOSounds);
 			break;
 
 		default:
@@ -223,6 +197,15 @@ void UAudioController::StopSound(TObjectPtr<class UAudioComponent>& AudioCompone
 		AudioComponent->Stop();
 	}
 	AudioComponent = nullptr;
+}
+
+void UAudioController::SelectAndPlayRandomVO(ESoundVOPlayed SoundVOPlayed, TArray<TSoftObjectPtr<USoundBase>> SoundVOArray)
+{
+	if (!HasSoundVOBeenPlayed(SoundVOPlayed))
+	{
+		SelectAndPlayRandomVO(SoundVOArray);
+		SetSoundVOPlayed(SoundVOPlayed);
+	}
 }
 
 void UAudioController::SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray)
@@ -259,5 +242,4 @@ void UAudioController::SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed)
 {
 	SoundVOPlayedFlags |= (uint8)SoundVOPlayed;
 }
-
 
