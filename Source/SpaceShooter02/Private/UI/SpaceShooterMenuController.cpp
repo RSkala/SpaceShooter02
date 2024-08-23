@@ -520,9 +520,9 @@ void USpaceShooterMenuController::SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed)
 
 void USpaceShooterMenuController::PlayButtonClickSound()
 {
-	if (UIButtonClickSound != nullptr)
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), UIButtonClickSound);
+		GameInstance->PlaySound(ESoundEffect::ButtonClick);
 	}
 }
 

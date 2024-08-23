@@ -333,19 +333,9 @@ void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSy
 void ASpaceShooterGameState::OnScoreMultiplierPickedUp(int32 ScoreMultiplierValue)
 {
 	// Play pickup sound
-	if (ScoreMultiplierPickupSound != nullptr)
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
-		// Stop the current pickup item sound, if playing
-		if (CurrentMultiplierPickupSound != nullptr)
-		{
-			CurrentMultiplierPickupSound->Stop();
-		}
-		CurrentMultiplierPickupSound = nullptr;
-
-		// Adjust a random pitch and play the pickup item sounds
-		static const float PitchAdjust = 0.1f;
-		float SoundPitch = 1.0f + FMath::FRandRange(-PitchAdjust, PitchAdjust);
-		CurrentMultiplierPickupSound = UGameplayStatics::SpawnSound2D(GetWorld(), ScoreMultiplierPickupSound, 0.9f, SoundPitch);
+		GameInstance->PlaySound(ESoundEffect::MultiplierPickupSound);
 	}
 
 	//// Increment values and notify

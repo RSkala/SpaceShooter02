@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
+#include "AudioEnums.h"
 #include "AudioController.h"
 #include "SpaceShooterGameState.h"
 #include "SpaceShooterSaveGame.h"
@@ -275,12 +276,12 @@ void USpaceShooterGameInstance::SaveAudioOptionData()
 	UE_CLOG(!bSaveGameSuccess, LogSpaceShooterGameInstance, Warning, TEXT("%s - Failed to save game"), ANSI_TO_TCHAR(__FUNCTION__));
 }
 
-uint8 USpaceShooterGameInstance::GetMusicSelection() const
+EMusicSelection USpaceShooterGameInstance::GetMusicSelection() const
 {
-	uint8 MusicSelection = (uint8)EMusicSelection::Random;
+	EMusicSelection MusicSelection = EMusicSelection::Random;
 	if (SpaceShooterSaveGame != nullptr)
 	{
-		MusicSelection = SpaceShooterSaveGame->MusicSelection;
+		MusicSelection = static_cast<EMusicSelection>(SpaceShooterSaveGame->MusicSelection);
 	}
 	return MusicSelection;
 }
@@ -293,6 +294,14 @@ bool USpaceShooterGameInstance::GetSoundEffectsEnabled() const
 		bSoundEffectsEnabled = SpaceShooterSaveGame->bSoundEffectsEnabled;
 	}
 	return bSoundEffectsEnabled;
+}
+
+void USpaceShooterGameInstance::PlaySound(ESoundEffect SoundEffect)
+{
+	if (AudioController != nullptr)
+	{
+		AudioController->PlaySound(SoundEffect);
+	}
 }
 
 void USpaceShooterGameInstance::Init()

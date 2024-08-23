@@ -938,12 +938,10 @@ void APlayerShipPawn::InputDash(const FInputActionValue& InputActionValue)
 		SphereComp->SetSphereRadius(DashCollisionSphereRadius, true);
 	}
 
-	// Play dash sound
-	if (ShipDashSounds.Num() > 0)
+	// Play boost sound
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
-		//UPaperSprite* RandomSprite = PlayerShipSprites[FMath::RandRange(0, PlayerShipSprites.Num() - 1)];
-		USoundBase* RandomDashSound = ShipDashSounds[FMath::RandRange(0, ShipDashSounds.Num() - 1)];
-		UGameplayStatics::PlaySound2D(GetWorld(), RandomDashSound);
+		GameInstance->PlaySound(ESoundEffect::ShipBoostSound);
 	}
 
 	// Enable dash exhaust particle
@@ -1061,8 +1059,10 @@ void APlayerShipPawn::PlayShootSound()
 		{
 			if (bPlayShootSoundDuringPowerup && PlayerHasPowerup())
 			{
-				float ShootSoundPitch = 1.0f + FMath::FRandRange(-ShootSoundPitchAdjust, ShootSoundPitchAdjust);
-				UGameplayStatics::PlaySound2D(GetWorld(), PlayerShootSound, ShootSoundVolume, ShootSoundPitch);
+				if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+				{
+					GameInstance->PlaySound(ESoundEffect::ShipShootSound);
+				}
 			}
 		}
 	}
@@ -1076,10 +1076,9 @@ void APlayerShipPawn::KillPlayer()
 	}
 
 	// Play death sound
-	if (ensureMsgf(
-		PlayerDeathSound != nullptr, TEXT("%s - PlayerDeathSound not set. Set it in the PlayerShip blueprint."), ANSI_TO_TCHAR(__FUNCTION__)))
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), PlayerDeathSound);
+		GameInstance->PlaySound(ESoundEffect::ShipExplosionSound);
 	}
 
 	// Play explosion effect
@@ -1238,9 +1237,10 @@ void APlayerShipPawn::AddSatelliteWeapon()
 	//EnableSatelliteWeapon(SatelliteWeaponSprite2);
 	PowerupActiveTimer = PowerupActiveTime;
 
-	if (PowerupEarnedSound != nullptr)
+	// Play Powerup Earned sound
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
-		UGameplayStatics::PlaySound2D(GetWorld(), PowerupEarnedSound);
+		GameInstance->PlaySound(ESoundEffect::PowerupEarnedSound);
 	}
 
 	// Play "Power Up" particle effect
@@ -1338,14 +1338,9 @@ void APlayerShipPawn::PickupItemPercentChanged(float Percent)
 			PowerupActiveTimer += PowerupPickupAddTime;
 
 			// Play powerup time add sound
-			if (PowerupTimeAddSound != nullptr)
+			if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 			{
-				if (CurrentPowerupTimeAddSound != nullptr)
-				{
-					CurrentPowerupTimeAddSound->Stop();
-				}
-				CurrentPowerupTimeAddSound = nullptr;
-				CurrentPowerupTimeAddSound = UGameplayStatics::SpawnSound2D(GetWorld(), PowerupTimeAddSound);
+				GameInstance->PlaySound(ESoundEffect::PowerupTimeAddedSound);
 			}
 
 			// Play powerup time added effect

@@ -8,11 +8,13 @@
 #include "NiagaraSystem.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "AudioEnums.h"
 #include "EnemyBase.h"
 #include "EnemyPoolController.h"
 #include "ExplosionBase.h"
 #include "ExplosionSpriteController.h"
 #include "PlayerShipPawn.h"
+#include "SpaceShooterGameInstance.h"
 #include "SpaceShooterGameState.h"
 #include "SpawnAnimBase.h"
 #include "SpawnAnimController.h"
@@ -205,10 +207,11 @@ void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* Ene
 	}
 	CurrentEnemyExplosionSound = nullptr;
 
-	// Adjust a random pitch and play the enemy death sound
-	static const float ExplodeSoundPitchAdjust = 0.1f;
-	float DeathSoundPitch = 1.0f + FMath::FRandRange(-ExplodeSoundPitchAdjust, ExplodeSoundPitchAdjust);
-	CurrentEnemyExplosionSound = UGameplayStatics::SpawnSound2D(World, EnemyDeathSound, DeathSoundPitch);
+	// Play enemy death sound
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		GameInstance->PlaySound(ESoundEffect::EnemyDeathSound);
+	}
 }
 
 float AEnemySpawner::GetTimeBetweenSpawns() const

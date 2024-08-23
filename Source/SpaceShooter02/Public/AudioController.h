@@ -4,19 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "AudioController.generated.h"
 
-UENUM(BlueprintType)
-enum class EMusicSelection : uint8 // An enum MUST be uint8 if using a BlueprintType
-{
-	Track1 = 0, // Index 0 into music list
-	Track2 = 1, // Index 1 into music list
-	Track3 = 2, // Index 2 into music list
-	MusicOff = 3, // Gameplay music will not play
-	Random = 4, // Randomly select a gameplay music track
-	NumMusicTracks UMETA(Hidden)
-};
-ENUM_RANGE_BY_FIRST_AND_LAST(EMusicSelection, EMusicSelection::Track1, EMusicSelection::Random);
+#include "AudioEnums.h"
+
+#include "AudioController.generated.h"
 
 UCLASS(Abstract, Blueprintable)
 class SPACESHOOTER02_API UAudioController : public UObject
@@ -31,9 +22,17 @@ public:
 	void FadeOutGameplayMusic();
 	void StopGameplayMusicImmediately();
 
+	// Sound
+	void PlaySound(ESoundEffect SoundEffect);
+
+private:
+	void StopSound(TObjectPtr<class UAudioComponent>& AudioComponent);
+
 private:
 
+	// -------------
 	// --- Music ---
+	// -------------
 
 	// List of gameplay music tracks
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
@@ -50,4 +49,56 @@ private:
 	// Currently playing music track. Used for fading and stopping.
 	UPROPERTY()
 	TObjectPtr<class UAudioComponent> CurrentGameplayMusic;
+
+	// ----------
+	// --- UI ---
+	// ----------
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class USoundBase> ButtonClickSound;
+
+	// ----------------
+	// --- Gameplay ---
+	// ----------------
+	
+	// Played when the player shoots (if shoot sounds enabled)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class USoundBase> PlayerShootSound;
+
+	// Played when the player starts a "Boost"
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class USoundBase> ShipBoostSound;
+
+	// Played when the player picks up a score multiplier
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class USoundBase> MultiplierPickupSound;
+
+	// Played when the player earned a powerup (after collecting enough pickups)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class USoundBase> PowerupEarnedSound;
+
+	// Played when the player earns a powerup level (after picking up an item while powered up)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class USoundBase> PowerupLevelUpSound; // TODO: Not yet implemented
+
+	// Played when the player earns more time (after picking up an item while powered up)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class USoundBase> PowerupTimeAddedSound;
+
+	// Played when the player's ship is destroyed (game over)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class USoundBase> ShipExplosionSound;
+
+	// Played when an enemy is defeated
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class USoundBase> EnemyDeathSound;
+
+	// -----------------------------------------------------
+	// Sound Tracking variables
+
+	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentMultiplierPickedupSound;
+	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentPowerupEarnedSound;
+	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentPowerupLevelUpSound; // TODO
+	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentPowerupTimeAddedSound;
+	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentEnemyDeathSound;
 };

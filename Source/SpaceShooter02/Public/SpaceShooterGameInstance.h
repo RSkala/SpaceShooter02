@@ -4,6 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+
+#include "AudioEnums.h"
+
 #include "SpaceShooterGameInstance.generated.h"
 
 UCLASS()
@@ -56,8 +59,11 @@ public:
 	void OnCycleSoundEffectOption();
 	void SaveAudioOptionData();
 
-	uint8 GetMusicSelection() const;
+	EMusicSelection GetMusicSelection() const;
 	bool GetSoundEffectsEnabled() const;
+
+	// Sound
+	void PlaySound(ESoundEffect SoundEffect);
 
 	static FString GetGameVersionString() { return GameVersion; }
 

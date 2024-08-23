@@ -6,6 +6,7 @@
 #include "Components/TextBlock.h"
 #include "Kismet/GameplayStatics.h"
 
+#include "AudioEnums.h"
 #include "SpaceShooterGameInstance.h"
 #include "UI/SpaceShooterMenuController.h"
 
@@ -85,22 +86,16 @@ void UOptionsScreen::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
 		// Music Selection
 		if (MusicSelectButtonTextBlock != nullptr)
 		{
-			//Track1 = 0, // Index 0 into music list
-			//Track2 = 1, // Index 1 into music list
-			//Track3 = 2, // Index 2 into music list
-			//MusicOff = 3, // Gameplay music will not play
-			//Random = 4, // Randomly select a gameplay music track
-
-			uint8 MusicSelection = GameInstance->GetMusicSelection();
+			EMusicSelection MusicSelection = GameInstance->GetMusicSelection();
 
 			FString MusicSelectionString = "";
 			switch (MusicSelection)
 			{
-				case 0: MusicSelectionString = "*TRACK 1*"; break;
-				case 1: MusicSelectionString = "*TRACK 2*"; break;
-				case 2: MusicSelectionString = "*TRACK 3*"; break;
-				case 3: MusicSelectionString = "*OFF*"; break;
-				case 4: MusicSelectionString = "*RANDOM*"; break;
+				case EMusicSelection::Track1: MusicSelectionString = "*TRACK 1*"; break;
+				case EMusicSelection::Track2 : MusicSelectionString = "*TRACK 2*"; break;
+				case EMusicSelection::Track3: MusicSelectionString = "*TRACK 3*"; break;
+				case EMusicSelection::MusicOff: MusicSelectionString = "*OFF*"; break;
+				case EMusicSelection::Random: MusicSelectionString = "*RANDOM*"; break;
 				default: break;
 			}
 			MusicSelectButtonTextBlock->SetText(FText::FromString(FString::Printf(TEXT("MUSIC\n%s"), *MusicSelectionString)));
