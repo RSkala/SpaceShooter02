@@ -326,14 +326,6 @@ protected:
 
 	// --- Audio ---
 
-	// Sound that is played when the player fires
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Audio")
-	TObjectPtr<class USoundBase> PlayerShootSound;
-
-	// Sound that is played when the player dies
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Audio")
-	TObjectPtr<class USoundBase> PlayerDeathSound;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ShootSoundVolume = 1.0f; // Volume of shoot sound
 
@@ -381,12 +373,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	float PowerupActiveTimer = 0.0f;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<class USoundBase> PowerupEarnedSound;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TArray<TObjectPtr<class USoundBase>> ShipDashSounds;
 
 	// Played when adding time to current powerup
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

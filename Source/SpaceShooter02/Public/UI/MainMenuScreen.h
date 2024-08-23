@@ -53,11 +53,4 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UTextBlock> VersionText;
-
-	// May use this in the future if going from Main Menu -> Ship Select is annoying
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
-	//TObjectPtr<class UButton> ShipSelectButton;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TSoftObjectPtr<class USoundBase> VOTestSound;
 };

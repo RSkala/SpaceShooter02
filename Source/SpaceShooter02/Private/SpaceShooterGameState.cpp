@@ -284,7 +284,7 @@ void ASpaceShooterGameState::OnPlayerShipDestroyed()
 	EndGame(PlayerScore);
 }
 
-void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, USoundBase* EnemyDeathSound, bool bKilledFromBoost)
+void ASpaceShooterGameState::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, bool bKilledFromBoost)
 {
 	int32 ScoreToAdd = EnemyScoreValue * CurrentScoreMultiplier;
 	PlayerScore += ScoreToAdd;

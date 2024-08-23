@@ -153,7 +153,7 @@ void AEnemySpawner::OnGameStarted()
 	SetSpawningEnabled(true);
 }
 
-void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, USoundBase* EnemyDeathSound, bool bKilledFromBoost)
+void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* EnemyDeathEffect, bool bKilledFromBoost)
 {
 	//UE_LOG(LogEnemySpawner, Warning, TEXT("%s - EnemyDeathPosition: %s"), ANSI_TO_TCHAR(__FUNCTION__), *EnemyDeathPosition.ToString());
 
@@ -199,13 +199,6 @@ void AEnemySpawner::OnEnemyDeath(FVector EnemyDeathPosition, UNiagaraSystem* Ene
 		SpawnParams.bPreCullCheck = true;
 		UNiagaraFunctionLibrary::SpawnSystemAtLocationWithParams(SpawnParams);
 	}
-
-	// Stop the death/explosion sound if playing
-	if (CurrentEnemyExplosionSound != nullptr)
-	{
-		CurrentEnemyExplosionSound->Stop();
-	}
-	CurrentEnemyExplosionSound = nullptr;
 
 	// Play enemy death sound
 	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))

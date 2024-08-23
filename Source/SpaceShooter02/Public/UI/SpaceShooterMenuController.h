@@ -272,7 +272,4 @@ private:
 	// Currently playing VO sound
 	UPROPERTY(meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UAudioComponent> CurrentVOSound;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
-	TObjectPtr<class USoundBase> UIButtonClickSound;
 };

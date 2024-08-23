@@ -78,7 +78,7 @@ void AEnemyBase::DeactivatePoolObject()
 void AEnemyBase::DestroyEnemy(bool bDestroyedFromBoost /*= false*/)
 {
 	// Notify subscribers that an enemy died
-	OnEnemyDeath.Broadcast(GetActorLocation(), EnemyExplosionEffect.Get(), EnemyDeathSound.Get(), bDestroyedFromBoost);
+	OnEnemyDeath.Broadcast(GetActorLocation(), EnemyExplosionEffect.Get(), bDestroyedFromBoost);
 
 	// Deactivate this enemy
 	DeactivatePoolObject();

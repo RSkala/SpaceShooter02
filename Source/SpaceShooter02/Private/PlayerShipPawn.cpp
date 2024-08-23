@@ -1054,15 +1054,11 @@ void APlayerShipPawn::PlayShootSound()
 {
 	if (bShootSoundEnabled)
 	{
-		if (ensureMsgf(
-			PlayerShootSound != nullptr, TEXT("%s - PlayerShootSound not set. Set it in the PlayerShip blueprint."), ANSI_TO_TCHAR(__FUNCTION__)))
+		if (bPlayShootSoundDuringPowerup && PlayerHasPowerup())
 		{
-			if (bPlayShootSoundDuringPowerup && PlayerHasPowerup())
+			if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 			{
-				if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
-				{
-					GameInstance->PlaySound(ESoundEffect::ShipShootSound);
-				}
+				GameInstance->PlaySound(ESoundEffect::ShipShootSound);
 			}
 		}
 	}

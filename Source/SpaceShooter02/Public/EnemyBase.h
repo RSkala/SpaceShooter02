@@ -11,11 +11,10 @@
 
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FEnemyDeathDelegateSignature, FVector, EnemyDeathPosition, class UNiagaraSystem*, EnemyDeathEffect);
 //DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FEnemyDeathDelegateSignature, FVector, EnemyDeathPosition, class UNiagaraSystem*, EnemyDeathEffect);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FourParams(
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(
 	FEnemyDeathDelegateSignature,
 	FVector, EnemyDeathPosition,
 	class UNiagaraSystem*, EnemyDeathEffect,
-	class USoundBase*, EnemyDeathSound,
 	bool, bKilledFromBoost);
 
 UCLASS(Abstract)
@@ -74,9 +73,6 @@ protected:
 	bool bRotateToFaceTarget = true;
 
 	// --- Effects ---
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TObjectPtr<class USoundBase> EnemyDeathSound; // TODO: Move to global place, so this is not duplicated
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class UNiagaraSystem> EnemyExplosionEffect;

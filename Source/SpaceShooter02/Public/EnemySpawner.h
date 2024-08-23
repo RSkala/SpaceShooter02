@@ -28,7 +28,7 @@ protected:
 	void OnGameStarted();
 
 	UFUNCTION()
-	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect, class USoundBase* EnemyDeathSound, bool bKilledFromBoost);
+	void OnEnemyDeath(FVector EnemyDeathPosition, class UNiagaraSystem* EnemyDeathEffect, bool bKilledFromBoost);
 
 	float GetTimeBetweenSpawns() const;
 
@@ -66,9 +66,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bSpawningEnabledDebug = true; // Set manually for debugging
-
-	UPROPERTY()
-	TObjectPtr<class UAudioComponent> CurrentEnemyExplosionSound;
 
 	UPROPERTY()
 	TWeakObjectPtr<class ASpaceShooterGameState> SpaceShooterGameState;
