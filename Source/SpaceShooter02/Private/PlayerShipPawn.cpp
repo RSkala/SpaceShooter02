@@ -747,13 +747,35 @@ void APlayerShipPawn::OnGameEnded(
 
 void APlayerShipPawn::OnPlayerShipSelected(int32 ShipSpriteIndex)
 {
-	if (PaperSpriteComp != nullptr)
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
-		if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+		if (UPaperSprite* SelectedShipSprite = GameInstance->GetShipSpriteForIndex(ShipSpriteIndex))
 		{
-			if (UPaperSprite* SelectedShipSprite = GameInstance->GetShipSpriteForIndex(ShipSpriteIndex))
+			// Set the player ship sprite
+			if (PaperSpriteComp != nullptr)
 			{
 				PaperSpriteComp->SetSprite(SelectedShipSprite);
+			}
+				
+			// Set the satellite weapon sprites
+			if (SatelliteWeaponSprite1)
+			{
+				SatelliteWeaponSprite1->SetSprite(SelectedShipSprite);
+			}
+
+			if (SatelliteWeaponSprite2)
+			{
+				SatelliteWeaponSprite2->SetSprite(SelectedShipSprite);
+			}
+
+			if (SatelliteWeaponSprite3)
+			{
+				SatelliteWeaponSprite3->SetSprite(SelectedShipSprite);
+			}
+
+			if (SatelliteWeaponSprite4)
+			{
+				SatelliteWeaponSprite4->SetSprite(SelectedShipSprite);
 			}
 		}
 	}
