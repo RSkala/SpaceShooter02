@@ -298,6 +298,15 @@ bool USpaceShooterGameInstance::GetSoundEffectsEnabled() const
 
 void USpaceShooterGameInstance::PlaySound(ESoundEffect SoundEffect)
 {
+	// Exit if sound is disabled
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		if (!SpaceShooterSaveGame->bSoundEffectsEnabled)
+		{
+			return;
+		}
+	}
+
 	if (AudioController != nullptr)
 	{
 		AudioController->PlaySound(SoundEffect);
@@ -306,6 +315,15 @@ void USpaceShooterGameInstance::PlaySound(ESoundEffect SoundEffect)
 
 void USpaceShooterGameInstance::PlayMenuVO(EMenuSoundVO MenuSoundVO)
 {
+	// Exit if sound is disabled
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		if (!SpaceShooterSaveGame->bSoundEffectsEnabled)
+		{
+			return;
+		}
+	}
+
 	if (AudioController != nullptr)
 	{
 		AudioController->PlayMenuVO(MenuSoundVO);
