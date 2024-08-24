@@ -2,8 +2,6 @@ Remaining Task
 
 MUST FIX:
 * Fix issue where pickups are still attracted to player after player defeat.
-* Ensure VO is enabled when packaging game
-* Different sound for "add time" on item pickup
 
 SHOULD FIX:
 * Set player "helper" sprites to current player ship sprite
@@ -15,8 +13,7 @@ SHOULD FIX:
   * Fix / close visible gaps in the background sprites
 * Add new enemy types.
 * Add harder enemy types depending on difficulty
-* Implement forcing of aspect ratio
-* Implement screen resolutions (or force windowed fullscreen)
+
 * Figure out why Launch button callbacks are getting called twice
 * Figure out why sometimes enemies dont spawn at a spawn animation location
 * Implement a spawn limiter (make sure no more than X enemies are on screen at once)
@@ -27,3 +24,8 @@ NICE TO HAVE:
 * Implement Achievement Screen and Achievements Button in Options Screen
 * Add "Longest Play Session" Stat
 * Implement ITargetable interface (instead of casting to get PlayerShipPawn)
+
+PACKAGED GAME:
+* Ensure VO is enabled when packaging game
+* Implement forcing of aspect ratio
+* Implement screen resolutions (or force windowed fullscreen)

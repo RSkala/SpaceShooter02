@@ -101,7 +101,7 @@ private:
 
 	// Played when the player earns a powerup level (after picking up an item while powered up)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (AllowPrivateAccess = true))
-	TObjectPtr<class USoundBase> PowerupLevelUpSound; // TODO: Not yet implemented
+	TObjectPtr<class USoundBase> PowerupLevelUpSound;
 
 	// Played when the player earns more time (after picking up an item while powered up)
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay", meta = (AllowPrivateAccess = true))
@@ -120,7 +120,7 @@ private:
 
 	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentMultiplierPickedupSound;
 	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentPowerupEarnedSound;
-	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentPowerupLevelUpSound; // TODO
+	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentPowerupLevelUpSound;
 	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentPowerupTimeAddedSound;
 	UPROPERTY() TObjectPtr<class UAudioComponent> CurrentEnemyDeathSound;
 

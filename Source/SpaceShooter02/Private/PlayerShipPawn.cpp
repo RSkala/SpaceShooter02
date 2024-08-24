@@ -1336,7 +1336,17 @@ void APlayerShipPawn::PickupItemPercentChanged(float Percent)
 			// Play powerup time add sound
 			if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 			{
-				GameInstance->PlaySound(ESoundEffect::PowerupTimeAddedSound);
+				if (CurrentPowerupLevel < MaxPowerupLevels)
+				{
+					// Not max powerup level
+					GameInstance->PlaySound(ESoundEffect::PowerupLevelUpSound);
+				}
+				else
+				{
+					// Max powerup level
+					//GameInstance->PlaySound(ESoundEffect::PowerupTimeAddedSound); // RKS: I dislike how this sounds. I prefer the standard powerup levelup sound.
+					GameInstance->PlaySound(ESoundEffect::PowerupLevelUpSound);
+				}
 			}
 
 			// Play powerup time added effect
