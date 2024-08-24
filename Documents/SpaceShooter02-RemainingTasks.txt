@@ -1,7 +1,6 @@
 Remaining Tasks
 
 MUST FIX:
-* Sound OFF still plays sounds
 
 SHOULD FIX:
 * Get voice sounds for "OPTIONS", "STATS", and "ACHIEVEMENTS"
@@ -25,6 +24,13 @@ PACKAGED GAME:
 * Ensure VO is enabled when packaging game
 * Implement forcing of aspect ratio
 * Implement screen resolutions (or force windowed fullscreen)
+
+-------
+Issue:
+-------
 * Some save game data seems corrupted on first load
   * "Time spent looking at stats" repeated where it should have the ship selections
     * This is likely due to the data not being cleared
+    * The saved data SHOULD have been created when the game first launched.
+* Update: This was likely due to FHighScoreData not getting initialized properly as Unreal expects.
+  * This is possibly fixed.

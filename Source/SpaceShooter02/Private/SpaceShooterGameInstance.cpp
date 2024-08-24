@@ -59,12 +59,18 @@ void USpaceShooterGameInstance::RecordHighScore(int32 Score, int32 SelectedShipS
 	{
 		// The incoming score is higher than any other score in the high score list
 		// Create a new High Score Data object to save into the Save Game array
-		FHighScoreData NewHighScoreData
-		{
-			.HighScore = Score,
-			.DateEarned = GetTodaysDateFormatted(),
-			.ShipSpriteIndex = SelectedShipSpriteIndex
-		};
+
+		// NOTE: I cannot do the below since adding a constructor to FHighScoreData
+		// error C7562: 'FHighScoreData': designated initialization can only be used to initialize aggregate class types
+		// In a Standalone game, I was seeing this error: LogClass: Display: 1 Uninitialized script struct members found including 0 object properties
+		//FHighScoreData NewHighScoreData
+		//{
+		//	.HighScore = Score,
+		//	.DateEarned = GetTodaysDateFormatted(),
+		//	.ShipSpriteIndex = SelectedShipSpriteIndex
+		//};
+
+		FHighScoreData NewHighScoreData(Score, GetTodaysDateFormatted(), SelectedShipSpriteIndex);
 
 		// Insert the new high score into the slot
 		HighScoreDataList.Insert(NewHighScoreData, LastHighestScoreIndex);
@@ -395,14 +401,17 @@ void USpaceShooterGameInstance::OnGameEnded(
 
 void USpaceShooterGameInstance::InitializeHighScoreData()
 {
+	UE_LOG(LogSpaceShooterGameInstance, Log, TEXT("USpaceShooterGameInstance::InitializeHighScoreData"));
+
 	if (ensure(SpaceShooterSaveGame != nullptr))
 	{
-		FHighScoreData EmptyHighScoreData
-		{
-			.HighScore = 0,
-			.DateEarned = GetTodaysDateFormatted(),
-			.ShipSpriteIndex = INVALID_SHIP_INDEX
-		};
+		//FHighScoreData EmptyHighScoreData
+		//{
+		//	.HighScore = 0,
+		//	.DateEarned = GetTodaysDateFormatted(),
+		//	.ShipSpriteIndex = INVALID_SHIP_INDEX
+		//};
+		FHighScoreData EmptyHighScoreData = FHighScoreData(0, GetTodaysDateFormatted(), INVALID_SHIP_INDEX);
 
 		TArray<FHighScoreData> HighScoreDataList;
 		for (int i = 0; i < MaxNumSaveGameHighScores; ++i)
@@ -416,6 +425,8 @@ void USpaceShooterGameInstance::InitializeHighScoreData()
 
 void USpaceShooterGameInstance::InitializeStatsData()
 {
+	UE_LOG(LogSpaceShooterGameInstance, Log, TEXT("USpaceShooterGameInstance::InitializeStatsData"));
+
 	if (ensure(SpaceShooterSaveGame != nullptr))
 	{
 		SpaceShooterSaveGame->ResetStats();

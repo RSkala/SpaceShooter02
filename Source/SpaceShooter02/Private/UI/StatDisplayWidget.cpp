@@ -66,6 +66,17 @@ void UStatDisplayWidget::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
+	// Clear the stat text
+	if (StatNameTextBlock != nullptr)
+	{
+		StatNameTextBlock->SetText(FText());
+	}
+
+	if (StatDataTextBlock != nullptr)
+	{
+		StatDataTextBlock->SetText(FText());
+	}
+
 	// By default, hide the ship image
 	if (ShipImage != nullptr)
 	{

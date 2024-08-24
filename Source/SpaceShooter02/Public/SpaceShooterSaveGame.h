@@ -12,7 +12,23 @@ struct FHighScoreData
 	GENERATED_USTRUCT_BODY()
 
 public:
+	FHighScoreData()
+		: HighScore(0)
+		, DateEarned(TEXT(""))
+		, ShipSpriteIndex(-1)
+	{
+	}
+
+	FHighScoreData(int32 InHighScore, FString InDateEarned, int32 InShipSpriteIndex)
+		: HighScore(InHighScore)
+		, DateEarned(InDateEarned)
+		, ShipSpriteIndex(InShipSpriteIndex)
+	{
+	}
+
 	FString ToString() const;
+
+public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 HighScore;
@@ -50,6 +66,8 @@ public:
 
 	void SetMusicSelection(uint8 InMusicSelection) { MusicSelection = InMusicSelection; }
 	void SetSoundEffectsEnabled(bool bInSoundEffectsEnabled) { bSoundEffectsEnabled = bInSoundEffectsEnabled; }
+
+	bool IsShipIndexValid(int32 ShipIndex) const;
 
 private:
 
