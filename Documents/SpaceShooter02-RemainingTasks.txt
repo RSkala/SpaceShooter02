@@ -7,7 +7,6 @@ SHOULD FIX:
 * Add "CONFIRM?" Screen for Clearing Scores and Clearing Stats
 * Adjust / Fix alignment of "background" sprites.
   * Fix / close visible gaps in the background sprites
-* Add new enemy types.
 * Add harder enemy types depending on difficulty
 * Figure out why sometimes enemies dont spawn at a spawn animation location
 * Implement a spawn limiter (make sure no more than X enemies are on screen at once)
