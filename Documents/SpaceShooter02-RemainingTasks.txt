@@ -1,0 +1,26 @@
+Remaining Task
+
+MUST FIX:
+* Fix issue where pickups are still attracted to player after player defeat.
+* Ensure VO is enabled when packaging game
+* Different sound for "add time" on item pickup
+
+SHOULD FIX:
+* Set player "helper" sprites to current player ship sprite
+* Adjust spawning "circle" center so it is in front of the player slightly
+  * This will address the issue which the enemies mostly spawn "next to" or "behind" the player
+* Get voice sounds for "OPTIONS", "STATS", and "ACHIEVEMENTS"
+* Add "CONFIRM?" Screen for Clearing Scores and Clearing Stats
+* Adjust / Fix alignment of "background" sprites.
+  * Fix / close visible gaps in the background sprites
+* Add new enemy types.
+* Add harder enemy types depending on difficulty
+* Allow for even lower "time between spawns" so the game gets even harder
+* Any trigger input should "Boost" player
+* Implement forcing of aspect ratio
+* Implement screen resolutions (or force windowed fullscreen)
+
+NICE TO HAVE:
+* Implement Achievements
+* Implement Achievement Screen and Achievements Button in Options Screen
+* Add "Longest Play Session" Stat
