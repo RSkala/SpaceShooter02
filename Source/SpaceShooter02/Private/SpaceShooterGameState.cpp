@@ -71,6 +71,7 @@ void ASpaceShooterGameState::StartGame()
 	TotalNumScoreMultipliersCollectedThisGame = 0;
 	TotalNumEnemiesKilledWithBoostThisGame = 0;
 	TotalProjectilesFiredThisGame = 0;
+	TimeAtGameplayStart = FDateTime::Now();
 
 	CurrentDifficultyLevel = 1; // Always start at level 1
 	CurrentTimeBetweenSpawns = 1.0f; // Always start at 1 second between each spewn
@@ -105,35 +106,7 @@ void ASpaceShooterGameState::EndGame(int32 FinalScore)
 	}
 	else
 	{
-		// Broadcast game ended
-		OnGameEnded.Broadcast(
-			FinalScore,
-			SelectedShipSpriteIndex,
-			TotalNumEnemiesKilledThisGame,
-			TotalNumScoreMultipliersCollectedThisGame,
-			TotalNumEnemiesKilledWithBoostThisGame,
-			TotalProjectilesFiredThisGame,
-			CurrentScoreMultiplier);
-
-		if (ProjectileController != nullptr)
-		{
-			ProjectileController->ResetProjectilePool();
-		}
-
-		if (PickupItemController != nullptr)
-		{
-			PickupItemController->ResetScoreMultiplierPool();
-		}
-
-		if (ExplosionSpriteController != nullptr)
-		{
-			ExplosionSpriteController->ResetExplosionSpritePools();
-		}
-
-		if (EnemyPoolController != nullptr)
-		{
-			EnemyPoolController->ResetEnemyPools();
-		}
+		OnGameOverTimerTimeout(FinalScore);
 	}
 
 	// Fade out gameplay music
@@ -402,7 +375,13 @@ void ASpaceShooterGameState::SpawnScoreMultiplierPickup(FVector SpawnPosition)
 
 void ASpaceShooterGameState::OnGameOverTimerTimeout(int32 FinalScore)
 {
-	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::OnGameOverTimerTimeout"));
+	// Get gameplay session length
+	FTimespan Timespan = FDateTime::Now() - TimeAtGameplayStart;
+	float GameplaySessionLength = static_cast<float>(Timespan.GetTotalSeconds());
+
+	UE_LOG(LogSpaceShooterGameState, Log, TEXT("ASpaceShooterGameState::OnGameOverTimerTimeout - GameplaySessionLength: %f"), GameplaySessionLength);
+
+	// Notify all listeners that gameplay has ended
 	OnGameEnded.Broadcast(
 		FinalScore,
 		SelectedShipSpriteIndex,
@@ -410,8 +389,10 @@ void ASpaceShooterGameState::OnGameOverTimerTimeout(int32 FinalScore)
 		TotalNumScoreMultipliersCollectedThisGame,
 		TotalNumEnemiesKilledWithBoostThisGame,
 		TotalProjectilesFiredThisGame,
-		CurrentScoreMultiplier);
+		CurrentScoreMultiplier,
+		GameplaySessionLength);
 
+	// Reset all object pools
 	if (ProjectileController != nullptr)
 	{
 		ProjectileController->ResetProjectilePool();

@@ -8,7 +8,7 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FGameStartedDelegateSignature);
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_EightParams(
 	FGameEndedDelegateSignature,
 	int32, FinalScore,
 	int32, SelectedShipSpriteIndex,
@@ -16,7 +16,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_SevenParams(
 	int32, NumScoreMultipliersCollected,
 	int32, NumEnemiesDefeatedWithBoost,
 	int32, NumProjectilesFired,
-	int32, CurrentScoreMultiplier);
+	int32, CurrentScoreMultiplier,
+	float, GameplaySessionLength);
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPlayerScoreChangedDelegateSignature, int32, PlayerScore);
@@ -48,6 +49,8 @@ class SPACESHOOTER02_API ASpaceShooterGameState : public AGameStateBase
 
 public:
 	ASpaceShooterGameState();
+
+	//virtual void Tick(float DeltaTime) override; AGameStateBase and AInfo disable ticking by default
 
 	void StartGame();
 	void EndGame(int32 FinalScore);
@@ -178,9 +181,9 @@ protected:
 	float DelayAfterGameOver = 1.5f;
 
 	// ----------------------------------------------------------
-	// --------------------------
-	// --- Difficulty Scaling ---
-	// --------------------------
+	// ---------------------------------------
+	// --- Difficulty Scaling & Game Stats ---
+	// ---------------------------------------
 
 	// Number of enemies spawned in the current game 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
@@ -201,6 +204,10 @@ protected:
 	// Number of projectiles fired during the current game
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 TotalProjectilesFiredThisGame = 0;
+
+	// Current time at gameplay start. Used for calculating GameplaySessionLength.
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	FDateTime TimeAtGameplayStart;
 
 	// Every X enemy spawned or killed, increase difficulty
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)

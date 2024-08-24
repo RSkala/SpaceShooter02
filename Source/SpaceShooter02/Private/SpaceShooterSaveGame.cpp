@@ -24,6 +24,7 @@ void USpaceShooterSaveGame::ResetStats()
 	NumEnemiesDefeatedWithBoost = 0;
 	NumProjectilesFired = 0;
 	HighestScoreMultiplier = 1;
+	LongestGameplaySession = 0.0f;
 
 	ShipIndexToNumTimesSelected.Empty();
 	ShipIndexToNumTimesSelected.Add(0, 0); // Ship 1 (White)

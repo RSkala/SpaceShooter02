@@ -62,6 +62,9 @@ private:
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UStatDisplayWidget> HighestScoreMultiplierStatDisplay;
 
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UStatDisplayWidget> LongestPlaySessionStatDisplay;
+
 	// --- Ship Selection Stats ----
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))

@@ -156,6 +156,7 @@ void USpaceShooterGameInstance::RecordPostGameStats(
 	int32 NumEnemiesDefeatedWithBoost,
 	int32 NumProjectilesFired,
 	int32 CurrentScoreMultiplier,
+	float GameplaySessionLength,
 	int32 SelectedShipSpriteIndex)
 {
 	if (SpaceShooterSaveGame != nullptr)
@@ -172,6 +173,11 @@ void USpaceShooterGameInstance::RecordPostGameStats(
 		if (CurrentScoreMultiplier > SpaceShooterSaveGame->HighestScoreMultiplier)
 		{
 			SpaceShooterSaveGame->SetHighestScoreMultiplier(CurrentScoreMultiplier);
+		}
+
+		if (GameplaySessionLength > SpaceShooterSaveGame->LongestGameplaySession)
+		{
+			SpaceShooterSaveGame->SetLongestGameplaySession(GameplaySessionLength);
 		}
 
 		bool bSaveGameSuccess = UGameplayStatics::SaveGameToSlot(SpaceShooterSaveGame, DefaultSaveSlotName, DefaultSaveSlotIndex);
@@ -198,6 +204,7 @@ void USpaceShooterGameInstance::GetSaveGameStatsData(
 	int32& OutNumEnemiesDefeatedWithBoost,
 	int32& OutNumProjectilesFired,
 	int32& OutHighestScoreMultiplier,
+	float& OutLongestGameplaySession,
 	float& OutTimeSpentLookingAtStats,
 	TMap<int32, int32>& OutShipIndexToNumTimesSelected)
 {
@@ -209,6 +216,7 @@ void USpaceShooterGameInstance::GetSaveGameStatsData(
 		OutNumEnemiesDefeatedWithBoost = SpaceShooterSaveGame->NumEnemiesDefeatedWithBoost;
 		OutNumProjectilesFired = SpaceShooterSaveGame->NumProjectilesFired;
 		OutHighestScoreMultiplier = SpaceShooterSaveGame->HighestScoreMultiplier;
+		OutLongestGameplaySession = SpaceShooterSaveGame->LongestGameplaySession;
 		OutTimeSpentLookingAtStats = SpaceShooterSaveGame->TimeSpentLookingAtStats;
 		OutShipIndexToNumTimesSelected = SpaceShooterSaveGame->ShipIndexToNumTimesSelected;
 	}
@@ -387,7 +395,8 @@ void USpaceShooterGameInstance::OnGameEnded(
 	int32 NumScoreMultipliersCollected,
 	int32 NumEnemiesDefeatedWithBoost,
 	int32 NumProjectilesFired,
-	int32 CurrentScoreMultiplier)
+	int32 CurrentScoreMultiplier,
+	float GameplaySessionLength)
 {
 	RecordHighScore(FinalScore, SelectedShipSpriteIndex);
 	RecordPostGameStats(
@@ -396,6 +405,7 @@ void USpaceShooterGameInstance::OnGameEnded(
 		NumEnemiesDefeatedWithBoost,
 		NumProjectilesFired,
 		CurrentScoreMultiplier,
+		GameplaySessionLength,
 		SelectedShipSpriteIndex);
 }
 

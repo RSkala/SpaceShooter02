@@ -25,7 +25,8 @@ protected:
 		int32 NumScoreMultipliersCollected,
 		int32 NumEnemiesDefeatedWithBoost,
 		int32 NumProjectilesFired,
-		int32 CurrentScoreMultiplier);
+		int32 CurrentScoreMultiplier,
+		float GameplaySessionLength);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)

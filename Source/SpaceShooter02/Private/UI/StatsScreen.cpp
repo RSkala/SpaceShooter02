@@ -26,6 +26,7 @@ void UStatsScreen::NativeOnInitialized()
 	{
 		// Get saved stats
 		int32 NumGamesPlayed, NumEnemiesDefeated, NumScoreMultipliersCollected, NumEnemiesDefeatedWithBoost, NumProjectilesFired, HighestScoreMultiplier;
+		float LongestGameplaySessionLength;
 
 		TMap<int32, int32> ShipIndexToNumTimesSelected;
 		GameInstance->GetSaveGameStatsData(
@@ -35,6 +36,7 @@ void UStatsScreen::NativeOnInitialized()
 			NumEnemiesDefeatedWithBoost,
 			NumProjectilesFired,
 			HighestScoreMultiplier,
+			LongestGameplaySessionLength,
 			SavedTimeSpentLookingAtStats,
 			ShipIndexToNumTimesSelected);
 
@@ -51,6 +53,7 @@ void UStatsScreen::NativeOnInitialized()
 
 			NumProjectilesFiredStatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
 			HighestScoreMultiplierStatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
+			LongestPlaySessionStatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
 
 			NumTimesSelectedShip1StatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
 			NumTimesSelectedShip2StatDisplay = CreateWidget<UStatDisplayWidget>(this, StatDisplayWidgetClass);
@@ -67,6 +70,7 @@ void UStatsScreen::NativeOnInitialized()
 
 			StatListVerticalBox->AddChildToVerticalBox(NumProjectilesFiredStatDisplay);
 			StatListVerticalBox->AddChildToVerticalBox(HighestScoreMultiplierStatDisplay);
+			StatListVerticalBox->AddChildToVerticalBox(LongestPlaySessionStatDisplay);
 
 			StatListVerticalBox->AddChildToVerticalBox(NumTimesSelectedShip1StatDisplay);
 			StatListVerticalBox->AddChildToVerticalBox(NumTimesSelectedShip2StatDisplay);
@@ -83,6 +87,7 @@ void UStatsScreen::NativeOnInitialized()
 
 			StatDisplayWidgets.Add(NumProjectilesFiredStatDisplay);
 			StatDisplayWidgets.Add(HighestScoreMultiplierStatDisplay);
+			StatDisplayWidgets.Add(LongestPlaySessionStatDisplay);
 
 			StatDisplayWidgets.Add(NumTimesSelectedShip1StatDisplay);
 			StatDisplayWidgets.Add(NumTimesSelectedShip2StatDisplay);
@@ -139,6 +144,23 @@ void UStatsScreen::NativeOnInitialized()
 
 				FText HighestScoreMultiplierTextGrouped = UKismetTextLibrary::Conv_IntToText(HighestScoreMultiplier, false, true);
 				HighestScoreMultiplierStatDisplay->UpdateStatDataText(HighestScoreMultiplierTextGrouped);
+			}
+
+			if (LongestPlaySessionStatDisplay != nullptr)
+			{
+				LongestPlaySessionStatDisplay->SetStatNameText(FText::FromString(TEXT("Longest Play Session:")));
+
+				FTimespan TimeSpan = FTimespan::FromSeconds(LongestGameplaySessionLength);;
+				int32 TotalMinutes = TimeSpan.GetTotalMinutes();
+				int32 Seconds = TimeSpan.GetSeconds();
+				int32 Milliseconds = TimeSpan.GetFractionMilli() / 100;
+
+				FString MinutesString = TotalMinutes < 10 ? FString::Printf(TEXT("0%d"), TotalMinutes) : FString::Printf(TEXT("%d"), TotalMinutes);
+				FString SecondsString = Seconds < 10 ? FString::Printf(TEXT("0%d"), Seconds) : FString::Printf(TEXT("%d"), Seconds);
+
+				LongestPlaySessionStatDisplay->UpdateStatDataText(
+					FText::FromString(
+						FString::Printf(TEXT("%sm%s.%ds"), *MinutesString, *SecondsString, Milliseconds)));
 			}
 			
 			// --- Ship Selection Stats ---

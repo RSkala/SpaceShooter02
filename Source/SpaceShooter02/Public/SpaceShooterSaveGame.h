@@ -61,6 +61,8 @@ public:
 	void AddNumProjectilesFired(int32 InNumProjectilesFired) { NumProjectilesFired += InNumProjectilesFired; }
 	void SetHighestScoreMultiplier(int32 InHighestScoreMultiplier) { HighestScoreMultiplier = InHighestScoreMultiplier; }
 
+	void SetLongestGameplaySession(float InLongestGameplaySession) { LongestGameplaySession = InLongestGameplaySession; }
+
 	void IncrementShipSelectedCount(int32 SelectedShipIndex);
 	void AddTimeSpentLookingAtStats(float InTimeSpentLookingAtStats) { TimeSpentLookingAtStats += InTimeSpentLookingAtStats; }
 
@@ -102,6 +104,10 @@ private:
 	// Highest Score Multiplier Achieved
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	int32 HighestScoreMultiplier = 1;
+
+	//  Longest Gameplay Session
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	float LongestGameplaySession = 0.0f;
 
 	// Number of games played with each ship
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))

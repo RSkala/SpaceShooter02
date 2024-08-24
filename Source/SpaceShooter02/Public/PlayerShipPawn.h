@@ -88,7 +88,8 @@ protected:
 		int32 NumScoreMultipliersCollected,
 		int32 NumEnemiesDefeatedWithBoost,
 		int32 NumProjectilesFired,
-		int32 CurrentScoreMultiplier);
+		int32 CurrentScoreMultiplier,
+		float GameplaySessionLength);
 
 	UFUNCTION()
 	void OnPlayerShipSelected(int32 ShipSpriteIndex);

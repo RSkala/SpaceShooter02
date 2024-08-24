@@ -15,7 +15,6 @@ SHOULD FIX:
 NICE TO HAVE:
 * Implement Achievements
 * Implement Achievement Screen and Achievements Button in Options Screen
-* Add "Longest Play Session" Stat
 
 WONT FIX:
 * Implement ITargetable interface (instead of casting to get PlayerShipPawn)

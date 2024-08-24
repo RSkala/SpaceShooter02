@@ -72,7 +72,8 @@ private:
 		int32 NumScoreMultipliersCollected,
 		int32 NumEnemiesDefeatedWithBoost,
 		int32 NumProjectilesFired,
-		int32 CurrentScoreMultiplier);
+		int32 CurrentScoreMultiplier,
+		float GameplaySessionLength);
 	UFUNCTION() void MainMenuPlayClicked();
 	UFUNCTION() void PlayerShipSelected(int32 ShipSpriteIndex);
 
