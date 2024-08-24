@@ -16,7 +16,6 @@ SHOULD FIX:
 * Add new enemy types.
 * Add harder enemy types depending on difficulty
 * Allow for even lower "time between spawns" so the game gets even harder
-* Any trigger input should "Boost" player
 * Implement forcing of aspect ratio
 * Implement screen resolutions (or force windowed fullscreen)
 
