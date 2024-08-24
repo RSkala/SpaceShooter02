@@ -1,8 +1,6 @@
 Remaining Tasks
 
 SHOULD FIX:
-* Adjust spawning "circle" center so it is in front of the player slightly
-  * This will address the issue which the enemies mostly spawn "next to" or "behind" the player
 * Get voice sounds for "OPTIONS", "STATS", and "ACHIEVEMENTS"
 * Add "CONFIRM?" Screen for Clearing Scores and Clearing Stats
 * Adjust / Fix alignment of "background" sprites.

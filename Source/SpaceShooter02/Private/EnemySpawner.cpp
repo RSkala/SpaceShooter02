@@ -85,7 +85,7 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 	// Debug Spawn Radiuses
 	if(bShowDebugSpawnRadius)
 	{
-		FVector EnemySpawnSourcePos = PlayerShipPawn != nullptr ? PlayerShipPawn->GetActorLocation() : FVector();
+		FVector EnemySpawnSourcePos = PlayerShipPawn != nullptr ? PlayerShipPawn->GetEnemySpawnSourcePosition() : FVector();
 		FVector UpAxis = FVector(0.0f, 0.0f, 1.0f);
 		FVector ForwardAxis = FVector(1.0f, 0.0f, 0.0f);
 
@@ -111,7 +111,7 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 		RandomPosition *= RandomDistance;
 
 		// Get the enemy spawn position
-		FVector SourcePosition = PlayerShipPawn != nullptr ? PlayerShipPawn->GetActorLocation() : FVector();
+		FVector SourcePosition = PlayerShipPawn != nullptr ? PlayerShipPawn->GetEnemySpawnSourcePosition() : FVector();
 		FVector EnemyPosition = SourcePosition + FVector(RandomPosition.X, 0.0f, RandomPosition.Y);
 
 		// Play a Spawn Animation at the enemy spawn position

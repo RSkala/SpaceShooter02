@@ -702,6 +702,18 @@ void APlayerShipPawn::KillPlayerFromSelfDestruct()
 	KillPlayer();
 }
 
+FVector APlayerShipPawn::GetEnemySpawnSourcePosition() const
+{
+	// If the player is moving, get an offset position in front of the player's ship.
+	// This prevents an "issue" where the enemies mostly seems to spawn "next to" or behind the player (because of the spawn delay)
+	FVector Offset = FVector::ZeroVector;
+	if (MovementDirection.SquaredLength() > 0.0f || bIsDashing)
+	{
+		Offset = GetActorUpVector() * EnemySpawnPosOffsetDistance;
+	}
+	return GetActorLocation() + Offset;
+}
+
 void APlayerShipPawn::OnCollisionOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	FString OtherActorName = OtherActor != nullptr ? OtherActor->GetName() : "(invalid)";

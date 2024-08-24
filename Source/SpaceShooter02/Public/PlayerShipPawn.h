@@ -50,6 +50,8 @@ public:
 
 	void KillPlayerFromSelfDestruct();
 
+	FVector GetEnemySpawnSourcePosition() const;
+
 	static FPlayerShipSpawnedDelegateSignature OnPlayerShipSpawned;
 	static FPlayerShipDestroyedDelegateSignature OnPlayerShipDestroyed;
 	static FPlayerPowerupTimerUpdatedDelegateSignature OnPlayerPowerupTimerUpdated;
@@ -422,6 +424,11 @@ protected:
 
 	UPROPERTY()
 	TWeakObjectPtr<class ASpaceShooterGameState> SpaceShooterGameState;
+
+	// -------------------------------------------------------------------------------------
+	// Distance to offset in front of the player for the enemy spawn radius
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float EnemySpawnPosOffsetDistance = 0.0f;
 
 	// -------------------------------------------------------------------------------------
 
