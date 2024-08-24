@@ -1,7 +1,4 @@
-Remaining Task
-
-MUST FIX:
-* Fix issue where pickups are still attracted to player after player defeat.
+Remaining Tasks
 
 SHOULD FIX:
 * Set player "helper" sprites to current player ship sprite
@@ -13,7 +10,6 @@ SHOULD FIX:
   * Fix / close visible gaps in the background sprites
 * Add new enemy types.
 * Add harder enemy types depending on difficulty
-
 * Figure out why Launch button callbacks are getting called twice
 * Figure out why sometimes enemies dont spawn at a spawn animation location
 * Implement a spawn limiter (make sure no more than X enemies are on screen at once)

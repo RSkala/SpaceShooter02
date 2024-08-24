@@ -43,6 +43,9 @@ protected:
 		bool bFromSweep,
 		const FHitResult& SweepResult);
 
+	UFUNCTION()
+	virtual void OnPlayerShipDestroyed();
+
 protected:
 	// --- Components ---
 
@@ -78,7 +81,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float AttractionMovementSpeed = 1750.0f;
 
-	// TEMP
+	// Used for easily getting the player.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	TSoftObjectPtr<AActor> PlayerShipActor;
+	TSoftObjectPtr<class APlayerShipPawn> PlayerShipPawn;
 };

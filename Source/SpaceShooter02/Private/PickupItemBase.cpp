@@ -30,12 +30,14 @@ void APickupItemBase::ActivatePoolObject()
 {
 	Super::ActivatePoolObject();
 	AttractionTargetActor = nullptr;
+	APlayerShipPawn::OnPlayerShipDestroyed.AddUniqueDynamic(this, &ThisClass::OnPlayerShipDestroyed);
 }
 
 void APickupItemBase::DeactivatePoolObject()
 {
 	Super::DeactivatePoolObject();
 	AttractionTargetActor = nullptr;
+	APlayerShipPawn::OnPlayerShipDestroyed.RemoveDynamic(this, &ThisClass::OnPlayerShipDestroyed);
 }
 
 void APickupItemBase::BeginPlay()
@@ -53,8 +55,8 @@ void APickupItemBase::BeginPlay()
 	float zDir = FMath::Sin(FMath::DegreesToRadians(RandomAngle));
 	MovementDirection = FVector(xDir, 0.0f, zDir);
 
-	// TEMP: Just get the player. TODO: Pass into the pickup item when "spawned" from pickup item spawner.
-	PlayerShipActor = UGameplayStatics::GetActorOfClass(GetWorld(), APlayerShipPawn::StaticClass());
+	// Just get the player. TODO: Pass into the pickup item when "spawned" from pickup item spawner.
+	PlayerShipPawn = UGameplayStatics::GetActorOfClass(GetWorld(), APlayerShipPawn::StaticClass());
 }
 
 void APickupItemBase::UpdateLifetime(float DeltaTime)
@@ -90,6 +92,7 @@ void APickupItemBase::UpdateAttractionMovement(float DeltaTime)
 	// Move this pickup item in the direction of its target
 	FVector PickupItemPosition = GetActorLocation();
 	FVector AttractionMovementDirection = (AttractionTargetActor->GetActorLocation() - PickupItemPosition).GetSafeNormal();
+	MovementDirection = AttractionMovementDirection; // Set the MovementDirection in case the player dies while attracting
 	FVector NewPickupItemPosition = PickupItemPosition + AttractionMovementDirection * AttractionMovementSpeed * DeltaTime;
 	SetActorLocation(NewPickupItemPosition);
 }
@@ -141,19 +144,18 @@ void APickupItemBase::UpdateTargetAttraction(float DeltaTime)
 
 	if (IsAttractingToTarget())
 	{
-		// This pickup item already has an attraction target
 		return;
 	}
 
-	// Check distance from this pickup item to the player pawn
-	if(PlayerShipActor.IsValid())
+	// Check distance from this pickup item to the player pawn (skip if player is dead)
+	if(PlayerShipPawn.IsValid() && !PlayerShipPawn->GetPlayerDead())
 	{
 		// Get distance from the player ship to this pickup item
-		float Distance = FVector::Distance(GetActorLocation(), PlayerShipActor.Get()->GetActorLocation());
+		float Distance = FVector::Distance(GetActorLocation(), PlayerShipPawn.Get()->GetActorLocation());
 		if (Distance <= TargetAttractDistance)
 		{
 			// Player ship is within the specified distance. Set the player ship as the attraction target.
-			AttractionTargetActor = PlayerShipActor.Get();
+			AttractionTargetActor = PlayerShipPawn.Get();
 		}
 	}
 }
@@ -166,11 +168,17 @@ void APickupItemBase::OnCollisionOverlap(
 	bool bFromSweep,
 	const FHitResult& SweepResult)
 {
-	APlayerShipPawn* PlayerShipPawn = Cast<APlayerShipPawn>(OtherActor);
-	if (PlayerShipPawn != nullptr)
+	APlayerShipPawn* CollidingPlayerShipPawn = Cast<APlayerShipPawn>(OtherActor);
+	if (CollidingPlayerShipPawn != nullptr)
 	{
 		HandlePlayerPickup();
 		DeactivatePoolObject();
 	}
+}
+
+void APickupItemBase::OnPlayerShipDestroyed()
+{
+	APlayerShipPawn::OnPlayerShipDestroyed.RemoveDynamic(this, &ThisClass::OnPlayerShipDestroyed);
+	AttractionTargetActor = nullptr;
 }
 
