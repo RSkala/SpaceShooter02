@@ -282,7 +282,7 @@ void USpaceShooterMenuController::OptionsScreenBackClicked()
 void USpaceShooterMenuController::OptionsScreenMusicSelectClicked()
 {
 	PlayButtonClickSound();
-	UE_LOG(LogTemp, Warning, TEXT("USpaceShooterMenuController::OptionsScreenMusicSelectClicked"));
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::OptionsScreenMusicSelectClicked"));
 	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
 		GameInstance->OnCycleMusicSelection();
@@ -292,7 +292,7 @@ void USpaceShooterMenuController::OptionsScreenMusicSelectClicked()
 void USpaceShooterMenuController::OptionsScreenSoundEffectClicked()
 {
 	PlayButtonClickSound();
-	UE_LOG(LogTemp, Warning, TEXT("USpaceShooterMenuController::OptionsScreenSoundEffectClicked"));
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::OptionsScreenSoundEffectClicked"));
 	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
 		GameInstance->OnCycleSoundEffectOption();

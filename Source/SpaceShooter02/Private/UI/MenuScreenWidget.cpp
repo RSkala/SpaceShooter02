@@ -163,7 +163,7 @@ void UMenuScreenWidget::OnViewportResized(FViewport* InViewport, uint32 InParams
 		UButton* KeyboardFocusLostButton = GetKeyboardFocusLostButton();
 		if (KeyboardFocusLostButton != nullptr)
 		{
-			UE_LOG(LogMenus, Warning, TEXT("No focused widget on resize. Forcing to %s"), *KeyboardFocusLostButton->GetName());
+			UE_LOG(LogMenus, Log, TEXT("No focused widget on resize. Forcing to %s"), *KeyboardFocusLostButton->GetName());
 			KeyboardFocusLostButton->SetKeyboardFocus();
 		}
 	}
@@ -182,7 +182,7 @@ void UMenuScreenWidget::OnApplicationActivationStateChanged(bool bIsActive)
 		UButton* KeyboardFocusLostButton = GetKeyboardFocusLostButton();
 		if (KeyboardFocusLostButton != nullptr)
 		{
-			UE_LOG(LogMenus, Warning, TEXT("No focused widget after application window focus change. Forcing to %s"), *KeyboardFocusLostButton->GetName());
+			UE_LOG(LogMenus, Log, TEXT("No focused widget after application window focus change. Forcing to %s"), *KeyboardFocusLostButton->GetName());
 			KeyboardFocusLostButton->SetKeyboardFocus();
 		}
 	}

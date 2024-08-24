@@ -107,7 +107,7 @@ void UMainMenuScreen::OnOptionsButtonClicked()
 
 void UMainMenuScreen::OnExitButtonClicked()
 {
-	UE_LOG(LogMenus, Warning, TEXT("Quitting game from MainMenu..."));
+	UE_LOG(LogMenus, Log, TEXT("Quitting game from MainMenu..."));
 	UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
 }
 
