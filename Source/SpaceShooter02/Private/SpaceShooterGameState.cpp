@@ -178,7 +178,7 @@ void ASpaceShooterGameState::BeginPlay()
 	// Handle Pause / Unpause
 	OnRequestPauseGame.AddUniqueDynamic(this, &ThisClass::HandleRequestPauseGame);
 	OnRequestUnpauseGame.AddUniqueDynamic(this, &ThisClass::HandleRequestUnpauseGame);
-	OnRequestSelfDestruct.BindUObject(this, &ThisClass::HandleRequestSelfDestruct);
+	OnRequestSelfDestruct.AddUniqueDynamic(this, &ThisClass::HandleRequestSelfDestruct);
 
 	// Start game in Main Menu
 	ShooterMenuGameState = EShooterMenuGameState::MainMenu;

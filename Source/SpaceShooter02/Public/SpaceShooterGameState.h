@@ -28,7 +28,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FPickupItemPercentChanged, float, Pe
 // Delegates for pausing / unpausing the game
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRequestPauseGameDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRequestUnpauseGameDelegateSignature);
-DECLARE_DELEGATE(FRequestSelfDestructDelegateSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FRequestSelfDestructDelegateSignature);
 
 UENUM(BlueprintType)
 enum class EShooterMenuGameState : uint8

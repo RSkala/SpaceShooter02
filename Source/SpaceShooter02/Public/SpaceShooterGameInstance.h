@@ -53,6 +53,8 @@ public:
 	void PlayGameplayMusic();
 	void StopGameplayMusic();
 	void FadeOutGameplayMusic();
+	void PauseGameplayMusic();
+	void UnpauseGameplayMusic();
 
 	// Audio Options
 	void OnCycleMusicSelection();

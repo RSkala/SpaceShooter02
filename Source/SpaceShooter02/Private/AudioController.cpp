@@ -6,6 +6,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Sound/SoundWave.h"
 
+#include "SpaceShooterGameState.h"
+
 DEFINE_LOG_CATEGORY_STATIC(LogAudioController, Log, All)
 
 void UAudioController::PostInitProperties()
@@ -20,6 +22,11 @@ void UAudioController::PostInitProperties()
 			MusicSoundWave->bLooping = true;
 			//MusicSoundWave->bRequiresStopFade = true;
 		}
+
+		// Subscribe to Pause/Unpause game delegates
+		ASpaceShooterGameState::OnRequestPauseGame.AddUniqueDynamic(this, &ThisClass::OnRequestPauseGame);
+		ASpaceShooterGameState::OnRequestUnpauseGame.AddUniqueDynamic(this, &ThisClass::OnRequestUnpauseGame);
+		ASpaceShooterGameState::OnRequestSelfDestruct.AddUniqueDynamic(this, &ThisClass::OnRequestSelfDestruct);
 	}
 }
 
@@ -77,6 +84,22 @@ void UAudioController::StopGameplayMusicImmediately()
 		CurrentGameplayMusic->Stop();
 	}
 	CurrentGameplayMusic = nullptr;
+}
+
+void UAudioController::PauseGameplayMusic()
+{
+	if (CurrentGameplayMusic != nullptr)
+	{
+		CurrentGameplayMusic->SetPaused(true);
+	}
+}
+
+void UAudioController::UnpauseGameplayMusic()
+{
+	if (CurrentGameplayMusic != nullptr)
+	{
+		CurrentGameplayMusic->SetPaused(false);
+	}
 }
 
 void UAudioController::PlaySound(ESoundEffect SoundEffect)
@@ -241,5 +264,20 @@ bool UAudioController::HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const
 void UAudioController::SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed)
 {
 	SoundVOPlayedFlags |= (uint8)SoundVOPlayed;
+}
+
+void UAudioController::OnRequestPauseGame()
+{
+	PauseGameplayMusic();
+}
+
+void UAudioController::OnRequestUnpauseGame()
+{
+	UnpauseGameplayMusic();
+}
+
+void UAudioController::OnRequestSelfDestruct()
+{
+	StopGameplayMusicImmediately();
 }
 

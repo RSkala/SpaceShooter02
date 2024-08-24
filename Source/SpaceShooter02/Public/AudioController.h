@@ -21,6 +21,8 @@ public:
 	void PlayGameplayMusic(EMusicSelection MusicSelection);
 	void FadeOutGameplayMusic();
 	void StopGameplayMusicImmediately();
+	void PauseGameplayMusic();
+	void UnpauseGameplayMusic();
 
 	// Sound Effects
 	void PlaySound(ESoundEffect SoundEffect);
@@ -37,6 +39,11 @@ private:
 	void SelectAndPlayRandomVO(TArray<TSoftObjectPtr<USoundBase>> SoundVOArray);
 	bool HasSoundVOBeenPlayed(ESoundVOPlayed SoundVOPlayed) const;
 	void SetSoundVOPlayed(ESoundVOPlayed SoundVOPlayed);
+
+	// Pause/Unpause
+	UFUNCTION() void OnRequestPauseGame();
+	UFUNCTION() void OnRequestUnpauseGame();
+	UFUNCTION() void OnRequestSelfDestruct();
 
 private:
 	// -------------

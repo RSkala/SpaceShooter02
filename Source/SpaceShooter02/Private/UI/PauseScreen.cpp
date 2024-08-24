@@ -54,7 +54,7 @@ void UPauseScreen::OnResumeButtonHovered()
 
 void UPauseScreen::OnQuitButtonClicked()
 {
-	ASpaceShooterGameState::OnRequestSelfDestruct.ExecuteIfBound();
+	ASpaceShooterGameState::OnRequestSelfDestruct.Broadcast();
 }
 
 void UPauseScreen::OnQuitButtonHovered()
