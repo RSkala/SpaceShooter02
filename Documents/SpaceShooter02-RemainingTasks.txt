@@ -15,11 +15,15 @@ SHOULD FIX:
   * Fix / close visible gaps in the background sprites
 * Add new enemy types.
 * Add harder enemy types depending on difficulty
-* Allow for even lower "time between spawns" so the game gets even harder
 * Implement forcing of aspect ratio
 * Implement screen resolutions (or force windowed fullscreen)
+* Figure out why Launch button callbacks are getting called twice
+* Figure out why sometimes enemies dont spawn at a spawn animation location
+* Implement a spawn limiter (make sure no more than X enemies are on screen at once)
+* Change "pitch" on pickup item sound (Do-Re-Mi-Fa-So-La-Ti-Do)
 
 NICE TO HAVE:
 * Implement Achievements
 * Implement Achievement Screen and Achievements Button in Options Screen
 * Add "Longest Play Session" Stat
+* Implement ITargetable interface (instead of casting to get PlayerShipPawn)

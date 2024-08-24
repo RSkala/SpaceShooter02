@@ -216,7 +216,7 @@ protected:
 
 	// Time between spawns should be decreased no lower than this
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float TimeBetweenSpawnsAbsoluteMinimum = 0.125f;
+	float TimeBetweenSpawnsAbsoluteMinimum = 0.0625;
 
 	// Amount of time to decrease between spawns at each difficulty spike increase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
