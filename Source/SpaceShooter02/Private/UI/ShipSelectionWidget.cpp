@@ -88,12 +88,10 @@ FNavigationReply UShipSelectionWidget::NativeOnNavigation(const FGeometry& InGeo
 
 void UShipSelectionWidget::OnLaunchButtonClicked()
 {
-	UE_LOG(LogTemp, Warning, TEXT("UShipSelectionWidget::OnLaunchButtonClicked - %s"), *GetName());
 	ShipSelected();
 }
 
 void UShipSelectionWidget::ShipSelected()
 {
-	UE_LOG(LogTemp, Warning, TEXT("UShipSelectionWidget::OnLaunchButtonClicked - %s"), *GetName());
 	USpaceShooterMenuController::OnPlayerShipSelected.Broadcast(ShipSpriteIndex);
 }

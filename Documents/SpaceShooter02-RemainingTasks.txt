@@ -10,7 +10,6 @@ SHOULD FIX:
   * Fix / close visible gaps in the background sprites
 * Add new enemy types.
 * Add harder enemy types depending on difficulty
-* Figure out why Launch button callbacks are getting called twice
 * Figure out why sometimes enemies dont spawn at a spawn animation location
 * Implement a spawn limiter (make sure no more than X enemies are on screen at once)
 * Change "pitch" on pickup item sound (Do-Re-Mi-Fa-So-La-Ti-Do)
@@ -25,3 +24,4 @@ PACKAGED GAME:
 * Ensure VO is enabled when packaging game
 * Implement forcing of aspect ratio
 * Implement screen resolutions (or force windowed fullscreen)
+* Adjust collision Trace to be a little further out. In packaged games, the player and pickup penetrate slightly deeper than in editor.
