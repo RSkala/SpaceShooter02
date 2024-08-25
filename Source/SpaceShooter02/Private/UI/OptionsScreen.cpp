@@ -34,30 +34,22 @@ void UOptionsScreen::NativeOnInitialized()
 		SoundsButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnSoundsButtonClicked);
 		SoundsButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnSoundsButtonHovered);
 		SoundsButton->SetNavigationRuleExplicit(EUINavigation::Up, StatsButton);
-		SoundsButton->SetNavigationRuleExplicit(EUINavigation::Down, ClearScoresButton);
+		SoundsButton->SetNavigationRuleExplicit(EUINavigation::Down, DataButton);
 	}
 
-	if (ClearScoresButton != nullptr)
+	if (DataButton != nullptr)
 	{
-		ClearScoresButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnClearScoresButtonClicked);
-		ClearScoresButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnClearScoresButtonHovered);
-		ClearScoresButton->SetNavigationRuleExplicit(EUINavigation::Up, SoundsButton);
-		ClearScoresButton->SetNavigationRuleExplicit(EUINavigation::Down, ClearStatsButton);
-	}
-
-	if (ClearStatsButton != nullptr)
-	{
-		ClearStatsButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnClearStatsButtonClicked);
-		ClearStatsButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnClearStatsButtonHovered);
-		ClearStatsButton->SetNavigationRuleExplicit(EUINavigation::Up, ClearScoresButton);
-		ClearStatsButton->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
+		DataButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnDataButtonClicked);
+		DataButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnDataButtonHovered);
+		DataButton->SetNavigationRuleExplicit(EUINavigation::Up, SoundsButton);
+		DataButton->SetNavigationRuleExplicit(EUINavigation::Down, BackButton);
 	}
 
 	if (BackButton != nullptr)
 	{
 		BackButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnBackButtonClicked);
 		BackButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnBackButtonHovered);
-		BackButton->SetNavigationRuleExplicit(EUINavigation::Up, ClearStatsButton);
+		BackButton->SetNavigationRuleExplicit(EUINavigation::Up, DataButton);
 	}
 }
 
@@ -71,11 +63,10 @@ void UOptionsScreen::OnColorShift(FLinearColor LinearColor)
 	}
 
 	SetColorShiftForButton(CreditsButton, LinearColor);
-	SetColorShiftForButton(BackButton, LinearColor);
-	SetColorShiftForButton(ClearScoresButton, LinearColor);
-	SetColorShiftForButton(StatsButton, LinearColor);
-	SetColorShiftForButton(ClearStatsButton, LinearColor);
 	SetColorShiftForButton(SoundsButton, LinearColor);
+	SetColorShiftForButton(StatsButton, LinearColor);
+	SetColorShiftForButton(DataButton, LinearColor);
+	SetColorShiftForButton(BackButton, LinearColor);
 }
 
 void UOptionsScreen::OnCreditsButtonClicked()
@@ -83,24 +74,9 @@ void UOptionsScreen::OnCreditsButtonClicked()
 	USpaceShooterMenuController::OnOptionsScreenCreditsClicked.Broadcast();
 }
 
-void UOptionsScreen::OnBackButtonClicked()
-{
-	USpaceShooterMenuController::OnOptionsScreenBackClicked.Broadcast();
-}
-
-void UOptionsScreen::OnClearScoresButtonClicked()
-{
-	USpaceShooterMenuController::OnOptionsScreenClearScoresClicked.Broadcast();
-}
-
 void UOptionsScreen::OnStatsButtonClicked()
 {
 	USpaceShooterMenuController::OnOptionsScreenStatsClicked.Broadcast();
-}
-
-void UOptionsScreen::OnClearStatsButtonClicked()
-{
-	USpaceShooterMenuController::OnOptionsScreenClearStatsClicked.Broadcast();
 }
 
 void UOptionsScreen::OnSoundsButtonClicked()
@@ -108,27 +84,21 @@ void UOptionsScreen::OnSoundsButtonClicked()
 	USpaceShooterMenuController::OnOptionsScreenSoundsClicked.Broadcast();
 }
 
+void UOptionsScreen::OnDataButtonClicked()
+{
+	USpaceShooterMenuController::OnOptionsScreenDataClicked.Broadcast();
+}
+
+void UOptionsScreen::OnBackButtonClicked()
+{
+	USpaceShooterMenuController::OnOptionsScreenBackClicked.Broadcast();
+}
+
 void UOptionsScreen::OnCreditsButtonHovered()
 {
 	if (CreditsButton != nullptr)
 	{
 		CreditsButton->SetKeyboardFocus();
-	}
-}
-
-void UOptionsScreen::OnClearScoresButtonHovered()
-{
-	if (ClearScoresButton != nullptr)
-	{
-		ClearScoresButton->SetKeyboardFocus();
-	}
-}
-
-void UOptionsScreen::OnBackButtonHovered()
-{
-	if (BackButton != nullptr)
-	{
-		BackButton->SetKeyboardFocus();
 	}
 }
 
@@ -140,14 +110,6 @@ void UOptionsScreen::OnStatsButtonHovered()
 	}
 }
 
-void UOptionsScreen::OnClearStatsButtonHovered()
-{
-	if (ClearStatsButton != nullptr)
-	{
-		ClearStatsButton->SetKeyboardFocus();
-	}
-}
-
 void UOptionsScreen::OnSoundsButtonHovered()
 {
 	if (SoundsButton != nullptr)
@@ -156,3 +118,18 @@ void UOptionsScreen::OnSoundsButtonHovered()
 	}
 }
 
+void UOptionsScreen::OnDataButtonHovered()
+{
+	if (DataButton != nullptr)
+	{
+		DataButton->SetKeyboardFocus();
+	}
+}
+
+void UOptionsScreen::OnBackButtonHovered()
+{
+	if (BackButton != nullptr)
+	{
+		BackButton->SetKeyboardFocus();
+	}
+}

@@ -10,11 +10,8 @@ SHOULD FIX:
 NICE TO HAVE:
 * Implement Achievements
 * Implement Achievement Screen and Achievements Button in Options Screen
-* Add "CONFIRM?" Screen for Clearing Scores and Clearing Stats
-  * Alternative:  "Sounds" Screen, "Data" Screen
 
 PACKAGED GAME:
-* Reminder: Ensure VO is enabled when packaging game
 * Implement forcing of aspect ratio
 * Implement screen resolutions (or force windowed fullscreen)
 
