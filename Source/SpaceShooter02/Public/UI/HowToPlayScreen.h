@@ -40,5 +40,6 @@ private:
 	UPROPERTY() FString HowToPlayLine3;
 	UPROPERTY() FString HowToPlayLine4;
 	UPROPERTY() FString HowToPlayLine5;
-	UPROPERTY() FString HowToPlayLine6;	
+	UPROPERTY() FString HowToPlayLine6;
+	UPROPERTY() FString HowToPlayLine7;
 };
