@@ -1,4 +1,4 @@
-# GENERIC SPACE SHOOTER 02
+# GENERIC SPACE SHOOTER
  2D Twin Stick Shooter built harnessing the power of **Unreal Engine 5**!!!
 
  Lately, I've been doing a bit of research with 2D development with Unreal Engine, so I decided to rebuild this project in UE5 that I previously built in Unity: <br>
@@ -26,14 +26,5 @@ Very early Work-In-Progress Screenshots: <br>
 <img src="./Assets-Source/Screenshots/ScreenShot00009.png" width=400/> <br>
 
 <br>
-
-#
-
- Once core gameplay and a game loop is implemented, I hope to implement the following features:
- * Local Co-op
- * Gameplay Ability System
- * Network Replication
- * Blockchain (maybe!)
- * ???
 
 #
