@@ -4,7 +4,6 @@ MUST FIX:
 
 SHOULD FIX:
 * Get voice sounds for "OPTIONS", "STATS", and "ACHIEVEMENTS"
-* Add "CONFIRM?" Screen for Clearing Scores and Clearing Stats
 * Adjust / Fix alignment of "background" sprites.
   * Fix / close visible gaps in the background sprites
 * Add harder enemy types depending on difficulty
@@ -15,6 +14,7 @@ SHOULD FIX:
 NICE TO HAVE:
 * Implement Achievements
 * Implement Achievement Screen and Achievements Button in Options Screen
+* Add "CONFIRM?" Screen for Clearing Scores and Clearing Stats
 
 WONT FIX:
 * Implement ITargetable interface (instead of casting to get PlayerShipPawn)
