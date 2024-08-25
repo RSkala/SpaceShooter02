@@ -15,6 +15,7 @@ NICE TO HAVE:
 * Implement Achievements
 * Implement Achievement Screen and Achievements Button in Options Screen
 * Add "CONFIRM?" Screen for Clearing Scores and Clearing Stats
+  * Alternative:  "Sounds" Screen, "Data" Screen
 
 WONT FIX:
 * Implement ITargetable interface (instead of casting to get PlayerShipPawn)
