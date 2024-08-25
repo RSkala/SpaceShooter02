@@ -23,13 +23,11 @@ protected:
 	UFUNCTION() void OnPlayButtonClicked();
 	UFUNCTION() void OnOptionsButtonClicked();
 	UFUNCTION() void OnExitButtonClicked();
-	UFUNCTION() void OnCreditsButtonClicked();
 	UFUNCTION() void OnHighScoresButtonClicked();
 
 	UFUNCTION() void OnPlayButtonHovered();
 	UFUNCTION() void OnOptionsButtonHovered();
 	UFUNCTION() void OnExitButtonHovered();
-	UFUNCTION() void OnCreditsButtonHovered();
 	UFUNCTION() void OnHighScoreButtonHovered();
 
 protected:
@@ -44,9 +42,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UButton> ExitButton;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
-	TObjectPtr<class UButton> CreditsButton;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (BindWidgetOptional))
 	TObjectPtr<class UButton> HighScoresButton;

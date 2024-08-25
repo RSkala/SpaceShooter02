@@ -38,6 +38,7 @@ void UMainMenuScreen::NativeOnInitialized()
 		PlayButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnPlayButtonClicked);
 		PlayButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnPlayButtonHovered);
 		//PlayButton->OnUnhovered.AddUniqueDynamic(this, &ThisClass::OnPlayButtonUnhovered);
+		PlayButton->SetNavigationRuleExplicit(EUINavigation::Up, ExitButton);
 		PlayButton->SetNavigationRuleExplicit(EUINavigation::Down, HighScoresButton);
 	}
 
@@ -62,13 +63,7 @@ void UMainMenuScreen::NativeOnInitialized()
 		ExitButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnExitButtonClicked);
 		ExitButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnExitButtonHovered);
 		ExitButton->SetNavigationRuleExplicit(EUINavigation::Up, OptionsButton);
-	}
-
-	if (CreditsButton != nullptr)
-	{
-		CreditsButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnCreditsButtonClicked);
-		CreditsButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnCreditsButtonHovered);
-		//CreditsButton->SetNavigationRuleExplicit(EUINavigation::Right, PlayButton);
+		ExitButton->SetNavigationRuleExplicit(EUINavigation::Down, PlayButton);
 	}
 
 	if (VersionText != nullptr)
@@ -90,9 +85,7 @@ void UMainMenuScreen::OnColorShift(FLinearColor LinearColor)
 	SetColorShiftForButton(PlayButton, LinearColor);
 	SetColorShiftForButton(OptionsButton, LinearColor);
 	SetColorShiftForButton(ExitButton, LinearColor);
-	SetColorShiftForButton(CreditsButton, LinearColor);
 	SetColorShiftForButton(HighScoresButton, LinearColor);
-
 }
 
 void UMainMenuScreen::OnPlayButtonClicked()
@@ -109,11 +102,6 @@ void UMainMenuScreen::OnExitButtonClicked()
 {
 	UE_LOG(LogMenus, Log, TEXT("Quitting game from MainMenu..."));
 	UKismetSystemLibrary::QuitGame(GetWorld(), nullptr, EQuitPreference::Quit, false);
-}
-
-void UMainMenuScreen::OnCreditsButtonClicked()
-{
-	USpaceShooterMenuController::OnMainMenuCreditsClicked.Broadcast();
 }
 
 void UMainMenuScreen::OnHighScoresButtonClicked()
@@ -142,14 +130,6 @@ void UMainMenuScreen::OnExitButtonHovered()
 	if (ExitButton != nullptr)
 	{
 		ExitButton->SetKeyboardFocus();
-	}
-}
-
-void UMainMenuScreen::OnCreditsButtonHovered()
-{
-	if (CreditsButton != nullptr)
-	{
-		//CreditsButton->SetKeyboardFocus();
 	}
 }
 

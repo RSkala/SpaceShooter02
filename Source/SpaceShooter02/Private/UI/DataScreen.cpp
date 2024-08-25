@@ -15,6 +15,7 @@ void UDataScreen::NativeOnInitialized()
 	{
 		ClearScoresButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnClearScoresButtonClicked);
 		ClearScoresButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnClearScoresButtonHovered);
+		ClearScoresButton->SetNavigationRuleExplicit(EUINavigation::Up, BackButton);
 		ClearScoresButton->SetNavigationRuleExplicit(EUINavigation::Down, ClearStatsButton);
 	}
 
@@ -31,6 +32,7 @@ void UDataScreen::NativeOnInitialized()
 		BackButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnBackButtonClicked);
 		BackButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnBackButtonHovered);
 		BackButton->SetNavigationRuleExplicit(EUINavigation::Up, ClearStatsButton);
+		BackButton->SetNavigationRuleExplicit(EUINavigation::Down, ClearScoresButton);
 	}
 }
 

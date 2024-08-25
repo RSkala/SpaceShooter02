@@ -15,6 +15,7 @@ void UPauseScreen::NativeOnInitialized()
 	{
 		ResumeButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnResumeButtonClicked);
 		ResumeButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnResumeButtonHovered);
+		ResumeButton->SetNavigationRuleExplicit(EUINavigation::Up, QuitGameButton);
 		ResumeButton->SetNavigationRuleExplicit(EUINavigation::Down, QuitGameButton);
 	}
 
@@ -23,6 +24,7 @@ void UPauseScreen::NativeOnInitialized()
 		QuitGameButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnQuitButtonClicked);
 		QuitGameButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnQuitButtonHovered);
 		QuitGameButton->SetNavigationRuleExplicit(EUINavigation::Up, ResumeButton);
+		QuitGameButton->SetNavigationRuleExplicit(EUINavigation::Down, ResumeButton);
 	}
 }
 

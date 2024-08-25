@@ -32,6 +32,7 @@ void UGameOverScreen::NativeOnInitialized()
 	{
 		PlayAgainButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnPlayAgainButtonClicked);
 		PlayAgainButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnPlayAgainButtonHovered);
+		PlayAgainButton->SetNavigationRuleExplicit(EUINavigation::Up, QuitGameButton);
 		PlayAgainButton->SetNavigationRuleExplicit(EUINavigation::Down, SelectNewShipButton);
 	}
 
@@ -43,11 +44,12 @@ void UGameOverScreen::NativeOnInitialized()
 		SelectNewShipButton->SetNavigationRuleExplicit(EUINavigation::Down, QuitGameButton);
 	}
 
-	if (QuitGameButton != nullptr)
+	if (QuitGameButton != nullptr) // NOTE: This was repurposed to "Return to Main Menu", but wasn't renamed
 	{
 		QuitGameButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnQuitGameButtonClicked);
 		QuitGameButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnQuitGameButtonHovered);
 		QuitGameButton->SetNavigationRuleExplicit(EUINavigation::Up, SelectNewShipButton);
+		QuitGameButton->SetNavigationRuleExplicit(EUINavigation::Down, PlayAgainButton);
 	}
 }
 

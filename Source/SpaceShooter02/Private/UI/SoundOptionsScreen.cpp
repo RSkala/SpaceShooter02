@@ -17,6 +17,7 @@ void USoundOptionsScreen::NativeOnInitialized()
 	{
 		MusicSelectButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnMusicSelectButtonClicked);
 		MusicSelectButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnMusicSelectButtonHovered);
+		MusicSelectButton->SetNavigationRuleExplicit(EUINavigation::Up, BackButton);
 		MusicSelectButton->SetNavigationRuleExplicit(EUINavigation::Down, SoundEffectsOnOffButton);
 	}
 
@@ -41,6 +42,7 @@ void USoundOptionsScreen::NativeOnInitialized()
 		BackButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnBackButtonClicked);
 		BackButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnBackButtonHovered);
 		BackButton->SetNavigationRuleExplicit(EUINavigation::Up, VOOnOffButton);
+		BackButton->SetNavigationRuleExplicit(EUINavigation::Down, MusicSelectButton);
 	}
 }
 

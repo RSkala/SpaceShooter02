@@ -18,6 +18,7 @@ void UOptionsScreen::NativeOnInitialized()
 	{
 		HowToPlayButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnHowToPlayButtonClicked);
 		HowToPlayButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnHowToPlayButtonHovered);
+		HowToPlayButton->SetNavigationRuleExplicit(EUINavigation::Up, BackButton);
 		HowToPlayButton->SetNavigationRuleExplicit(EUINavigation::Down, CreditsButton);
 	}
 
@@ -58,6 +59,7 @@ void UOptionsScreen::NativeOnInitialized()
 		BackButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnBackButtonClicked);
 		BackButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnBackButtonHovered);
 		BackButton->SetNavigationRuleExplicit(EUINavigation::Up, DataButton);
+		BackButton->SetNavigationRuleExplicit(EUINavigation::Down, HowToPlayButton);
 	}
 }
 
