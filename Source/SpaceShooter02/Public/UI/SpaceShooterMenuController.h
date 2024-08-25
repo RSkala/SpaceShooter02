@@ -21,11 +21,15 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHighScoreBackButtonClickedDelegateSignature)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FMainMenuOptionsButtonClickedDelegateSignature);
 
 // Options Screen actions
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenHowToPlayButtonClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenCreditsButtonClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenStatsButtonClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenSoundsButtonClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenDataButtonClickedDelegateSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOptionsScreenBackButtonClickedDelegateSignature);
+
+// How to Play Screen actions
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FHowToPlayScreenBackButtonClickedDelegateSignature);
 
 // Sound Options Screen actions
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSoundScreenMusicSelectClickedDelegateSignature);
@@ -97,11 +101,15 @@ private:
 	UFUNCTION() void MainMenuOptionsButtonClicked();
 
 	// Options Screen actions
+	UFUNCTION() void OptionsScreenHowToPlayClicked();
 	UFUNCTION() void OptionsScreenCreditsClicked();
 	UFUNCTION() void OptionsScreenStatsClicked();
 	UFUNCTION() void OptionsScreenSoundsClicked();
 	UFUNCTION() void OptionsScreenDataClicked();
 	UFUNCTION() void OptionsScreenBackClicked();
+
+	// How to Play Screen actions
+	UFUNCTION() void HowToPlayBackClicked();
 
 	// Sound Options Screen actions
 	UFUNCTION() void SoundScreenMusicSelectClicked();
@@ -126,6 +134,10 @@ private:
 	// Main Menu / Title
 	void OpenMainMenuScreen();
 	void CloseMainMenuScreen();
+
+	// How To Play
+	void OpenHowToPlayScreen();
+	void CloseHowToPlayScreen();
 
 	// Credits
 	void OpenCreditsScreen();
@@ -184,11 +196,15 @@ public:
 	static FMainMenuOptionsButtonClickedDelegateSignature OnMainMenuOptionsClicked;
 
 	// Options Screen Actions
+	static FOptionsScreenHowToPlayButtonClickedDelegateSignature OnOptionsScreenHowToPlayClicked;
 	static FOptionsScreenCreditsButtonClickedDelegateSignature OnOptionsScreenCreditsClicked;
 	static FOptionsScreenStatsButtonClickedDelegateSignature OnOptionsScreenStatsClicked;
 	static FOptionsScreenSoundsButtonClickedDelegateSignature OnOptionsScreenSoundsClicked;
 	static FOptionsScreenDataButtonClickedDelegateSignature OnOptionsScreenDataClicked;
 	static FOptionsScreenBackButtonClickedDelegateSignature OnOptionsScreenBackClicked;
+
+	// How to Play Screen Actions
+	static FHowToPlayScreenBackButtonClickedDelegateSignature OnHowToPlayScreenBackClicked;
 
 	// Sound Options Screen Actions
 	static FSoundScreenMusicSelectClickedDelegateSignature OnSoundScreenMusicSelectClicked;
@@ -223,6 +239,9 @@ private:
 	TSubclassOf<class UUserWidget> GameOverScreenClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TSubclassOf<class UUserWidget> HowToPlayScreenClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TSubclassOf<class UUserWidget> CreditsScreenClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
@@ -253,6 +272,9 @@ private:
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UGameOverScreen> GameOverScreen;
+
+	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	TObjectPtr<class UHowToPlayScreen> HowToPlayScreen;
 
 	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<class UGameCreditsScreen> CreditsScreen;

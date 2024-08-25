@@ -9,16 +9,17 @@
 #include "AudioEnums.h"
 #include "SpaceShooterGameInstance.h"
 #include "SpaceShooterGameState.h"
+#include "UI/DataScreen.h"
 #include "UI/GameCreditsScreen.h"
 #include "UI/GameOverScreen.h"
 #include "UI/HighScoreScreen.h"
+#include "UI/HowToPlayScreen.h"
 #include "UI/MainMenuScreen.h"
 #include "UI/OptionsScreen.h"
 #include "UI/PauseScreen.h"
 #include "UI/PlayerShipSelectScreen.h"
 #include "UI/SoundOptionsScreen.h"
 #include "UI/StatsScreen.h"
-#include "UI/DataScreen.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogMenuController, Warning, All)
 
@@ -37,11 +38,15 @@ FHighScoreBackButtonClickedDelegateSignature USpaceShooterMenuController::OnHigh
 FMainMenuOptionsButtonClickedDelegateSignature USpaceShooterMenuController::OnMainMenuOptionsClicked;
 
 // Options Screen actions
+FOptionsScreenHowToPlayButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenHowToPlayClicked;
 FOptionsScreenCreditsButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenCreditsClicked;
 FOptionsScreenStatsButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenStatsClicked;
 FOptionsScreenSoundsButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenSoundsClicked;
 FOptionsScreenDataButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenDataClicked;
 FOptionsScreenBackButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenBackClicked;
+
+// How to Play Screen actions
+FHowToPlayScreenBackButtonClickedDelegateSignature USpaceShooterMenuController::OnHowToPlayScreenBackClicked;
 
 // Sound Options Screen actions
 FSoundScreenMusicSelectClickedDelegateSignature USpaceShooterMenuController::OnSoundScreenMusicSelectClicked;
@@ -92,11 +97,15 @@ void USpaceShooterMenuController::PostInitProperties()
 		OnMainMenuOptionsClicked.AddUniqueDynamic(this, &ThisClass::MainMenuOptionsButtonClicked);
 
 		// Options Screen
+		OnOptionsScreenHowToPlayClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenHowToPlayClicked);
 		OnOptionsScreenCreditsClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenCreditsClicked);
 		OnOptionsScreenStatsClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenStatsClicked);
 		OnOptionsScreenSoundsClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenSoundsClicked);
 		OnOptionsScreenDataClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenDataClicked);
 		OnOptionsScreenBackClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenBackClicked);
+
+		// How to Play Screen
+		OnHowToPlayScreenBackClicked.AddUniqueDynamic(this, &ThisClass::HowToPlayBackClicked);
 
 		// Sound Screen
 		OnSoundScreenMusicSelectClicked.AddUniqueDynamic(this, &ThisClass::SoundScreenMusicSelectClicked);
@@ -256,6 +265,13 @@ void USpaceShooterMenuController::MainMenuOptionsButtonClicked()
 	OpenOptionsScreen();
 }
 
+void USpaceShooterMenuController::OptionsScreenHowToPlayClicked()
+{
+	PlayButtonClickSound();
+	CloseOptionsScreen();
+	OpenHowToPlayScreen();
+}
+
 void USpaceShooterMenuController::OptionsScreenCreditsClicked()
 {
 	PlayButtonClickSound();
@@ -294,6 +310,13 @@ void USpaceShooterMenuController::OptionsScreenBackClicked()
 	{
 		GameInstance->SaveAudioOptionData();
 	}
+}
+
+void USpaceShooterMenuController::HowToPlayBackClicked()
+{
+	PlayButtonClickSound();
+	CloseHowToPlayScreen();
+	OpenOptionsScreen();
 }
 
 void USpaceShooterMenuController::SoundScreenMusicSelectClicked()
@@ -420,6 +443,18 @@ void USpaceShooterMenuController::CloseMainMenuScreen()
 {
 	CloseScreen(MainMenuScreen);
 	MainMenuScreen = nullptr;
+}
+
+void USpaceShooterMenuController::OpenHowToPlayScreen()
+{
+	HowToPlayScreen = Cast<UHowToPlayScreen>(OpenScreen(HowToPlayScreenClass));
+	ensure(HowToPlayScreen != nullptr);
+}
+
+void USpaceShooterMenuController::CloseHowToPlayScreen()
+{
+	CloseScreen(HowToPlayScreen);
+	HowToPlayScreen = nullptr;
 }
 
 void USpaceShooterMenuController::OpenCreditsScreen()

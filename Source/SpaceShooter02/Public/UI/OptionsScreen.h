@@ -18,12 +18,14 @@ protected:
 	virtual class UButton* GetKeyboardFocusLostButton() const override { return BackButton; }
 
 private:
+	UFUNCTION() void OnHowToPlayButtonClicked();
 	UFUNCTION() void OnCreditsButtonClicked();
 	UFUNCTION() void OnStatsButtonClicked();
 	UFUNCTION() void OnSoundsButtonClicked();
 	UFUNCTION() void OnDataButtonClicked();
 	UFUNCTION() void OnBackButtonClicked();
 
+	UFUNCTION() void OnHowToPlayButtonHovered();
 	UFUNCTION() void OnCreditsButtonHovered();
 	UFUNCTION() void OnStatsButtonHovered();
 	UFUNCTION() void OnSoundsButtonHovered();
@@ -35,6 +37,9 @@ private:
 	TObjectPtr<class UTextBlock> OptionsTextBlock;
 
 	// --- Buttons ---
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UButton> HowToPlayButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UButton> CreditsButton;

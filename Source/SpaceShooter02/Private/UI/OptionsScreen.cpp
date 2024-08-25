@@ -14,10 +14,18 @@ void UOptionsScreen::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
 
+	if (HowToPlayButton != nullptr)
+	{
+		HowToPlayButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnHowToPlayButtonClicked);
+		HowToPlayButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnHowToPlayButtonHovered);
+		HowToPlayButton->SetNavigationRuleExplicit(EUINavigation::Down, CreditsButton);
+	}
+
 	if (CreditsButton != nullptr)
 	{
 		CreditsButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnCreditsButtonClicked);
 		CreditsButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnCreditsButtonHovered);
+		CreditsButton->SetNavigationRuleExplicit(EUINavigation::Up, HowToPlayButton);
 		CreditsButton->SetNavigationRuleExplicit(EUINavigation::Down, StatsButton);
 	}
 
@@ -62,11 +70,17 @@ void UOptionsScreen::OnColorShift(FLinearColor LinearColor)
 		OptionsTextBlock->SetColorAndOpacity(FSlateColor(LinearColor));
 	}
 
+	SetColorShiftForButton(HowToPlayButton, LinearColor);
 	SetColorShiftForButton(CreditsButton, LinearColor);
 	SetColorShiftForButton(SoundsButton, LinearColor);
 	SetColorShiftForButton(StatsButton, LinearColor);
 	SetColorShiftForButton(DataButton, LinearColor);
 	SetColorShiftForButton(BackButton, LinearColor);
+}
+
+void UOptionsScreen::OnHowToPlayButtonClicked()
+{
+	USpaceShooterMenuController::OnOptionsScreenHowToPlayClicked.Broadcast();
 }
 
 void UOptionsScreen::OnCreditsButtonClicked()
@@ -92,6 +106,14 @@ void UOptionsScreen::OnDataButtonClicked()
 void UOptionsScreen::OnBackButtonClicked()
 {
 	USpaceShooterMenuController::OnOptionsScreenBackClicked.Broadcast();
+}
+
+void UOptionsScreen::OnHowToPlayButtonHovered()
+{
+	if (HowToPlayButton != nullptr)
+	{
+		HowToPlayButton->SetKeyboardFocus();
+	}
 }
 
 void UOptionsScreen::OnCreditsButtonHovered()
