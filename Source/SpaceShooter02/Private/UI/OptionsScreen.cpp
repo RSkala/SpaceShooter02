@@ -26,30 +26,22 @@ void UOptionsScreen::NativeOnInitialized()
 		StatsButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnStatsButtonClicked);
 		StatsButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnStatsButtonHovered);
 		StatsButton->SetNavigationRuleExplicit(EUINavigation::Up, CreditsButton);
-		StatsButton->SetNavigationRuleExplicit(EUINavigation::Down, SoundEffectsOnOffButton);
+		StatsButton->SetNavigationRuleExplicit(EUINavigation::Down, SoundsButton);
 	}
 
-	if (SoundEffectsOnOffButton != nullptr)
+	if (SoundsButton != nullptr)
 	{
-		SoundEffectsOnOffButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnSoundEffectsOnOffButtonClicked);
-		SoundEffectsOnOffButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnSoundEffectsOnOffButtonHovered);
-		SoundEffectsOnOffButton->SetNavigationRuleExplicit(EUINavigation::Up, StatsButton);
-		SoundEffectsOnOffButton->SetNavigationRuleExplicit(EUINavigation::Down, MusicSelectButton);
-	}
-
-	if (MusicSelectButton != nullptr)
-	{
-		MusicSelectButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnMusicSelectButtonClicked);
-		MusicSelectButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnMusicSelectButtonHovered);
-		MusicSelectButton->SetNavigationRuleExplicit(EUINavigation::Up, SoundEffectsOnOffButton);
-		MusicSelectButton->SetNavigationRuleExplicit(EUINavigation::Down, ClearScoresButton);
+		SoundsButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnSoundsButtonClicked);
+		SoundsButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnSoundsButtonHovered);
+		SoundsButton->SetNavigationRuleExplicit(EUINavigation::Up, StatsButton);
+		SoundsButton->SetNavigationRuleExplicit(EUINavigation::Down, ClearScoresButton);
 	}
 
 	if (ClearScoresButton != nullptr)
 	{
 		ClearScoresButton->OnClicked.AddUniqueDynamic(this, &ThisClass::OnClearScoresButtonClicked);
 		ClearScoresButton->OnHovered.AddUniqueDynamic(this, &ThisClass::OnClearScoresButtonHovered);
-		ClearScoresButton->SetNavigationRuleExplicit(EUINavigation::Up, MusicSelectButton);
+		ClearScoresButton->SetNavigationRuleExplicit(EUINavigation::Up, SoundsButton);
 		ClearScoresButton->SetNavigationRuleExplicit(EUINavigation::Down, ClearStatsButton);
 	}
 
@@ -69,40 +61,6 @@ void UOptionsScreen::NativeOnInitialized()
 	}
 }
 
-void UOptionsScreen::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
-{
-	Super::NativeTick(MyGeometry, InDeltaTime);
-
-	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
-	{
-		// Sound Effect Selection
-		if (SoundEffectsOnOffButtonTextBlock != nullptr)
-		{
-			bool bSoundEffectsEnabled = GameInstance->GetSoundEffectsEnabled();
-			FString SoundEffectEnabledString = bSoundEffectsEnabled ? "*ON*" : "*OFF*";
-			SoundEffectsOnOffButtonTextBlock->SetText(FText::FromString(FString::Printf(TEXT("SOUND FX\n%s"), *SoundEffectEnabledString)));
-		}
-
-		// Music Selection
-		if (MusicSelectButtonTextBlock != nullptr)
-		{
-			EMusicSelection MusicSelection = GameInstance->GetMusicSelection();
-
-			FString MusicSelectionString = "";
-			switch (MusicSelection)
-			{
-				case EMusicSelection::Track1: MusicSelectionString = "*TRACK 1*"; break;
-				case EMusicSelection::Track2 : MusicSelectionString = "*TRACK 2*"; break;
-				case EMusicSelection::Track3: MusicSelectionString = "*TRACK 3*"; break;
-				case EMusicSelection::MusicOff: MusicSelectionString = "*OFF*"; break;
-				case EMusicSelection::Random: MusicSelectionString = "*RANDOM*"; break;
-				default: break;
-			}
-			MusicSelectButtonTextBlock->SetText(FText::FromString(FString::Printf(TEXT("MUSIC\n%s"), *MusicSelectionString)));
-		}
-	}
-}
-
 void UOptionsScreen::OnColorShift(FLinearColor LinearColor)
 {
 	Super::OnColorShift(LinearColor);
@@ -117,8 +75,7 @@ void UOptionsScreen::OnColorShift(FLinearColor LinearColor)
 	SetColorShiftForButton(ClearScoresButton, LinearColor);
 	SetColorShiftForButton(StatsButton, LinearColor);
 	SetColorShiftForButton(ClearStatsButton, LinearColor);
-	SetColorShiftForButton(SoundEffectsOnOffButton, LinearColor);
-	SetColorShiftForButton(MusicSelectButton, LinearColor);
+	SetColorShiftForButton(SoundsButton, LinearColor);
 }
 
 void UOptionsScreen::OnCreditsButtonClicked()
@@ -146,14 +103,9 @@ void UOptionsScreen::OnClearStatsButtonClicked()
 	USpaceShooterMenuController::OnOptionsScreenClearStatsClicked.Broadcast();
 }
 
-void UOptionsScreen::OnSoundEffectsOnOffButtonClicked()
+void UOptionsScreen::OnSoundsButtonClicked()
 {
-	USpaceShooterMenuController::OnOptionsSoundEffectClicked.Broadcast();
-}
-
-void UOptionsScreen::OnMusicSelectButtonClicked()
-{
-	USpaceShooterMenuController::OnOptionsMusicSelectClicked.Broadcast();
+	USpaceShooterMenuController::OnOptionsScreenSoundsClicked.Broadcast();
 }
 
 void UOptionsScreen::OnCreditsButtonHovered()
@@ -196,18 +148,11 @@ void UOptionsScreen::OnClearStatsButtonHovered()
 	}
 }
 
-void UOptionsScreen::OnSoundEffectsOnOffButtonHovered()
+void UOptionsScreen::OnSoundsButtonHovered()
 {
-	if (SoundEffectsOnOffButton != nullptr)
+	if (SoundsButton != nullptr)
 	{
-		SoundEffectsOnOffButton->SetKeyboardFocus();
+		SoundsButton->SetKeyboardFocus();
 	}
 }
 
-void UOptionsScreen::OnMusicSelectButtonHovered()
-{
-	if (MusicSelectButton != nullptr)
-	{
-		MusicSelectButton->SetKeyboardFocus();
-	}
-}

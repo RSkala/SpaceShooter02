@@ -16,6 +16,7 @@
 #include "UI/OptionsScreen.h"
 #include "UI/PauseScreen.h"
 #include "UI/PlayerShipSelectScreen.h"
+#include "UI/SoundOptionsScreen.h"
 #include "UI/StatsScreen.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogMenuController, Warning, All)
@@ -39,9 +40,14 @@ FOptionsScreenCreditsButtonClickedDelegateSignature USpaceShooterMenuController:
 FOptionsScreenStatsButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenStatsClicked;
 FOptionsScreenClearScoresClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenClearScoresClicked;
 FOptionsScreenClearStatsClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenClearStatsClicked;
+FOptionsScreenSoundsButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenSoundsClicked;
 FOptionsScreenBackButtonClickedDelegateSignature USpaceShooterMenuController::OnOptionsScreenBackClicked;
-FOptionsScreenMusicSelectClickedDelegateSignature USpaceShooterMenuController::OnOptionsMusicSelectClicked;
-FOptionsScreenSoundEffectClickedDelegateSignature USpaceShooterMenuController::OnOptionsSoundEffectClicked;
+
+// Sound Options Screen actions
+FSoundScreenMusicSelectClickedDelegateSignature USpaceShooterMenuController::OnSoundScreenMusicSelectClicked;
+FSoundScreenSoundEffectClickedDelegateSignature USpaceShooterMenuController::OnSoundScreenSoundEffectClicked;
+FSoundScreenVOClickedDelegateSignature USpaceShooterMenuController::OnSoundScreenVOClicked;
+FSoundBackClickedDelegateSignature USpaceShooterMenuController::OnSoundScreenBackClicked;
 
 // Credits Screen actions
 FCreditsScreenBackButtonClickedDelegateSignature USpaceShooterMenuController::OnCreditsScreenBackClicked;
@@ -85,9 +91,14 @@ void USpaceShooterMenuController::PostInitProperties()
 		OnOptionsScreenStatsClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenStatsClicked);
 		OnOptionsScreenClearScoresClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenClearScoresClicked);
 		OnOptionsScreenClearStatsClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenClearStatsClicked);
+		OnOptionsScreenSoundsClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenSoundsClicked);
 		OnOptionsScreenBackClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenBackClicked);
-		OnOptionsMusicSelectClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenMusicSelectClicked);
-		OnOptionsSoundEffectClicked.AddUniqueDynamic(this, &ThisClass::OptionsScreenSoundEffectClicked);
+
+		// Sound Screen
+		OnSoundScreenMusicSelectClicked.AddUniqueDynamic(this, &ThisClass::SoundScreenMusicSelectClicked);
+		OnSoundScreenSoundEffectClicked.AddUniqueDynamic(this, &ThisClass::SoundScreenSoundEffectClicked);
+		OnSoundScreenVOClicked.AddUniqueDynamic(this, &ThisClass::SoundScreenVOClicked);
+		OnSoundScreenBackClicked.AddUniqueDynamic(this, &ThisClass::SoundScreenBackClicked);
 
 		// Credits Screen
 		OnCreditsScreenBackClicked.AddUniqueDynamic(this, &ThisClass::CreditsScreenBackClicked);
@@ -268,6 +279,13 @@ void USpaceShooterMenuController::OptionsScreenClearStatsClicked()
 	}
 }
 
+void USpaceShooterMenuController::OptionsScreenSoundsClicked()
+{
+	PlayButtonClickSound();
+	CloseOptionsScreen();
+	OpenSoundOptionsScreen();
+}
+
 void USpaceShooterMenuController::OptionsScreenBackClicked()
 {
 	PlayButtonClickSound();
@@ -280,24 +298,41 @@ void USpaceShooterMenuController::OptionsScreenBackClicked()
 	}
 }
 
-void USpaceShooterMenuController::OptionsScreenMusicSelectClicked()
+void USpaceShooterMenuController::SoundScreenMusicSelectClicked()
 {
 	PlayButtonClickSound();
-	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::OptionsScreenMusicSelectClicked"));
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::SoundScreenMusicSelectClicked"));
 	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
 		GameInstance->OnCycleMusicSelection();
 	}
 }
 
-void USpaceShooterMenuController::OptionsScreenSoundEffectClicked()
+void USpaceShooterMenuController::SoundScreenSoundEffectClicked()
 {
 	PlayButtonClickSound();
-	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::OptionsScreenSoundEffectClicked"));
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::SoundScreenSoundEffectClicked"));
 	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
 	{
 		GameInstance->OnCycleSoundEffectOption();
 	}
+}
+
+void USpaceShooterMenuController::SoundScreenVOClicked()
+{
+	PlayButtonClickSound();
+	UE_LOG(LogMenuController, Log, TEXT("USpaceShooterMenuController::SoundScreenVOClicked"));
+	if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		GameInstance->OnCycleVOOption();
+	}
+}
+
+void USpaceShooterMenuController::SoundScreenBackClicked()
+{
+	PlayButtonClickSound();
+	CloseSoundOptionsScreen();
+	OpenOptionsScreen();
 }
 
 void USpaceShooterMenuController::CreditsScreenBackClicked()
@@ -474,6 +509,18 @@ void USpaceShooterMenuController::CloseStatsScreen()
 {
 	CloseScreen(StatsScreen);
 	OptionsScreen = nullptr;
+}
+
+void USpaceShooterMenuController::OpenSoundOptionsScreen()
+{
+	SoundOptionsScreen = Cast<USoundOptionsScreen>(OpenScreen(SoundOptionsScreenClass));
+	ensure(SoundOptionsScreen != nullptr);
+}
+
+void USpaceShooterMenuController::CloseSoundOptionsScreen()
+{
+	CloseScreen(SoundOptionsScreen);
+	SoundOptionsScreen = nullptr;
 }
 
 void USpaceShooterMenuController::PlayButtonClickSound()

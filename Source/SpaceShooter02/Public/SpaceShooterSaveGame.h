@@ -68,6 +68,7 @@ public:
 
 	void SetMusicSelection(uint8 InMusicSelection) { MusicSelection = InMusicSelection; }
 	void SetSoundEffectsEnabled(bool bInSoundEffectsEnabled) { bSoundEffectsEnabled = bInSoundEffectsEnabled; }
+	void SetVOEnabled(bool bInVOEnabled) { bVOEnabled = bInVOEnabled; }
 
 	bool IsShipIndexValid(int32 ShipIndex) const;
 
@@ -124,6 +125,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 	bool bSoundEffectsEnabled = true;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
+	bool bVOEnabled = true;
 
 	friend class USpaceShooterGameInstance;
 };

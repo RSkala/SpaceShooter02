@@ -61,10 +61,12 @@ public:
 	// Audio Options
 	void OnCycleMusicSelection();
 	void OnCycleSoundEffectOption();
+	void OnCycleVOOption();
 	void SaveAudioOptionData();
 
 	EMusicSelection GetMusicSelection() const;
 	bool GetSoundEffectsEnabled() const;
+	bool GetVOEnabled() const;
 
 	// Sound & VO
 	void PlaySound(ESoundEffect SoundEffect);

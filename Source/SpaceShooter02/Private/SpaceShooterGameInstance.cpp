@@ -284,6 +284,14 @@ void USpaceShooterGameInstance::OnCycleSoundEffectOption()
 	}
 }
 
+void USpaceShooterGameInstance::OnCycleVOOption()
+{
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		SpaceShooterSaveGame->SetVOEnabled(!SpaceShooterSaveGame->bVOEnabled);
+	}
+}
+
 void USpaceShooterGameInstance::SaveAudioOptionData()
 {
 	bool bSaveGameSuccess = UGameplayStatics::SaveGameToSlot(SpaceShooterSaveGame, DefaultSaveSlotName, DefaultSaveSlotIndex);
@@ -310,6 +318,16 @@ bool USpaceShooterGameInstance::GetSoundEffectsEnabled() const
 	return bSoundEffectsEnabled;
 }
 
+bool USpaceShooterGameInstance::GetVOEnabled() const
+{
+	bool bVOEnabled = true;
+	if (SpaceShooterSaveGame != nullptr)
+	{
+		bVOEnabled = SpaceShooterSaveGame->bVOEnabled;
+	}
+	return bVOEnabled;
+}
+
 void USpaceShooterGameInstance::PlaySound(ESoundEffect SoundEffect)
 {
 	// Exit if sound is disabled
@@ -329,10 +347,10 @@ void USpaceShooterGameInstance::PlaySound(ESoundEffect SoundEffect)
 
 void USpaceShooterGameInstance::PlayMenuVO(EMenuSoundVO MenuSoundVO)
 {
-	// Exit if sound is disabled
+	// Exit if VO is disabled
 	if (SpaceShooterSaveGame != nullptr)
 	{
-		if (!SpaceShooterSaveGame->bSoundEffectsEnabled)
+		if (!SpaceShooterSaveGame->bVOEnabled)
 		{
 			return;
 		}

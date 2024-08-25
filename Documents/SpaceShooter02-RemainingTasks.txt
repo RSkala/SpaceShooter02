@@ -1,9 +1,5 @@
 Remaining Tasks
 
-MUST FIX:
-* Add particle effect to new enemy types
-* Add default particle effect to AEnemyBase
-
 SHOULD FIX:
 * Get voice sounds for "OPTIONS", "STATS", and "ACHIEVEMENTS"
 * Add harder enemy types depending on difficulty
@@ -16,9 +12,6 @@ NICE TO HAVE:
 * Implement Achievement Screen and Achievements Button in Options Screen
 * Add "CONFIRM?" Screen for Clearing Scores and Clearing Stats
   * Alternative:  "Sounds" Screen, "Data" Screen
-
-WONT FIX:
-* Implement ITargetable interface (instead of casting to get PlayerShipPawn)
 
 PACKAGED GAME:
 * Reminder: Ensure VO is enabled when packaging game
