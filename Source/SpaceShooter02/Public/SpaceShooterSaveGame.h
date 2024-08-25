@@ -103,7 +103,7 @@ private:
 
 	// Highest Score Multiplier Achieved
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
-	int32 HighestScoreMultiplier = 1;
+	int32 HighestScoreMultiplier = 0;
 
 	//  Longest Gameplay Session
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))

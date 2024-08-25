@@ -13,6 +13,8 @@
 #include "UI/SpaceShooterMenuController.h"
 #include "UI/StatDisplayWidget.h"
 
+#define LOCTEXT_NAMESPACE "StatsScreen"
+
 void UStatsScreen::NativeOnInitialized()
 {
 	Super::NativeOnInitialized();
@@ -143,7 +145,9 @@ void UStatsScreen::NativeOnInitialized()
 				HighestScoreMultiplierStatDisplay->SetStatNameText(FText::FromString(TEXT("Highest Score Multiplier:")));
 
 				FText HighestScoreMultiplierTextGrouped = UKismetTextLibrary::Conv_IntToText(HighestScoreMultiplier, false, true);
-				HighestScoreMultiplierStatDisplay->UpdateStatDataText(HighestScoreMultiplierTextGrouped);
+				const FText HighestScoreMultiplierTextFormat = LOCTEXT("HighestScoreMultiplierText", "x{0}");
+				FText HighestScoreMultiplierText = FText::Format(HighestScoreMultiplierTextFormat, HighestScoreMultiplierTextGrouped);
+				HighestScoreMultiplierStatDisplay->UpdateStatDataText(HighestScoreMultiplierText);
 			}
 
 			if (LongestPlaySessionStatDisplay != nullptr)
@@ -313,3 +317,5 @@ void UStatsScreen::OnBackButtonHovered()
 		BackButton->SetKeyboardFocus();
 	}
 }
+
+#undef LOCTEXT_NAMESPACE

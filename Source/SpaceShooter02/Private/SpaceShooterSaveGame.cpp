@@ -23,7 +23,7 @@ void USpaceShooterSaveGame::ResetStats()
 	NumScoreMultipliersCollected = 0;
 	NumEnemiesDefeatedWithBoost = 0;
 	NumProjectilesFired = 0;
-	HighestScoreMultiplier = 1;
+	HighestScoreMultiplier = 0;
 	LongestGameplaySession = 0.0f;
 
 	ShipIndexToNumTimesSelected.Empty();
