@@ -22,6 +22,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	virtual FVector GetInactivePoolObjectPosition() const override;
+
 	UFUNCTION()
 	void OnSpawnAnimationFinished();
 
@@ -31,4 +33,6 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class UPaperFlipbookComponent> SpawnAnimFlipbookComp;
+
+	static const FVector InactivePosition;
 };

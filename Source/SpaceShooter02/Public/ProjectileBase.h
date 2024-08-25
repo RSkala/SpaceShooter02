@@ -24,6 +24,8 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void BeginDestroy() override;
 
+	virtual FVector GetInactivePoolObjectPosition() const override;
+
 	void CreateProjectileDefaultSubobjects(); // Should be called in the constructor of any subclass. Will create all the proper default subobjects.
 	virtual TSubclassOf<class UShapeComponent> GetCollisionVolumeComponentClass() const; // PURE_VIRTUAL(GetCollisionVolumeComponentClass, ;)
 	virtual const TCHAR* GetDefaultSpritePath() const; // PURE_VIRTUAL(GetDefaultSpritePath, ;)
@@ -74,4 +76,6 @@ protected:
 	// Each Projectile should NOT be carrying a hard reference to an asset like this!
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TObjectPtr<class UNiagaraSystem> ProjectileImpactEffect;
+
+	static const FVector InactivePosition;
 };

@@ -22,4 +22,8 @@ public:
 	virtual void ActivatePoolObject() = 0;
 	virtual void DeactivatePoolObject() = 0;
 	virtual bool IsPoolObjectActive() const = 0;
+	virtual bool EnableCollisionOnActivate() const { return true; }
+
+protected:
+	virtual FVector GetInactivePoolObjectPosition() const = 0;
 };

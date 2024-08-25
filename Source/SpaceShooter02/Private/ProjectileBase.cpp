@@ -10,6 +10,8 @@
 
 DEFINE_LOG_CATEGORY_CLASS(AProjectileBase, LogProjectiles)
 
+const FVector AProjectileBase::InactivePosition = FVector(9000.0f, 9000.0f, 9000.0f);
+
 AProjectileBase::AProjectileBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -39,6 +41,11 @@ void AProjectileBase::BeginDestroy()
 {
 	//UE_LOG(LogTemp, Warning, TEXT("AProjectileBase::BeginDestroy - %s"), *GetName());
 	Super::BeginDestroy();
+}
+
+FVector AProjectileBase::GetInactivePoolObjectPosition() const
+{
+	return InactivePosition;
 }
 
 void AProjectileBase::CreateProjectileDefaultSubobjects()

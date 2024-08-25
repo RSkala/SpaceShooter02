@@ -25,10 +25,9 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-	virtual void UpdateLifetime(float DeltaTime);
+	virtual FVector GetInactivePoolObjectPosition() const override;
 
-public:
-	static const FVector InactivePoolActorPosition;
+	virtual void UpdateLifetime(float DeltaTime);
 
 protected:
 	// Whether this object is active and visible in the world

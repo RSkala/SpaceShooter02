@@ -33,12 +33,15 @@ public:
 	// APoolActor / IPoolObject
 	virtual void ActivatePoolObject() override;
 	virtual void DeactivatePoolObject() override;
+	virtual bool EnableCollisionOnActivate() const override { return false; }
 
 	void DestroyEnemy(bool bDestroyedFromBoost = false);
 	void SetTarget(TSoftObjectPtr<AActor> InTargetActor);
 
 protected:
 	virtual void BeginPlay() override;
+	virtual FVector GetInactivePoolObjectPosition() const override;
+
 	virtual void MoveTowardsTarget(float DeltaTime);
 	virtual void OnSpawnDelayTimerElapsed();
 
@@ -83,4 +86,9 @@ protected:
 
 	UPROPERTY()
 	FTimerHandle SpawnDelayTimerHandle;
+
+	static const FVector InactivePosition;
+
+	// Debug
+	//UPROPERTY() FDateTime LastTimeActivated;
 };

@@ -2,8 +2,6 @@
 
 #include "PoolActor.h"
 
-const FVector APoolActor::InactivePoolActorPosition = FVector(-10000.0f, -10000.0f, -10000.0f);
-
 APoolActor::APoolActor()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -19,7 +17,10 @@ void APoolActor::ActivatePoolObject()
 {
 	bIsPoolObjectActive = true;
 	SetActorHiddenInGame(false); // Show visible components
-	SetActorEnableCollision(true); // Enable collision components
+	if (EnableCollisionOnActivate())
+	{
+		SetActorEnableCollision(true); // Enable collision components
+	}
 	SetActorTickEnabled(true); // Start ticking
 	TimeAlive = 0.0f;
 }
@@ -30,7 +31,7 @@ void APoolActor::DeactivatePoolObject()
 	SetActorHiddenInGame(true); // Hide visible components
 	SetActorEnableCollision(false); // Disable collision components
 	SetActorTickEnabled(false); // Stop ticking
-	SetActorLocation(InactivePoolActorPosition); // Move actor to somewhere far outside game bounds
+	SetActorLocation(GetInactivePoolObjectPosition()); // Move actor to somewhere far outside game bounds
 	TimeAlive = 0.0f;
 }
 
@@ -40,6 +41,12 @@ void APoolActor::BeginPlay()
 
 	// Always start pooled actors deactivated
 	DeactivatePoolObject();
+}
+
+FVector APoolActor::GetInactivePoolObjectPosition() const
+{
+	checkf(false, TEXT("APoolActor::GetInactivePoolObjectPosition MUST be overidden in a subclass"));
+	return FVector();
 }
 
 void APoolActor::UpdateLifetime(float DeltaTime)

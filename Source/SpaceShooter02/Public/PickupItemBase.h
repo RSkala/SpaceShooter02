@@ -23,6 +23,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual FVector GetInactivePoolObjectPosition() const override;
 	virtual void UpdateLifetime(float DeltaTime) override;
 
 	virtual void UpdateMovement(float DeltaTime);
@@ -84,4 +85,6 @@ protected:
 	// Used for easily getting the player.
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TSoftObjectPtr<class APlayerShipPawn> PlayerShipPawn;
+
+	static const FVector InactivePosition;
 };

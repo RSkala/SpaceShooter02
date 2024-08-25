@@ -7,6 +7,8 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogExplosion, Log, All)
 
+const FVector AExplosionBase::InactivePosition = FVector(9000.0f, -9000.0f, -9000.0f);
+
 AExplosionBase::AExplosionBase()
 {
 	//UE_LOG(LogExplosion, Log, TEXT("AExplosionBase::AExplosionBase - %s"), *GetName());
@@ -59,6 +61,11 @@ void AExplosionBase::BeginPlay()
 		// Subscribe to the OnFinishedPlaying delegate to be notified when the flipbook animation completed. bLooping MUST be false.
 		ExplosionFlipbookComp->OnFinishedPlaying.AddUniqueDynamic(this, &ThisClass::OnExplosionAnimationFinished);
 	}
+}
+
+FVector AExplosionBase::GetInactivePoolObjectPosition() const
+{
+	return InactivePosition;
 }
 
 void AExplosionBase::OnExplosionAnimationFinished()

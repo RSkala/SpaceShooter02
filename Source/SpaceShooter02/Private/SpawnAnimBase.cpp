@@ -4,6 +4,8 @@
 
 #include "PaperFlipbookComponent.h"
 
+const FVector ASpawnAnimBase::InactivePosition = FVector(-9000.0f, -9000.0f, 9000.0f);
+
 ASpawnAnimBase::ASpawnAnimBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -50,6 +52,11 @@ void ASpawnAnimBase::BeginPlay()
 		// Subscribe to the OnFinishedPlaying delegate to be notified when the flipbook animation completed. bLooping MUST be false.
 		SpawnAnimFlipbookComp->OnFinishedPlaying.AddUniqueDynamic(this, &ThisClass::OnSpawnAnimationFinished);
 	}
+}
+
+FVector ASpawnAnimBase::GetInactivePoolObjectPosition() const
+{
+	return InactivePosition;
 }
 
 void ASpawnAnimBase::OnSpawnAnimationFinished()

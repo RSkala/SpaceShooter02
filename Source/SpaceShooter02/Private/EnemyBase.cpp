@@ -17,6 +17,7 @@
 DEFINE_LOG_CATEGORY_CLASS(AEnemyBase, LogEnemy)
 
 FEnemyDeathDelegateSignature AEnemyBase::OnEnemyDeath;
+const FVector AEnemyBase::InactivePosition = FVector(-10000.0f, -10000.0f, -10000.0f);
 
 namespace
 {
@@ -92,6 +93,11 @@ void AEnemyBase::SetTarget(TSoftObjectPtr<AActor> InTargetActor)
 void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+FVector AEnemyBase::GetInactivePoolObjectPosition() const
+{
+	return InactivePosition;
 }
 
 void AEnemyBase::MoveTowardsTarget(float DeltaTime)

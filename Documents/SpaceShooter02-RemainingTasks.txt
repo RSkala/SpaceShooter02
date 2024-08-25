@@ -3,7 +3,6 @@ Remaining Tasks
 SHOULD FIX:
 * Get voice sounds for "OPTIONS", "STATS", and "ACHIEVEMENTS"
 * Add harder enemy types depending on difficulty
-* Figure out why sometimes enemies dont spawn at a spawn animation location
 * Implement a spawn limiter (make sure no more than X enemies are on screen at once)
 * Change "pitch" on pickup item sound (Do-Re-Mi-Fa-So-La-Ti-Do)
 

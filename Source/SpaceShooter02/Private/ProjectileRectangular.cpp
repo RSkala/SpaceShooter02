@@ -53,7 +53,6 @@ void AProjectileRectangular::OnCollisionOverlap(
 	if (AEnemyBase* CollidingEnemy = Cast<AEnemyBase>(OtherActor))
 	{
 		// The colliding actor is an enemy. Deal damage / destroy the enemy.
-		//CollidingEnemy->Destroy();
 		CollidingEnemy->DestroyEnemy();
 	}
 }

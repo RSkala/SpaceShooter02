@@ -8,6 +8,8 @@
 
 #include "PlayerShipPawn.h"
 
+const FVector APickupItemBase::InactivePosition = FVector(-9000.0f, 9000.0f, 9000.0f);
+
 APickupItemBase::APickupItemBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -57,6 +59,11 @@ void APickupItemBase::BeginPlay()
 
 	// Just get the player. TODO: Pass into the pickup item when "spawned" from pickup item spawner.
 	PlayerShipPawn = UGameplayStatics::GetActorOfClass(GetWorld(), APlayerShipPawn::StaticClass());
+}
+
+FVector APickupItemBase::GetInactivePoolObjectPosition() const
+{
+	return InactivePosition;
 }
 
 void APickupItemBase::UpdateLifetime(float DeltaTime)
