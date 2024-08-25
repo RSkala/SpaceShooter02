@@ -15,7 +15,7 @@ protected:
 	virtual void NativeOnInitialized() override;
 
 	virtual void OnColorShift(FLinearColor LinearColor) override;
-	virtual class UButton* GetKeyboardFocusLostButton() const override { return CreditsButton; }
+	virtual class UButton* GetKeyboardFocusLostButton() const override { return BackButton; }
 
 private:
 	UFUNCTION() void OnCreditsButtonClicked();
