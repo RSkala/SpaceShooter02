@@ -1032,8 +1032,8 @@ void APlayerShipPawn::InputCleanPause(const FInputActionValue& InputActionValue)
 
 void APlayerShipPawn::FireProjectile(FRotator ProjectileRotation)
 {
-	// Do not allow projectile firing while dashing
-	if (bIsDashing)
+	// Do not allow projectile firing while dashing or dead
+	if (bIsDashing || bPlayerDead)
 	{
 		return;
 	}
