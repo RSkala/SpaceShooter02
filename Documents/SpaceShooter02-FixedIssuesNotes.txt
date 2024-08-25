@@ -1,0 +1,17 @@
+Fixed Issue Notes:
+
+=======================================================================
+Issue:
+* Enemies sometimes not spawning at spawn anim location
+
+Commit:
+8d3a5c5b796f05fe07b32531f6d58ebd5e4d0559
+https://github.com/RSkala/SpaceShooter02/commit/8d3a5c5b796f05fe07b32531f6d58ebd5e4d0559
+
+
+Notes:
+This was due to the enemy's collision getting activated before it was "ready" to be collided with (since there is a spawn delay). If a projectile happened to be directly on top of an enemy during the frame where collision is activated but before collision gets deactivated, then the projectile will collide with and kill the enemy.  I fixed this by adding a virtual function EnableCollisionOnActivate, which defaults to true; this function is overriden in AEnemyBase and return false. This prevents the tiny window where an enemy can be collided with before ready.  As an added precaution, I made sure different IPoolObject/APoolActor subclasses have different "inactive" positions (i.e. where they are moved out of the gameplay space).
+
+I originally suspected that this was happening due to overlaps in the "Inactive" positions. When I implemented that "fix" and it didn't work, I decided to keep that in anyways, as it is probably a good idea to NOT have different (and potentially colliding) game objects on top of one another.
+
+=======================================================================
