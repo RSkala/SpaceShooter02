@@ -22,6 +22,7 @@ public class SpaceShooter02 : ModuleRules
         PrivateDependencyModuleNames.AddRange(
             new string[]
             {
+                "EngineSettings",
                 "Slate",
                 "SlateCore"
             });

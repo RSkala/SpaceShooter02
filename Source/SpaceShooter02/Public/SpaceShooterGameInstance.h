@@ -72,7 +72,7 @@ public:
 	void PlaySound(ESoundEffect SoundEffect);
 	void PlayMenuVO(EMenuSoundVO MenuSoundVO);
 
-	static FString GetGameVersionString() { return GameVersion; }
+	FString GetGameVersionString() const;
 
 protected:
 	virtual void Init() override;

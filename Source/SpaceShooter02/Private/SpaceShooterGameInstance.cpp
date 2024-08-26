@@ -2,8 +2,10 @@
 
 #include "SpaceShooterGameInstance.h"
 
+#include "GeneralProjectSettings.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+//#include "Misc/ConfigCacheIni.h" // Possibly needed to access GConfig
 
 #include "AudioEnums.h"
 #include "AudioController.h"
@@ -360,6 +362,32 @@ void USpaceShooterGameInstance::PlayMenuVO(EMenuSoundVO MenuSoundVO)
 	{
 		AudioController->PlayMenuVO(MenuSoundVO);
 	}
+}
+
+FString USpaceShooterGameInstance::GetGameVersionString() const
+{
+	FString AppVersion;
+
+	// Project Version is set:
+	// * Project Settings -> Project -> Description -> Project Version
+	// * It is saved in Config/DefaultGame.ini, under [/Script/EngineSettings.GeneralProjectSettings]
+	// * In order to access UGeneralProjectSettings, you need to add "EngineSettings" as a dependency module in the Build.cs file. 
+	const UGeneralProjectSettings* const GeneralProjectSettings = GetDefault<UGeneralProjectSettings>();
+	if (GeneralProjectSettings != nullptr)
+	{
+		AppVersion = GeneralProjectSettings->ProjectVersion;
+	}
+
+	// NOTE: You can also get the Project Settings like this:
+	/*if (GConfig != nullptr)
+	{
+		GConfig->GetString(
+			TEXT("/Script/EngineSettings.GeneralProjectSettings"),
+			TEXT("ProjectVersion"),
+			AppVersion,
+			GGameIni);
+	}*/
+	return FString::Printf(TEXT("v%s"), *AppVersion);
 }
 
 void USpaceShooterGameInstance::Init()

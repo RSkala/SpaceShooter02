@@ -68,8 +68,11 @@ void UMainMenuScreen::NativeOnInitialized()
 
 	if (VersionText != nullptr)
 	{
-		FText GameVersionString = FText::FromString(USpaceShooterGameInstance::GetGameVersionString());
-		VersionText->SetText(GameVersionString);
+		if (USpaceShooterGameInstance* GameInstance = Cast<USpaceShooterGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+		{
+			FString GameVersionString = GameInstance->GetGameVersionString();
+			VersionText->SetText(FText::FromString(GameVersionString));
+		}
 	}
 }
 
