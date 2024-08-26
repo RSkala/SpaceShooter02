@@ -210,6 +210,11 @@ void APlayerShipPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		ensureAlways(InputActionKeyboardMove != nullptr);
 		EnhancedInputComponent->BindAction(InputActionKeyboardMove, ETriggerEvent::Triggered, this, &ThisClass::KeyboardMoveTriggered);
 		EnhancedInputComponent->BindAction(InputActionKeyboardMove, ETriggerEvent::Completed, this, &ThisClass::KeyboardMoveCompleted);
+
+		// Bind Keyboard Aiming
+		ensureAlways(InputActionKeyboardAim != nullptr);
+		EnhancedInputComponent->BindAction(InputActionKeyboardAim, ETriggerEvent::Triggered, this, &ThisClass::KeyboardAimTriggered);
+		EnhancedInputComponent->BindAction(InputActionKeyboardAim, ETriggerEvent::Completed, this, &ThisClass::KeyboardAimCompleted);
 		
 		// Bind Gamepad Movement
 		ensureAlways(InputActionGamepadMove != nullptr);
@@ -805,6 +810,19 @@ void APlayerShipPawn::KeyboardMoveCompleted(const FInputActionValue& InputAction
 {
 	MovementDirection = FVector2D::ZeroVector;
 	UE_LOG(LogPlayerShipPawnInput, Verbose, TEXT("APlayerShipPawn::KeyboardMoveCompleted - MovementDirection: %s"), *MovementDirection.ToString());
+}
+
+void APlayerShipPawn::KeyboardAimTriggered(const FInputActionValue& InputActionValue)
+{
+	FVector2D AimTriggeredInput = InputActionValue.Get<FVector2D>();
+	AimingDirection = AimTriggeredInput.GetSafeNormal();
+	UE_LOG(LogPlayerShipPawnInput, Verbose, TEXT("APlayerShipPawn::KeyboardAimTriggered - %s"), *AimingDirection.ToString());
+}
+
+void APlayerShipPawn::KeyboardAimCompleted(const FInputActionValue& InputActionValue)
+{
+	AimingDirection = FVector2D::ZeroVector;
+	UE_LOG(LogPlayerShipPawnInput, Verbose, TEXT("APlayerShipPawn::KeyboardAimCompleted - AimingDirection: %s"), *AimingDirection.ToString());
 }
 
 void APlayerShipPawn::GamepadMoveTriggered(const FInputActionValue& InputActionValue)

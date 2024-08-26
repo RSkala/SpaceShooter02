@@ -98,6 +98,9 @@ protected:
 	void KeyboardMoveTriggered(const struct FInputActionValue& InputActionValue);
 	void KeyboardMoveCompleted(const struct FInputActionValue& InputActionValue);
 
+	void KeyboardAimTriggered(const struct FInputActionValue& InputActionValue);
+	void KeyboardAimCompleted(const struct FInputActionValue& InputActionValue);
+
 	void GamepadMoveTriggered(const struct FInputActionValue& InputActionValue);
 	void GamepadMoveCompleted(const struct FInputActionValue& InputActionValue);
 
@@ -232,6 +235,10 @@ protected:
 	// Player ship movement via keyboard, i.e. WASD
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
 	TObjectPtr<class UInputAction> InputActionKeyboardMove;
+
+	// Player ship aiming via keyboard, i.e. Arrow Keys
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
+	TObjectPtr<class UInputAction> InputActionKeyboardAim;
 
 	// Player ship movement via gamepad, i.e. left thumbstick
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "PlayerShipPawn|Input")
