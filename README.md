@@ -1,5 +1,13 @@
 # GENERIC SPACE SHOOTER
- 2D Twin Stick Shooter built harnessing the power of **Unreal Engine 5**!!!
+
+---
+
+2D Twin Stick Shooter built harnessing the power of **Unreal Engine 5**!!!
+
+**Download and play it from itch.io! </br>**
+https://rskala.itch.io/generic-space-shooter
+
+ ---
 
  Lately, I've been doing a bit of research with 2D development with Unreal Engine, so I decided to rebuild this project in UE5 that I previously built in Unity: <br>
  https://github.com/RSkala/SpaceShooter01
