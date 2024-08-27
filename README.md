@@ -1,17 +1,15 @@
-#
-
 ![Generic Space Shooter](/Assets-Source/Screenshots/Banner-Image-001.png "Generic Space Shooter")
 
-## GENERIC SPACE SHOOTER
+# Generic Space Shooter
 
-Pixel Art Twin Stick Shooter built harnessing the power of **Unreal Engine 5**!
+**Pixel Art Twin Stick Shooter built harnessing the power of Unreal Engine 5!**
 
-**Download and play it from itch.io!**\
+**Download and play from itch.io!**\
 [Generic Space Shooter on Itch.io](https://rskala.itch.io/generic-space-shooter)
 
 ---
 
-This game is written mostly in C++ with some Blueprint implementation.\
+This game is a work-in-progress and is written mostly in C++ with some Blueprint implementation.\
 My Development Log can be found [here.](https://github.com/RSkala/SpaceShooter02/blob/main/Documents/SpaceShooter02-DevNotes.txt)
 
 ---
