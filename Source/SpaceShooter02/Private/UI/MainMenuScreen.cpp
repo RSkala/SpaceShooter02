@@ -89,6 +89,11 @@ void UMainMenuScreen::OnColorShift(FLinearColor LinearColor)
 	SetColorShiftForButton(OptionsButton, LinearColor);
 	SetColorShiftForButton(ExitButton, LinearColor);
 	SetColorShiftForButton(HighScoresButton, LinearColor);
+
+	if (VersionText != nullptr)
+	{
+		VersionText->SetColorAndOpacity(FSlateColor(LinearColor));
+	}
 }
 
 void UMainMenuScreen::OnPlayButtonClicked()

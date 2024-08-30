@@ -48,6 +48,21 @@ void UGameplayScreen::OnColorShift(FLinearColor LinearColor)
 	{
 		PowerupWeaponMeter->SetFillColorAndOpacity(LinearColor);
 	}
+
+	if (CurrentScoreText != nullptr)
+	{
+		CurrentScoreText->SetColorAndOpacity(FSlateColor(LinearColor));
+	}
+
+	if (CurrentMultiplierText != nullptr)
+	{
+		CurrentMultiplierText->SetColorAndOpacity(FSlateColor(LinearColor));
+	}
+
+	if (HighScoreText != nullptr)
+	{
+		HighScoreText->SetColorAndOpacity(FSlateColor(LinearColor));
+	}
 }
 
 void UGameplayScreen::OnPlayerScoreUpdated(int32 PlayerScore)
