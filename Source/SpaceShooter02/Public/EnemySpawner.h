@@ -6,6 +6,16 @@
 #include "GameFramework/Actor.h"
 #include "EnemySpawner.generated.h"
 
+UENUM(BlueprintType)
+enum class EEnemySpawnType : uint8
+{
+	RadiusAroundPlayer,
+	BoxInsideGameorders,
+
+	NumSpawnTypes UMETA(Hidden)
+};
+ENUM_RANGE_BY_COUNT(EEnemySpawnType, EEnemySpawnType::NumSpawnTypes);
+
 // Class for handling enemy spawning
 UCLASS()
 class SPACESHOOTER02_API AEnemySpawner : public AActor
@@ -32,12 +42,18 @@ protected:
 
 	float GetTimeBetweenSpawns() const;
 
+	FVector GetRandomEnemySpawnPosition() const;
+
 #if WITH_EDITOR
 	virtual bool CanEditChange(const FProperty* InProperty) const override;
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 #endif
 
 protected:
+	// Spawn type to use
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EEnemySpawnType EnemySpawnType;
+
 	// Default Time Between Spawns. Only used if GameInstance ptr is invalid
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (Units = "Seconds"))
 	float FallbackTimeBetweenSpawns = 1.0f;

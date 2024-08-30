@@ -4,9 +4,11 @@
 
 #include "Components/AudioComponent.h"
 #include "DrawDebugHelpers.h"
+#include "Engine/TriggerBox.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraSystem.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 #include "AudioEnums.h"
 #include "EnemyBase.h"
@@ -16,6 +18,7 @@
 #include "PlayerShipPawn.h"
 #include "SpaceShooterGameInstance.h"
 #include "SpaceShooterGameState.h"
+#include "SpaceShooterLevelScriptActor.h"
 #include "SpawnAnimBase.h"
 #include "SpawnAnimController.h"
 
@@ -83,7 +86,7 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 	}
 
 	// Debug Spawn Radiuses
-	if(bShowDebugSpawnRadius)
+	if(bShowDebugSpawnRadius && EnemySpawnType == EEnemySpawnType::RadiusAroundPlayer)
 	{
 		FVector EnemySpawnSourcePos = PlayerShipPawn != nullptr ? PlayerShipPawn->GetEnemySpawnSourcePosition() : FVector();
 		FVector UpAxis = FVector(0.0f, 0.0f, 1.0f);
@@ -97,22 +100,7 @@ void AEnemySpawner::UpdateSpawning(float DeltaTime)
 	if (TimeSinceLastEnemySpawned >= GetTimeBetweenSpawns())
 	{
 		// Time has elapsed since the last enemy was spawned. Spawn an enemy.
-
-		// Get a random position to spawn the enemy using the range
-		float RandomDistance = FMath::FRandRange(SpawnDistanceFromPlayerMin, SpawnDistanceFromPlayerMax);
-
-		// Get a random position at the edge of the unit sphere
-		FVector RandomUnitSphereEdgePos = FMath::VRand();
-
-		// Discard the Y-component, then normalize the vector to "push" the position to the edge of a unit circle
-		FVector2D RandomPosition = FVector2D(RandomUnitSphereEdgePos).GetSafeNormal();
-
-		// Multiply by the random distance for the spawn position offset from the player
-		RandomPosition *= RandomDistance;
-
-		// Get the enemy spawn position
-		FVector SourcePosition = PlayerShipPawn != nullptr ? PlayerShipPawn->GetEnemySpawnSourcePosition() : FVector();
-		FVector EnemyPosition = SourcePosition + FVector(RandomPosition.X, 0.0f, RandomPosition.Y);
+		FVector EnemyPosition = GetRandomEnemySpawnPosition();
 
 		// Play a Spawn Animation at the enemy spawn position
 		if (SpawnAnimController != nullptr)
@@ -215,6 +203,47 @@ float AEnemySpawner::GetTimeBetweenSpawns() const
 		CurTimeBetweenSpawns = SpaceShooterGameState.Get()->GetTimeBetweenSpawns();
 	}
 	return CurTimeBetweenSpawns;
+}
+
+FVector AEnemySpawner::GetRandomEnemySpawnPosition() const
+{
+	FVector RandomSpawnPosition = FVector::ZeroVector;
+	if (EnemySpawnType == EEnemySpawnType::RadiusAroundPlayer)
+	{
+		// Get a random position to spawn the enemy using the range
+		float RandomDistance = FMath::FRandRange(SpawnDistanceFromPlayerMin, SpawnDistanceFromPlayerMax);
+
+		// Get a random position at the edge of the unit sphere
+		FVector RandomUnitSphereEdgePos = FMath::VRand(); // Note: KismetMathLibrary::RandomUnitVector() calls VRand()
+
+		// Discard the Y-component, then normalize the vector to "push" the position to the edge of a unit circle
+		FVector2D RandomPosition = FVector2D(RandomUnitSphereEdgePos).GetSafeNormal();
+
+		// Multiply by the random distance for the spawn position offset from the player
+		RandomPosition *= RandomDistance;
+
+		// Get the enemy spawn position
+		FVector SourcePosition = PlayerShipPawn != nullptr ? PlayerShipPawn->GetEnemySpawnSourcePosition() : FVector();
+		RandomSpawnPosition = SourcePosition + FVector(RandomPosition.X, 0.0f, RandomPosition.Y);
+	}
+	else if (EnemySpawnType == EEnemySpawnType::BoxInsideGameorders)
+	{
+		if (UWorld* World = GetWorld())
+		{
+			if (ASpaceShooterLevelScriptActor* LevelScriptActor = Cast<ASpaceShooterLevelScriptActor>(World->GetLevelScriptActor()))
+			{
+				FVector LevelBoundingBoxPosition, LevelBoundingBoxExtent;
+				LevelScriptActor->GetLevelBoundingBoxPositionAndExtent(LevelBoundingBoxPosition, LevelBoundingBoxExtent);
+				RandomSpawnPosition = UKismetMathLibrary::RandomPointInBoundingBox(LevelBoundingBoxPosition, LevelBoundingBoxExtent);
+			}
+		}
+	}
+	else
+	{
+		ensure(false);
+	}
+
+	return RandomSpawnPosition;
 }
 
 #if WITH_EDITOR
