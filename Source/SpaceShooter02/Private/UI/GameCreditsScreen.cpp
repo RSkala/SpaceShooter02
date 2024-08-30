@@ -3,6 +3,7 @@
 #include "UI/GameCreditsScreen.h"
 
 #include "Components/Button.h"
+#include "Components/Image.h"
 #include "Components/TextBlock.h"
 
 #include "UI/SpaceShooterMenuController.h"
@@ -62,6 +63,11 @@ void UGameCreditsScreen::OnColorShift(FLinearColor LinearColor)
 	if (CreditsTextBlock != nullptr)
 	{
 		CreditsTextBlock->SetColorAndOpacity(LinearColor);
+	}
+
+	if (UnrealEngineLogoImage != nullptr)
+	{
+		UnrealEngineLogoImage->SetColorAndOpacity(LinearColor);
 	}
 }
 

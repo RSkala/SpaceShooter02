@@ -34,6 +34,9 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
 	TObjectPtr<class UButton> BackButton;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidgetOptional, AllowPrivateAccess = true))
+	TObjectPtr<class UImage> UnrealEngineLogoImage;
+
 	// --- Lines for Credits Text ---
 	static FString CreditsLine1;
 	static FString CreditsLine2;
